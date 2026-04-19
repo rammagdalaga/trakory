@@ -1,5 +1,4 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { FFFSType } from "@ffmpeg/ffmpeg";
 
 let ffmpegInstance: FFmpeg | null = null;
 let loadPromise: Promise<FFmpeg> | null = null;
@@ -65,7 +64,7 @@ export async function convertVideoToAudio(
 
   try {
     await ffmpeg.createDir(mountDir);
-    await ffmpeg.mount(FFFSType.WORKERFS, { files: [file] }, mountDir);
+    await ffmpeg.mount("WORKERFS" as never, { files: [file] }, mountDir);
 
     const args = ["-i", inputName, "-vn"];
     if (format === "mp3") {
