@@ -4,7 +4,9 @@ import { toBlobURL } from "@ffmpeg/util";
 let ffmpegInstance: FFmpeg | null = null;
 let loadPromise: Promise<FFmpeg> | null = null;
 
-const CORE_VERSION = "0.12.10";
+// Use single-threaded core: works without COOP/COEP headers (which the
+// Lovable preview iframe doesn't set), so SharedArrayBuffer isn't required.
+const CORE_VERSION = "0.12.6";
 const CORE_BASE = `https://unpkg.com/@ffmpeg/core@${CORE_VERSION}/dist/umd`;
 
 export async function getFFmpeg(
@@ -15,21 +17,30 @@ export async function getFFmpeg(
 
   loadPromise = (async () => {
     const ffmpeg = new FFmpeg();
-    if (onLog) ffmpeg.on("log", ({ message }) => onLog(message));
-
-    await ffmpeg.load({
-      coreURL: await toBlobURL(`${CORE_BASE}/ffmpeg-core.js`, "text/javascript"),
-      wasmURL: await toBlobURL(
-        `${CORE_BASE}/ffmpeg-core.wasm`,
-        "application/wasm",
-      ),
+    ffmpeg.on("log", ({ message }) => {
+      console.log("[ffmpeg]", message);
+      if (onLog) onLog(message);
     });
+
+    // toBlobURL avoids cross-origin worker issues by serving the core from
+    // a same-origin blob: URL.
+    const [coreURL, wasmURL] = await Promise.all([
+      toBlobURL(`${CORE_BASE}/ffmpeg-core.js`, "text/javascript"),
+      toBlobURL(`${CORE_BASE}/ffmpeg-core.wasm`, "application/wasm"),
+    ]);
+
+    await ffmpeg.load({ coreURL, wasmURL });
 
     ffmpegInstance = ffmpeg;
     return ffmpeg;
   })();
 
-  return loadPromise;
+  try {
+    return await loadPromise;
+  } catch (err) {
+    loadPromise = null;
+    throw err;
+  }
 }
 
 export type AudioFormat = "mp3" | "wav" | "flac";
