@@ -58,13 +58,12 @@ export async function convertVideoToAudio(
   };
   ffmpeg.on("progress", progressHandler);
 
-  const mountDir = `/input-${Date.now()}`;
-  const inputName = `${mountDir}/${file.name || "source"}`;
+  const inputName = `input_${Date.now()}_${file.name || "source"}`;
   const outputName = `output_${Date.now()}.${format}`;
 
   try {
-    await ffmpeg.createDir(mountDir);
-    await ffmpeg.mount("WORKERFS" as never, { files: [file] }, mountDir);
+    const buf = new Uint8Array(await file.arrayBuffer());
+    await ffmpeg.writeFile(inputName, buf);
 
     const args = ["-i", inputName, "-vn"];
     if (format === "mp3") {
@@ -92,9 +91,8 @@ export async function convertVideoToAudio(
     return new Blob([data.slice().buffer], { type: mime });
   } finally {
     ffmpeg.off("progress", progressHandler);
+    await ffmpeg.deleteFile(inputName).catch(() => {});
     await ffmpeg.deleteFile(outputName).catch(() => {});
-    await ffmpeg.unmount(mountDir).catch(() => {});
-    await ffmpeg.deleteDir(mountDir).catch(() => {});
   }
 }
 
