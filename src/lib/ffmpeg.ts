@@ -3,7 +3,7 @@ import { FFmpeg } from "@ffmpeg/ffmpeg";
 let ffmpegInstance: FFmpeg | null = null;
 let loadPromise: Promise<FFmpeg> | null = null;
 
-const CORE_VERSION = "0.12.10";
+const CORE_VERSION = "0.12.9";
 const CORE_BASE = `https://unpkg.com/@ffmpeg/core@${CORE_VERSION}/dist/umd`;
 const CORE_URL = `${CORE_BASE}/ffmpeg-core.js`;
 const WASM_URL = `${CORE_BASE}/ffmpeg-core.wasm`;
