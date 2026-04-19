@@ -1,13 +1,13 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { toBlobURL } from "@ffmpeg/util";
+import { FFFSType } from "@ffmpeg/ffmpeg";
 
 let ffmpegInstance: FFmpeg | null = null;
 let loadPromise: Promise<FFmpeg> | null = null;
 
-// Use single-threaded core: works without COOP/COEP headers (which the
-// Lovable preview iframe doesn't set), so SharedArrayBuffer isn't required.
-const CORE_VERSION = "0.12.6";
+const CORE_VERSION = "0.12.10";
 const CORE_BASE = `https://unpkg.com/@ffmpeg/core@${CORE_VERSION}/dist/umd`;
+const CORE_URL = `${CORE_BASE}/ffmpeg-core.js`;
+const WASM_URL = `${CORE_BASE}/ffmpeg-core.wasm`;
 
 export async function getFFmpeg(
   onLog?: (msg: string) => void,
@@ -19,17 +19,13 @@ export async function getFFmpeg(
     const ffmpeg = new FFmpeg();
     ffmpeg.on("log", ({ message }) => {
       console.log("[ffmpeg]", message);
-      if (onLog) onLog(message);
+      onLog?.(message);
     });
 
-    // toBlobURL avoids cross-origin worker issues by serving the core from
-    // a same-origin blob: URL.
-    const [coreURL, wasmURL] = await Promise.all([
-      toBlobURL(`${CORE_BASE}/ffmpeg-core.js`, "text/javascript"),
-      toBlobURL(`${CORE_BASE}/ffmpeg-core.wasm`, "application/wasm"),
-    ]);
-
-    await ffmpeg.load({ coreURL, wasmURL });
+    await ffmpeg.load({
+      coreURL: CORE_URL,
+      wasmURL: WASM_URL,
+    });
 
     ffmpegInstance = ffmpeg;
     return ffmpeg;
@@ -59,16 +55,17 @@ export async function convertVideoToAudio(
   const ffmpeg = await getFFmpeg();
 
   const progressHandler = ({ progress }: { progress: number }) => {
-    if (onProgress) onProgress(Math.min(Math.max(progress, 0), 1));
+    onProgress?.(Math.min(Math.max(progress, 0), 1));
   };
   ffmpeg.on("progress", progressHandler);
 
-  try {
-    const inputName = `input_${Date.now()}`;
-    const outputName = `output_${Date.now()}.${format}`;
+  const mountDir = `/input-${Date.now()}`;
+  const inputName = `${mountDir}/${file.name || "source"}`;
+  const outputName = `output_${Date.now()}.${format}`;
 
-    const buf = new Uint8Array(await file.arrayBuffer());
-    await ffmpeg.writeFile(inputName, buf);
+  try {
+    await ffmpeg.createDir(mountDir);
+    await ffmpeg.mount(FFFSType.WORKERFS, { files: [file] }, mountDir);
 
     const args = ["-i", inputName, "-vn"];
     if (format === "mp3") {
@@ -80,7 +77,10 @@ export async function convertVideoToAudio(
     }
     args.push(outputName);
 
-    await ffmpeg.exec(args);
+    const exitCode = await ffmpeg.exec(args);
+    if (exitCode !== 0) {
+      throw new Error("Conversion failed. Try a smaller or different video file.");
+    }
 
     const data = (await ffmpeg.readFile(outputName)) as Uint8Array;
     const mime =
@@ -90,12 +90,12 @@ export async function convertVideoToAudio(
           ? "audio/wav"
           : "audio/flac";
 
-    await ffmpeg.deleteFile(inputName).catch(() => {});
-    await ffmpeg.deleteFile(outputName).catch(() => {});
-
     return new Blob([data.slice().buffer], { type: mime });
   } finally {
     ffmpeg.off("progress", progressHandler);
+    await ffmpeg.deleteFile(outputName).catch(() => {});
+    await ffmpeg.unmount(mountDir).catch(() => {});
+    await ffmpeg.deleteDir(mountDir).catch(() => {});
   }
 }
 
