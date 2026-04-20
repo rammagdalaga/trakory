@@ -7,6 +7,9 @@ import {
   type Bitrate,
 } from "@/lib/ffmpeg";
 import { cn } from "@/lib/utils";
+import { AdGateModal } from "./AdGateModal";
+
+const SITE_NAME = "trakory";
 
 type Status = "idle" | "ready" | "loading" | "converting" | "done" | "error";
 
