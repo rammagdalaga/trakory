@@ -103,11 +103,14 @@ function Index() {
         </section>
       </main>
 
-      <footer className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-10 text-center">
+      <footer className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-28 text-center">
         <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
           Trakory · Sound, distilled
         </p>
       </footer>
+
+      <InterstitialAd />
+      <BottomAdBar />
     </div>
   );
 }
