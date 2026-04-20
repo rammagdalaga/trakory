@@ -102,6 +102,16 @@ export function Converter() {
       ? `${file.name.replace(/\.[^.]+$/, "")}.${SITE_NAME}.${format}`
       : `audio.${SITE_NAME}.${format}`;
 
+  const triggerDownload = () => {
+    if (!result) return;
+    const a = document.createElement("a");
+    a.href = result.url;
+    a.download = downloadName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
   return (
     <div className="relative w-full max-w-2xl">
       {/* Glow */}
