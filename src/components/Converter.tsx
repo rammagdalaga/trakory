@@ -7,6 +7,9 @@ import {
   type Bitrate,
 } from "@/lib/ffmpeg";
 import { cn } from "@/lib/utils";
+import { AdGateModal } from "./AdGateModal";
+
+const SITE_NAME = "trakory";
 
 type Status = "idle" | "ready" | "loading" | "converting" | "done" | "error";
 
@@ -29,6 +32,7 @@ export function Converter() {
     null,
   );
   const [dragOver, setDragOver] = useState(false);
+  const [adGateOpen, setAdGateOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -95,8 +99,18 @@ export function Converter() {
 
   const downloadName =
     file && result
-      ? `${file.name.replace(/\.[^.]+$/, "")}.${format}`
-      : `audio.${format}`;
+      ? `${file.name.replace(/\.[^.]+$/, "")}.${SITE_NAME}.${format}`
+      : `audio.${SITE_NAME}.${format}`;
+
+  const triggerDownload = () => {
+    if (!result) return;
+    const a = document.createElement("a");
+    a.href = result.url;
+    a.download = downloadName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
 
   return (
     <div className="relative w-full max-w-2xl">
@@ -317,13 +331,12 @@ export function Converter() {
                 >
                   Convert another
                 </button>
-                <a
-                  href={result.url}
-                  download={downloadName}
+                <button
+                  onClick={() => setAdGateOpen(true)}
                   className="rounded-xl bg-gradient-brand px-6 py-3 text-center text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-elevated active:scale-[0.98]"
                 >
                   Download {format.toUpperCase()}
-                </a>
+                </button>
               </>
             ) : (
               <button
@@ -348,6 +361,16 @@ export function Converter() {
           </div>
         </div>
       </div>
+
+      <AdGateModal
+        open={adGateOpen}
+        durationSec={8}
+        onComplete={() => {
+          setAdGateOpen(false);
+          triggerDownload();
+        }}
+        onClose={() => setAdGateOpen(false)}
+      />
     </div>
   );
 }
