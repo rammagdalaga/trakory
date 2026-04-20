@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Converter } from "@/components/Converter";
+import { InterstitialAd } from "@/components/InterstitialAd";
+import { BottomAdBar } from "@/components/BottomAdBar";
 
 export const Route = createFileRoute("/")({
   head: () => ({
