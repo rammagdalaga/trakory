@@ -361,6 +361,16 @@ export function Converter() {
           </div>
         </div>
       </div>
+
+      <AdGateModal
+        open={adGateOpen}
+        durationSec={8}
+        onComplete={() => {
+          setAdGateOpen(false);
+          triggerDownload();
+        }}
+        onClose={() => setAdGateOpen(false)}
+      />
     </div>
   );
 }
