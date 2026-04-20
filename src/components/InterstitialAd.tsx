@@ -1,21 +1,17 @@
 import { useEffect, useState } from "react";
 import { AdSlot } from "./AdSlot";
 
-const STORAGE_KEY = "trakory_interstitial_seen";
-
 /**
- * One-shot interstitial: appears 5s after the user lands on the site.
- * Stored per-session so it doesn't nag on re-renders.
+ * Interstitial: appears 5s after the user lands on the site.
+ * Shows on every fresh page load so the ad placement is always present.
  */
 export function InterstitialAd() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (sessionStorage.getItem(STORAGE_KEY)) return;
     const t = setTimeout(() => {
       setOpen(true);
-      sessionStorage.setItem(STORAGE_KEY, "1");
     }, 5000);
     return () => clearTimeout(t);
   }, []);

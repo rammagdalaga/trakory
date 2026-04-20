@@ -5,7 +5,7 @@ import { AdSlot } from "./AdSlot";
 
 export function TopAdBar() {
   const isMobile = useIsMobile();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 shadow-soft backdrop-blur-xl">
