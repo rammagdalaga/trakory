@@ -32,6 +32,7 @@ export function Converter() {
     null,
   );
   const [dragOver, setDragOver] = useState(false);
+  const [adGateOpen, setAdGateOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
