@@ -1,13 +1,24 @@
-import { FFmpeg } from "@ffmpeg/ffmpeg";
+interface FFmpeg {
+  load: (opts: any) => Promise<void>;
+  exec: (args: string[]) => Promise<number>;
+  writeFile: (name: string, data: Uint8Array) => Promise<void>;
+  readFile: (name: string) => Promise<Uint8Array>;
+  deleteFile: (name: string) => Promise<void>;
+  on: (event: string, callback: (data: any) => void) => void;
+  off: (event: string, callback: (data: any) => void) => void;
+}
 
 let ffmpegInstance: FFmpeg | null = null;
 let loadPromise: Promise<FFmpeg> | null = null;
 
 const CORE_VERSION = "0.12.9";
-const CORE_BASE = `https://unpkg.com/@ffmpeg/core@${CORE_VERSION}/dist/umd`;
-const CORE_URL = `${CORE_BASE}/ffmpeg-core.js`;
-const WASM_URL = `${CORE_BASE}/ffmpeg-core.wasm`;
+const CORE_URL = `https://cdn.jsdelivr.net/npm/@ffmpeg/core@${CORE_VERSION}/dist/umd/ffmpeg-core.js`;
+const WASM_URL = `https://cdn.jsdelivr.net/npm/@ffmpeg/core@${CORE_VERSION}/dist/umd/ffmpeg-core.wasm`;
 
+/**
+ * Load FFmpeg from CDN using esm.sh
+ * Avoids native binding issues with Cloudflare Pages by using pre-built WASM
+ */
 export async function getFFmpeg(
   onLog?: (msg: string) => void,
 ): Promise<FFmpeg> {
@@ -15,19 +26,39 @@ export async function getFFmpeg(
   if (loadPromise) return loadPromise;
 
   loadPromise = (async () => {
-    const ffmpeg = new FFmpeg();
-    ffmpeg.on("log", ({ message }) => {
-      console.log("[ffmpeg]", message);
-      onLog?.(message);
-    });
+    try {
+      console.log("[FFmpeg] Loading FFmpeg from CDN...");
+      
+      // Import FFmpeg directly from esm.sh (proper ES module from CDN)
+      const FFmpegModule = await import("https://esm.sh/@ffmpeg/ffmpeg@0.12.15");
 
-    await ffmpeg.load({
-      coreURL: CORE_URL,
-      wasmURL: WASM_URL,
-    });
+      const FFmpegClass = FFmpegModule.FFmpeg;
+      if (!FFmpegClass) {
+        console.error("[FFmpeg] Available exports:", Object.keys(FFmpegModule));
+        throw new Error("FFmpeg class not available from import");
+      }
 
-    ffmpegInstance = ffmpeg;
-    return ffmpeg;
+      console.log("[FFmpeg] Creating FFmpeg instance...");
+      const ffmpeg = new FFmpegClass();
+
+      ffmpeg.on("log", ({ message }: { message: string }) => {
+        console.log("[ffmpeg]", message);
+        onLog?.(message);
+      });
+
+      console.log("[FFmpeg] Loading FFmpeg core from", CORE_URL);
+      await ffmpeg.load({
+        coreURL: CORE_URL,
+        wasmURL: WASM_URL,
+      });
+
+      console.log("[FFmpeg] FFmpeg loaded successfully!");
+      ffmpegInstance = ffmpeg;
+      return ffmpeg;
+    } catch (error) {
+      console.error("[FFmpeg] Failed to load FFmpeg:", error);
+      throw new Error(`Failed to initialize FFmpeg: ${error}`);
+    }
   })();
 
   try {

@@ -39,14 +39,14 @@ export const Route = createFileRoute("/")({
     links: [
       { rel: "canonical", href: SITE_URL },
       // Website icon (favicon)
-      { rel: "icon", type: "image/png", href: "../public/logo/32x32.png", sizes: "32x32" },
-      { rel: "icon", type: "image/png", href: "../public/logo/16x16.png", sizes: "16x16" },
+      { rel: "icon", type: "image/png", href: "/logo/32x32.png", sizes: "32x32" },
+      { rel: "icon", type: "image/png", href: "/logo/16x16.png", sizes: "16x16" },
 
       // Main shortcut icon (fallback)
-      { rel: "shortcut icon", href: "../public/logo/logo.png" },
+      { rel: "shortcut icon", href: "/logo/logo.png" },
 
       // Apple devices icon
-      { rel: "apple-touch-icon", href: "../public/logo/180x180.png", sizes: "180x180" },
+      { rel: "apple-touch-icon", href: "/logo/180x180.png", sizes: "180x180" },
     ],
     scripts: [
       {

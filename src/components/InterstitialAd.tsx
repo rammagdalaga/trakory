@@ -4,19 +4,27 @@ import { AdSlot } from "./AdSlot";
 /**
  * Interstitial: appears 5s after the user lands on the site.
  * Shows on every fresh page load so the ad placement is always present.
+ * Only renders on client after hydration to avoid SSR mismatches.
  */
 export function InterstitialAd() {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    // Mark as mounted after hydration
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const t = setTimeout(() => {
       setOpen(true);
     }, 5000);
     return () => clearTimeout(t);
-  }, []);
+  }, [mounted]);
 
-  if (!open) return null;
+  // Don't render anything until mounted to avoid hydration issues
+  if (!mounted || !open) return null;
 
   return (
     <div

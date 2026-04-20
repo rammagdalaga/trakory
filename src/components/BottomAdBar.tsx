@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdSlot } from "./AdSlot";
 
 export function BottomAdBar() {
   const [closed, setClosed] = useState(false);
-  if (closed) return null;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || closed) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 shadow-elevated backdrop-blur-xl">
+    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 shadow-elevated backdrop-blur-xl" suppressHydrationWarning>
       <div className="mx-auto flex w-full max-w-6xl items-center gap-2 px-3 py-2 sm:gap-3 sm:px-4">
         <span className="hidden font-mono text-[10px] uppercase tracking-widest text-muted-foreground sm:inline">
           Ad

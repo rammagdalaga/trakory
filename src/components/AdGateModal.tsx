@@ -13,6 +13,7 @@ interface AdGateModalProps {
 /**
  * Rewarded-style ad gate. User must wait `durationSec` seconds before the
  * "Continue" action unlocks. Closing early calls onClose without unlocking.
+ * Only renders on client after hydration to avoid SSR mismatches.
  */
 export function AdGateModal({
   open,
@@ -23,9 +24,14 @@ export function AdGateModal({
   description = "Please watch this short ad to support Trakory. Your download will start automatically.",
 }: AdGateModalProps) {
   const [remaining, setRemaining] = useState(durationSec);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!open) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!open || !mounted) {
       setRemaining(durationSec);
       return;
     }
@@ -40,9 +46,9 @@ export function AdGateModal({
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [open, durationSec]);
+  }, [open, durationSec, mounted]);
 
-  if (!open) return null;
+  if (!mounted || !open) return null;
 
   const done = remaining === 0;
   const progress = ((durationSec - remaining) / durationSec) * 100;
@@ -52,6 +58,7 @@ export function AdGateModal({
       className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
+      suppressHydrationWarning
     >
       <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border bg-card shadow-elevated">
         <button

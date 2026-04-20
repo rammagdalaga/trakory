@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-// Replace with your real AdSense IDs after approval.
-export const ADSENSE_CLIENT = "ca-pub-XXXXXXXXXXXXXXXX";
+// Your AdSense account ID and ad slots
+export const ADSENSE_CLIENT = "ca-pub-7172866420926779";
 
 declare global {
   interface Window {
@@ -27,10 +27,16 @@ export function AdSlot({
 }: AdSlotProps) {
   const pushed = useRef(false);
   const [filled, setFilled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const insRef = useRef<HTMLModElement | null>(null);
 
+  // Mark as mounted on first client render only
   useEffect(() => {
-    if (pushed.current) return;
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || pushed.current) return;
     pushed.current = true;
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -47,12 +53,24 @@ export function AdSlot({
       }
     }, 1500);
     return () => clearTimeout(t);
-  }, []);
+  }, [mounted]);
 
   const isPlaceholder = ADSENSE_CLIENT.includes("XXXX") || !filled;
 
+  // Only render on client after hydration
+  if (!mounted) return <div className={cn("relative w-full", className)} style={style} />;
+
   return (
-    <div className={cn("relative w-full", className)} style={style}>
+    <div 
+      className={cn("relative w-full", className)} 
+      style={{
+        // Ensure placeholder has minimum ad dimensions for testing
+        minHeight: format === "auto" ? "90px" : "250px",
+        minWidth: "100%",
+        ...style 
+      }} 
+      suppressHydrationWarning
+    >
       <ins
         ref={insRef}
         className="adsbygoogle block h-full w-full"
@@ -65,14 +83,14 @@ export function AdSlot({
       {isPlaceholder && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-lg bg-gradient-soft text-center"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-lg bg-gradient-to-br from-muted to-muted/50 border border-dashed border-muted-foreground/30 text-center"
         >
           <div className="px-4">
-            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-              Advertisement
+            <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">
+              📢 Advertisement
             </p>
-            <p className="mt-1 text-xs text-muted-foreground/80">
-              Your ad could be here
+            <p className="mt-1 text-xs text-muted-foreground/70">
+              {format === "auto" ? "728×90" : "300×250"}
             </p>
           </div>
         </div>
