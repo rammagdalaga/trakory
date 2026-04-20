@@ -104,7 +104,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="relative min-h-dvh overflow-hidden bg-background">
+    <div className="relative min-h-dvh overflow-x-clip bg-background pb-24 sm:pb-28">
       {/* Ambient gradient blobs (soft, no rainbow) */}
       <div
         aria-hidden
@@ -117,18 +117,18 @@ function Index() {
 
       <TopAdBar />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-4 pt-5 sm:px-6 sm:pt-8">
-        <a href="/" className="flex items-center gap-2.5" aria-label="Trakory home">
+      <header className="relative z-10 mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pt-4 sm:px-6 sm:pt-6 lg:pt-8">
+        <a href="/" className="flex min-w-0 items-center gap-2.5" aria-label="Trakory home">
           <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-brand shadow-soft">
             <span className="font-mono text-sm font-bold text-primary-foreground">
               T
             </span>
           </div>
-          <span className="text-lg font-semibold tracking-tight text-foreground">
+          <span className="truncate text-lg font-semibold tracking-tight text-foreground">
             Trakory
           </span>
         </a>
-        <div className="flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1.5 backdrop-blur">
+        <div className="ml-auto flex shrink-0 items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1.5 backdrop-blur">
           <span className="size-1.5 animate-pulse rounded-full bg-primary" />
           <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             Engine ready
@@ -136,16 +136,16 @@ function Index() {
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-4 py-10 sm:px-6 sm:py-16 lg:py-20">
-        <div className="mb-10 max-w-2xl text-center sm:mb-12">
+      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
+        <div className="mb-8 max-w-2xl text-center sm:mb-10">
           <span className="mb-4 inline-block rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur sm:mb-5">
             Private · In-browser · No uploads
           </span>
-          <h1 className="text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h1 className="text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl">
             Free Video to Audio Converter —{" "}
             <span className="text-gradient-brand">MP3, WAV, FLAC</span>
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-pretty text-sm text-muted-foreground sm:mt-5 sm:text-base md:text-lg">
+          <p className="mx-auto mt-4 max-w-xl text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base md:text-lg">
             Convert MP4, MOV, MKV and WEBM videos into high-quality audio
             directly in your browser. No uploads, no signup, 100% private.
           </p>
@@ -155,7 +155,7 @@ function Index() {
 
         <section
           aria-label="Why Trakory"
-          className="mt-14 grid w-full max-w-4xl grid-cols-1 gap-3 sm:mt-20 sm:grid-cols-3 sm:gap-4"
+            className="mt-12 grid w-full max-w-4xl grid-cols-1 gap-3 sm:mt-16 sm:grid-cols-3 sm:gap-4"
         >
           {[
             {
@@ -188,7 +188,7 @@ function Index() {
 
       <section
         aria-label="Frequently asked questions"
-        className="relative z-10 mx-auto mt-4 w-full max-w-3xl px-4 pb-12 sm:px-6"
+        className="relative z-10 mx-auto mt-2 w-full max-w-3xl px-4 pb-10 sm:px-6 sm:pb-12"
       >
         <h2 className="mb-6 text-center text-xl font-semibold text-foreground sm:text-2xl">
           Frequently asked questions
@@ -223,7 +223,7 @@ function Index() {
         </div>
       </section>
 
-      <footer className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-28 text-center sm:px-6">
+      <footer className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-6 text-center sm:px-6">
         <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
           Trakory · Sound, distilled
         </p>
