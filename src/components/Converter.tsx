@@ -331,13 +331,12 @@ export function Converter() {
                 >
                   Convert another
                 </button>
-                <a
-                  href={result.url}
-                  download={downloadName}
+                <button
+                  onClick={() => setAdGateOpen(true)}
                   className="rounded-xl bg-gradient-brand px-6 py-3 text-center text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-elevated active:scale-[0.98]"
                 >
                   Download {format.toUpperCase()}
-                </a>
+                </button>
               </>
             ) : (
               <button
