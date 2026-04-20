@@ -121,7 +121,7 @@ export function Converter() {
       />
 
       <div className="relative rounded-3xl border border-border/60 bg-card/90 p-1 shadow-elevated backdrop-blur-xl">
-        <div className="rounded-[calc(1.5rem-2px)] bg-gradient-soft p-8 sm:p-10">
+        <div className="rounded-[calc(1.5rem-2px)] bg-gradient-soft p-5 sm:p-8 lg:p-10">
           {/* Drop zone */}
           {!file ? (
             <button
@@ -137,8 +137,8 @@ export function Converter() {
                 setDragOver(false);
                 handleFile(e.dataTransfer.files?.[0] ?? null);
               }}
-              className={cn(
-                "group relative flex w-full flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-border bg-background/60 p-12 text-center transition-all hover:border-primary/50 hover:bg-primary-soft/40",
+                className={cn(
+                  "group relative flex w-full flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-border bg-background/60 p-6 text-center transition-all hover:border-primary/50 hover:bg-primary-soft/40 sm:p-10 lg:p-12",
                 dragOver && "border-primary bg-primary-soft/60",
               )}
             >
@@ -170,7 +170,7 @@ export function Converter() {
               </span>
             </button>
           ) : (
-            <div className="flex items-center justify-between gap-4 rounded-2xl border border-border bg-background/80 p-4">
+            <div className="flex flex-col gap-3 rounded-2xl border border-border bg-background/80 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft">
                   <svg
@@ -197,7 +197,7 @@ export function Converter() {
               </div>
               <button
                 onClick={reset}
-                className="rounded-lg px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
+                className="self-start rounded-lg px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground sm:self-auto"
               >
                 Change
               </button>
@@ -299,16 +299,16 @@ export function Converter() {
           {/* Result */}
           {result && (
             <div className="mt-6 space-y-4 rounded-2xl border border-border bg-background/80 p-4">
-              <div className="flex items-center justify-between">
-                <div>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
                   <p className="text-sm font-semibold text-foreground">
                     Ready to download
                   </p>
-                  <p className="font-mono text-xs text-muted-foreground">
+                  <p className="truncate font-mono text-xs text-muted-foreground">
                     {downloadName} · {formatBytes(result.blob.size)}
                   </p>
                 </div>
-                <span className="rounded-full bg-primary-soft px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary">
+                <span className="w-fit rounded-full bg-primary-soft px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary">
                   ✓ Done
                 </span>
               </div>
