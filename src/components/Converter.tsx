@@ -98,8 +98,8 @@ export function Converter() {
 
   const downloadName =
     file && result
-      ? `${file.name.replace(/\.[^.]+$/, "")}.${format}`
-      : `audio.${format}`;
+      ? `${file.name.replace(/\.[^.]+$/, "")}.${SITE_NAME}.${format}`
+      : `audio.${SITE_NAME}.${format}`;
 
   return (
     <div className="relative w-full max-w-2xl">
