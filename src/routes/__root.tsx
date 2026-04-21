@@ -44,6 +44,12 @@ export const Route = createRootRoute({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Trakory — Video to Audio Converter" },
+      { name: "description", content: "Converts YouTube videos to downloadable MP3 audio files with selectable quality." },
+      { property: "og:description", content: "Converts YouTube videos to downloadable MP3 audio files with selectable quality." },
+      { name: "twitter:description", content: "Converts YouTube videos to downloadable MP3 audio files with selectable quality." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/83cf47c5-ffaa-481d-8d19-4b541bb4daa7/id-preview-8440a619--770f5aa1-72a3-44d0-bd2a-05450cb032d3.lovable.app-1776701822459.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/83cf47c5-ffaa-481d-8d19-4b541bb4daa7/id-preview-8440a619--770f5aa1-72a3-44d0-bd2a-05450cb032d3.lovable.app-1776701822459.png" },
     ],
     links: [
       {
