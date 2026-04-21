@@ -1,5 +1,5 @@
-// Media conversion powered by Mediabunny (pure JS, no WASM, no native deps).
-// Runs in the browser using WebCodecs and bundles cleanly for Cloudflare.
+// Media conversion powered by Mediabunny (pure JS, no native deps).
+// Runs in the browser, bundles cleanly for Cloudflare Workers.
 import {
   Input,
   Output,
@@ -10,8 +10,22 @@ import {
   Mp3OutputFormat,
   WavOutputFormat,
   FlacOutputFormat,
-  canEncodeAudio,
 } from "mediabunny";
+import { registerMp3Encoder } from "@mediabunny/mp3-encoder";
+
+// Register the LAME-based WASM MP3 encoder so MP3 export works in every browser
+// (browser WebCodecs implementations don't ship an MP3 encoder).
+// Idempotent — safe to call once at module load.
+let mp3Registered = false;
+function ensureMp3Encoder() {
+  if (mp3Registered) return;
+  try {
+    registerMp3Encoder();
+    mp3Registered = true;
+  } catch {
+    // already registered or unsupported environment — ignore
+  }
+}
 
 export type AudioFormat = "mp3" | "wav" | "flac";
 export type Bitrate = "128" | "192" | "320";
@@ -24,16 +38,13 @@ export interface ConvertOptions {
 
 export interface ConvertResult {
   blob: Blob;
-  /** Format actually produced (may differ from requested if encoder unavailable). */
   format: AudioFormat;
-  /** True when we had to fall back from the requested format. */
   fellBack: boolean;
 }
 
-// Kept for API compatibility with the previous ffmpeg.wasm implementation.
-// Mediabunny needs no async engine load, so this is a no-op.
+// Kept for API compatibility; nothing to load.
 export async function getFFmpeg(): Promise<void> {
-  return;
+  ensureMp3Encoder();
 }
 
 function makeOutputFormat(format: AudioFormat) {
@@ -48,26 +59,11 @@ function mimeFor(format: AudioFormat): string {
   return "audio/flac";
 }
 
-async function pickFormat(requested: AudioFormat): Promise<AudioFormat> {
-  // WAV uses PCM and is always encodable in any browser.
-  if (requested === "wav") return "wav";
-  // MP3 / FLAC require WebCodecs encoders that aren't present in every browser
-  // (notably MP3 is missing in Chrome/Firefox today).
-  try {
-    if (await canEncodeAudio(requested)) return requested;
-  } catch {
-    // ignore — treat as unsupported
-  }
-  // Fall back to WAV (lossless, always available).
-  return "wav";
-}
-
 export async function convertVideoToAudio(
   file: File,
   { format, bitrate, onProgress }: ConvertOptions,
 ): Promise<ConvertResult> {
-  const targetFormat = await pickFormat(format);
-  const fellBack = targetFormat !== format;
+  ensureMp3Encoder();
 
   const input = new Input({
     formats: ALL_FORMATS,
@@ -75,20 +71,20 @@ export async function convertVideoToAudio(
   });
 
   const output = new Output({
-    format: makeOutputFormat(targetFormat),
+    format: makeOutputFormat(format),
     target: new BufferTarget(),
   });
 
   const conversion = await Conversion.init({
     input,
     output,
-    video: { discard: true }, // strip video, we only want audio
+    video: { discard: true },
     audio:
-      targetFormat === "mp3"
+      format === "mp3"
         ? { codec: "mp3", bitrate: Number(bitrate) * 1000 }
-        : targetFormat === "flac"
+        : format === "flac"
           ? { codec: "flac" }
-          : undefined, // wav: let Mediabunny pick PCM defaults
+          : undefined, // wav: PCM defaults
   });
 
   if (!conversion.isValid) {
@@ -98,7 +94,7 @@ export async function convertVideoToAudio(
       .join("; ");
     throw new Error(
       reasons
-        ? `Couldn't extract audio from this file (${reasons}). Try a different video.`
+        ? `Couldn't extract audio (${reasons}). Try a different file.`
         : "This file doesn't contain a convertible audio track.",
     );
   }
@@ -114,9 +110,9 @@ export async function convertVideoToAudio(
   if (!buffer) throw new Error("Conversion produced no output.");
 
   return {
-    blob: new Blob([buffer], { type: mimeFor(targetFormat) }),
-    format: targetFormat,
-    fellBack,
+    blob: new Blob([buffer], { type: mimeFor(format) }),
+    format,
+    fellBack: false,
   };
 }
 
