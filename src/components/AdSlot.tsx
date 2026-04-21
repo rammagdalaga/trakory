@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-// Replace with your real AdSense IDs after approval.
-export const ADSENSE_CLIENT = "ca-pub-XXXXXXXXXXXXXXXX";
+// Google AdSense Client ID
+export const ADSENSE_CLIENT = "ca-pub-7172866420926779";
 
 declare global {
   interface Window {
@@ -28,6 +28,7 @@ export function AdSlot({
   const pushed = useRef(false);
   const [filled, setFilled] = useState(false);
   const insRef = useRef<HTMLModElement | null>(null);
+  const scriptRef = useRef<HTMLScriptElement | null>(null);
 
   useEffect(() => {
     if (pushed.current) return;
@@ -53,6 +54,7 @@ export function AdSlot({
 
   return (
     <div className={cn("relative w-full", className)} style={style}>
+      {/* Google AdSense Ad Unit */}
       <ins
         ref={insRef}
         className="adsbygoogle block h-full w-full"
@@ -61,6 +63,13 @@ export function AdSlot({
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive ? "true" : "false"}
+      />
+      {/* Execute Google AdSense script */}
+      <script
+        ref={scriptRef}
+        dangerouslySetInnerHTML={{
+          __html: "(adsbygoogle = window.adsbygoogle || []).push({});",
+        }}
       />
       {isPlaceholder && (
         <div
