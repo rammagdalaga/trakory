@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -6,6 +6,34 @@ export function TopAdBar() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(true);
   const adHeight = isMobile ? 50 : 60;
+  const adContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open || !adContainerRef.current) return;
+
+    const container = adContainerRef.current;
+    container.innerHTML = "";
+
+    // Create and append first script with config
+    const configScript = document.createElement("script");
+    configScript.textContent = `
+      window.atOptions = {
+        'key' : '3f22fa6031a61d2f5c0f26c81ba99787',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+      };
+    `;
+    container.appendChild(configScript);
+
+    // Create and append the invoke script
+    const invokeScript = document.createElement("script");
+    invokeScript.src =
+      "https://www.highperformanceformat.com/3f22fa6031a61d2f5c0f26c81ba99787/invoke.js";
+    invokeScript.async = true;
+    container.appendChild(invokeScript);
+  }, [open]);
 
   return (
     <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 shadow-soft backdrop-blur-xl">
@@ -43,24 +71,9 @@ export function TopAdBar() {
             opacity: open ? 1 : 0,
             marginTop: open ? 8 : 0,
           }}
-        >
-          <div
-            dangerouslySetInnerHTML={{
-              __html: `
-                <script>
-                  atOptions = {
-                    'key' : '3f22fa6031a61d2f5c0f26c81ba99787',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                  };
-                </script>
-                <script src="https://www.highperformanceformat.com/3f22fa6031a61d2f5c0f26c81ba99787/invoke.js"><\/script>
-              `,
-            }}
-          />
-        </div>
+          ref={adContainerRef}
+          suppressHydrationWarning
+        />
       </div>
     </div>
   );

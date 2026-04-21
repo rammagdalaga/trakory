@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { AdSlot } from "./AdSlot";
 
 /**
  * Interstitial: appears 5s after the user lands on the site.
@@ -10,6 +9,7 @@ export function InterstitialAd() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const adHeight = isMobile ? 200 : 280;
+  const adContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -19,6 +19,20 @@ export function InterstitialAd() {
     return () => clearTimeout(t);
   }, []);
 
+  useEffect(() => {
+    if (!open || !adContainerRef.current) return;
+
+    const container = adContainerRef.current;
+    container.innerHTML = "";
+
+    // Create and append script
+    const script = document.createElement("script");
+    script.src =
+      "https://pl29211369.profitablecpmratenetwork.com/75/85/d5/7585d53822b64080f1cea75f11c02c14.js";
+    script.async = true;
+    container.appendChild(script);
+  }, [open]);
+
   if (!open) return null;
 
   return (
@@ -26,6 +40,7 @@ export function InterstitialAd() {
       className="fixed inset-0 z-40 flex items-center justify-center bg-foreground/40 p-3 sm:p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
+      suppressHydrationWarning
     >
       <div
         className={`relative w-full ${isMobile ? "max-w-sm" : "max-w-xl"} overflow-hidden rounded-3xl border border-border bg-card shadow-elevated`}
@@ -44,13 +59,9 @@ export function InterstitialAd() {
           <div
             className={`overflow-hidden rounded-2xl border border-dashed border-border bg-muted/40`}
             style={{ minHeight: adHeight }}
-          >
-            <AdSlot
-              slot="3688685950"
-              format="square"
-              style={{ minHeight: adHeight, height: adHeight, maxHeight: adHeight }}
-            />
-          </div>
+            ref={adContainerRef}
+            suppressHydrationWarning
+          />
         </div>
       </div>
     </div>

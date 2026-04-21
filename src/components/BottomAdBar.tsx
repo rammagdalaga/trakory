@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -6,6 +6,27 @@ export function BottomAdBar() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(true);
   const adHeight = isMobile ? 50 : 60;
+  const adContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open || !adContainerRef.current) return;
+
+    const container = adContainerRef.current;
+    container.innerHTML = "";
+
+    // Create and inject link
+    const link = document.createElement("a");
+    link.href =
+      "https://www.profitablecpmratenetwork.com/kz8t2s35nt?key=167bbbb0298f11541ca9ac312849d65b";
+    link.textContent = "View Ad";
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.style.display = "block";
+    link.style.width = "100%";
+    link.style.height = "100%";
+
+    container.appendChild(link);
+  }, [open]);
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 w-full border-t border-border bg-card/95 shadow-elevated backdrop-blur-xl">
@@ -44,16 +65,7 @@ export function BottomAdBar() {
             marginTop: open ? 8 : 0,
           }}
         >
-          <div className="rounded-lg bg-muted/40">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `
-                  <script async="async" data-cfasync="false" src="https://pl29211370.profitablecpmratenetwork.com/88d8b73197a7a675ab90013771bb9e26/invoke.js"><\/script>
-                  <div id="container-88d8b73197a7a675ab90013771bb9e26"><\/div>
-                `,
-              }}
-            />
-          </div>
+          <div className="rounded-lg bg-muted/40" ref={adContainerRef} />
         </div>
       </div>
     </div>
