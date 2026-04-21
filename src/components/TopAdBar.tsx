@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { AdSlot } from "./AdSlot";
 
 export function TopAdBar() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(true);
-  const adHeight = isMobile ? 56 : 72;
+  const adHeight = isMobile ? 50 : 60;
 
   return (
     <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 shadow-soft backdrop-blur-xl">
@@ -38,20 +37,29 @@ export function TopAdBar() {
 
         {/* Ad Container - With smooth animation */}
         <div
-          className="overflow-hidden transition-all duration-300 ease-in-out"
+          className="overflow-hidden rounded-lg bg-muted/40 transition-all duration-300 ease-in-out"
           style={{
             maxHeight: open ? adHeight + 12 : 0,
             opacity: open ? 1 : 0,
             marginTop: open ? 8 : 0,
           }}
         >
-          <div className="rounded-lg bg-muted/40">
-            <AdSlot
-              slot="3250761747"
-              format="horizontal"
-              style={{ minHeight: adHeight, height: adHeight, maxHeight: adHeight }}
-            />
-          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: `
+                <script>
+                  atOptions = {
+                    'key' : '3f22fa6031a61d2f5c0f26c81ba99787',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                  };
+                </script>
+                <script src="https://www.highperformanceformat.com/3f22fa6031a61d2f5c0f26c81ba99787/invoke.js"><\/script>
+              `,
+            }}
+          />
         </div>
       </div>
     </div>

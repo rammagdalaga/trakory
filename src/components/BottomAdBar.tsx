@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { AdSlot } from "./AdSlot";
 
 export function BottomAdBar() {
   const isMobile = useIsMobile();
@@ -46,10 +45,13 @@ export function BottomAdBar() {
           }}
         >
           <div className="rounded-lg bg-muted/40">
-            <AdSlot
-              slot="3111160949"
-              format="horizontal"
-              style={{ minHeight: adHeight, height: adHeight, maxHeight: adHeight }}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: `
+                  <script async="async" data-cfasync="false" src="https://pl29211370.profitablecpmratenetwork.com/88d8b73197a7a675ab90013771bb9e26/invoke.js"><\/script>
+                  <div id="container-88d8b73197a7a675ab90013771bb9e26"><\/div>
+                `,
+              }}
             />
           </div>
         </div>

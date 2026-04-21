@@ -8,7 +8,8 @@ const SITE_URL = "https://trakory.com";
 const OG_TITLE = "Trakory — Free Online File Converter Tools";
 const OG_DESC =
   "Convert videos to MP3, resize images, convert PDFs to Word, compress files & more. 100% free, fast, and private. All conversions happen in your browser. No uploads, no signup.";
-const SCHEMA_DESC = "Free online converter platform supporting video to audio conversion, image resizing, PDF conversion, Word document conversion, and more. Browser-based conversion with no uploads or registration required.";
+const SCHEMA_DESC =
+  "Free online converter platform supporting video to audio conversion, image resizing, PDF conversion, Word document conversion, and more. Browser-based conversion with no uploads or registration required.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,7 +24,10 @@ export const Route = createFileRoute("/")({
         content:
           "online converter, file converter, video to audio, mp3 converter, image resizer, PDF converter, word converter, audio converter, free online tools, browser converter, private conversion, no upload required, video converter, format converter, media converter, document converter",
       },
-      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+      {
+        name: "robots",
+        content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      },
       { name: "author", content: "Trakory" },
       { name: "theme-color", content: "#0ea5b7" },
       { name: "application-name", content: "Trakory" },
@@ -56,7 +60,7 @@ export const Route = createFileRoute("/")({
 
       // Apple devices icon
       { rel: "apple-touch-icon", href: "/logo/180x180.png", sizes: "180x180" },
-      
+
       // Preconnect for better performance
       { rel: "preconnect", href: "https://www.googletagmanager.com" },
     ],
@@ -70,9 +74,7 @@ export const Route = createFileRoute("/")({
           url: SITE_URL,
           logo: `${SITE_URL}/logo/logo.png`,
           description: SCHEMA_DESC,
-          sameAs: [
-            "https://twitter.com/Trakory",
-          ],
+          sameAs: ["https://twitter.com/Trakory"],
           contactPoint: {
             "@type": "ContactPoint",
             contactType: "Customer Support",
@@ -90,9 +92,9 @@ export const Route = createFileRoute("/")({
           applicationCategory: "MultimediaApplication",
           operatingSystem: "Any (Web Browser)",
           description: SCHEMA_DESC,
-          offers: { 
-            "@type": "Offer", 
-            price: "0", 
+          offers: {
+            "@type": "Offer",
+            price: "0",
             priceCurrency: "USD",
             availability: "https://schema.org/InStock",
           },
@@ -209,7 +211,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="relative min-h-dvh overflow-x-clip bg-background pb-24 sm:pb-28">
+    <div className="relative min-h-dvh overflow-x-clip bg-background pb-20 sm:pb-24 md:pb-28 pt-0">
       {/* Ambient gradient blobs (soft, no rainbow) */}
       <div
         aria-hidden
@@ -246,8 +248,8 @@ function Index() {
             <span className="text-gradient-brand">MP3, WAV, FLAC</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base md:text-lg">
-            Convert MP4, MOV, MKV and WEBM videos into high-quality audio
-            directly in your browser. No uploads, no signup, 100% private.
+            Convert MP4, MOV, MKV and WEBM videos into high-quality audio directly in your browser.
+            No uploads, no signup, 100% private.
           </p>
         </div>
 
@@ -255,7 +257,7 @@ function Index() {
 
         <section
           aria-label="Why Trakory"
-            className="mt-12 grid w-full max-w-4xl grid-cols-1 gap-3 sm:mt-16 sm:grid-cols-3 sm:gap-4"
+          className="mt-12 grid w-full max-w-4xl grid-cols-1 gap-3 sm:mt-16 sm:grid-cols-3 sm:gap-4"
         >
           {[
             {
@@ -275,12 +277,8 @@ function Index() {
               key={f.title}
               className="rounded-2xl border border-border bg-card/70 p-5 shadow-soft backdrop-blur"
             >
-              <h3 className="text-sm font-semibold text-foreground">
-                {f.title}
-              </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                {f.body}
-              </p>
+              <h3 className="text-sm font-semibold text-foreground">{f.title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
             </div>
           ))}
         </section>
@@ -315,9 +313,7 @@ function Index() {
               <summary className="cursor-pointer list-none text-sm font-semibold text-foreground sm:text-base">
                 {f.q}
               </summary>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {f.a}
-              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
             </details>
           ))}
         </div>
