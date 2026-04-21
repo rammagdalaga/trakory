@@ -10,7 +10,8 @@ export function TopAdBar() {
 
   return (
     <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 shadow-soft backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-3 py-2 sm:px-4">
+      <div className="mx-auto flex w-full max-w-6xl flex-col px-3 py-2 sm:px-4">
+        {/* Header - Always visible */}
         <div className="flex items-center justify-between gap-3">
           <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             Sponsored
@@ -35,17 +36,22 @@ export function TopAdBar() {
           </button>
         </div>
 
+        {/* Ad Container - With smooth animation */}
         <div
-          className={
-            "overflow-hidden rounded-lg bg-muted/40 transition-all duration-300 " +
-            (open ? "max-h-[56px] opacity-100 sm:max-h-[72px]" : "max-h-0 opacity-0")
-          }
+          className="overflow-hidden transition-all duration-300 ease-in-out"
+          style={{
+            maxHeight: open ? adHeight + 12 : 0,
+            opacity: open ? 1 : 0,
+            marginTop: open ? 8 : 0,
+          }}
         >
-          <AdSlot
-            slot="3250761747"
-            format="horizontal"
-            style={{ minHeight: adHeight, height: adHeight, maxHeight: adHeight }}
-          />
+          <div className="rounded-lg bg-muted/40">
+            <AdSlot
+              slot="3250761747"
+              format="horizontal"
+              style={{ minHeight: adHeight, height: adHeight, maxHeight: adHeight }}
+            />
+          </div>
         </div>
       </div>
     </div>
