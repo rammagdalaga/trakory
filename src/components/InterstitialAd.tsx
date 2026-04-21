@@ -37,11 +37,7 @@ export function InterstitialAd() {
             Sponsored
           </p>
           <div className="min-h-[280px] overflow-hidden rounded-2xl border border-dashed border-border bg-muted/40">
-            <AdSlot
-              slot="2233445566"
-              format="rectangle"
-              style={{ minHeight: 280 }}
-            />
+            <AdSlot slot="3688685950" format="square" style={{ minHeight: 280 }} />
           </div>
         </div>
       </div>
