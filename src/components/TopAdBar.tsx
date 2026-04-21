@@ -6,6 +6,7 @@ import { AdSlot } from "./AdSlot";
 export function TopAdBar() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(true);
+  const adHeight = isMobile ? 56 : 72;
 
   return (
     <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 shadow-soft backdrop-blur-xl">
@@ -37,10 +38,14 @@ export function TopAdBar() {
         <div
           className={
             "overflow-hidden rounded-lg bg-muted/40 transition-all duration-300 " +
-            (open ? "max-h-[140px] opacity-100" : "max-h-0 opacity-0")
+            (open ? "max-h-[56px] opacity-100 sm:max-h-[72px]" : "max-h-0 opacity-0")
           }
         >
-          <AdSlot slot="3250761747" format="horizontal" style={{ minHeight: isMobile ? 56 : 72 }} />
+          <AdSlot
+            slot="3250761747"
+            format="horizontal"
+            style={{ minHeight: adHeight, height: adHeight, maxHeight: adHeight }}
+          />
         </div>
       </div>
     </div>

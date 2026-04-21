@@ -3,6 +3,8 @@ import { AdSlot } from "./AdSlot";
 
 export function BottomAdBar() {
   const [closed, setClosed] = useState(false);
+  const adHeight = 56;
+
   if (closed) return null;
 
   return (
@@ -11,8 +13,12 @@ export function BottomAdBar() {
         <span className="hidden font-mono text-[10px] uppercase tracking-widest text-muted-foreground sm:inline">
           Ad
         </span>
-        <div className="min-h-[56px] min-w-0 flex-1 overflow-hidden rounded-lg bg-muted/40 sm:min-h-[60px]">
-          <AdSlot slot="3111160949" format="horizontal" style={{ minHeight: 56 }} />
+        <div className="h-[56px] min-w-0 flex-1 overflow-hidden rounded-lg bg-muted/40">
+          <AdSlot
+            slot="3111160949"
+            format="horizontal"
+            style={{ minHeight: adHeight, height: adHeight, maxHeight: adHeight }}
+          />
         </div>
         <button
           onClick={() => setClosed(true)}
