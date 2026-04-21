@@ -14,18 +14,25 @@ export function TopAdBar() {
     const container = adContainerRef.current;
     container.innerHTML = "";
 
-    // Create and append the ad script
-    const adScript = document.createElement("script");
-    adScript.async = true;
-    adScript.dataset.cfasync = "false";
-    adScript.src =
-      "https://pl29211370.profitablecpmratenetwork.com/88d8b73197a7a675ab90013771bb9e26/invoke.js";
-    container.appendChild(adScript);
+    // Create and append the config script
+    const configScript = document.createElement("script");
+    configScript.textContent = `
+      atOptions = {
+        'key' : 'c20bbbe96f578b91260b2f57fbeaa1e1',
+        'format' : 'iframe',
+        'height' : 300,
+        'width' : 160,
+        'params' : {}
+      };
+    `;
+    container.appendChild(configScript);
 
-    // Create the ad container div
-    const adDiv = document.createElement("div");
-    adDiv.id = "container-88d8b73197a7a675ab90013771bb9e26";
-    container.appendChild(adDiv);
+    // Create and append the invoke script
+    const invokeScript = document.createElement("script");
+    invokeScript.src =
+      "https://www.highperformanceformat.com/c20bbbe96f578b91260b2f57fbeaa1e1/invoke.js";
+    invokeScript.async = true;
+    container.appendChild(invokeScript);
   }, [open]);
 
   return (
