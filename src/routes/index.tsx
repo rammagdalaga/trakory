@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Converter } from "@/components/Converter";
-import { InterstitialAd } from "@/components/InterstitialAd";
 import { BottomAdBar } from "@/components/BottomAdBar";
 import { TopAdBar } from "@/components/TopAdBar";
 
@@ -329,7 +328,6 @@ function Index() {
         </p>
       </footer>
 
-      <InterstitialAd />
       <BottomAdBar />
     </div>
   );

@@ -52,7 +52,7 @@ export function AdSlot({
   const isPlaceholder = !filled;
 
   return (
-    <div className={cn("relative w-full", className)} style={style}>
+    <div className={cn("relative w-full overflow-hidden", className)} style={style}>
       <ins
         ref={insRef}
         className="adsbygoogle block w-full"
