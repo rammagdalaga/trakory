@@ -12,11 +12,7 @@ export function BottomAdBar() {
           Ad
         </span>
         <div className="min-h-[56px] min-w-0 flex-1 overflow-hidden rounded-lg bg-muted/40 sm:min-h-[60px]">
-          <AdSlot
-            slot="9988776655"
-            format="horizontal"
-            style={{ minHeight: 56 }}
-          />
+          <AdSlot slot="3111160949" format="horizontal" style={{ minHeight: 56 }} />
         </div>
         <button
           onClick={() => setClosed(true)}
