@@ -14,25 +14,12 @@ export function TopAdBar() {
     const container = adContainerRef.current;
     container.innerHTML = "";
 
-    // Create and append the config script
-    const configScript = document.createElement("script");
-    configScript.textContent = `
-      atOptions = {
-        'key' : 'c20bbbe96f578b91260b2f57fbeaa1e1',
-        'format' : 'iframe',
-        'height' : 300,
-        'width' : 160,
-        'params' : {}
-      };
-    `;
-    container.appendChild(configScript);
-
-    // Create and append the invoke script
-    const invokeScript = document.createElement("script");
-    invokeScript.src =
-      "https://www.highperformanceformat.com/c20bbbe96f578b91260b2f57fbeaa1e1/invoke.js";
-    invokeScript.async = true;
-    container.appendChild(invokeScript);
+    // Create and append the ad script
+    const adScript = document.createElement("script");
+    adScript.src =
+      "https://pl29211371.profitablecpmratenetwork.com/72/a0/07/72a0075509660e39b4965cd32736ad5b.js";
+    adScript.async = true;
+    container.appendChild(adScript);
   }, [open]);
 
   return (
