@@ -1,59 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { AdSlot } from "./AdSlot";
 
-// Extend window type to include adsbygoogle
-declare global {
-  interface Window {
-    adsbygoogle: any[];
-  }
-}
-
-// AdSlot component (integrated)
-interface AdSlotProps {
-  slot: string;
-  format?: "horizontal" | "vertical" | "square" | "auto";
-  style?: React.CSSProperties;
-}
-
-function AdSlot({ slot, format = "auto", style }: AdSlotProps) {
-  useEffect(() => {
-    // Inject the main AdSense script once
-    if ((window as any).adsbygoogle === undefined) {
-      const script = document.createElement("script");
-      script.async = true;
-      script.src =
-        "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7172866420926779";
-      script.crossOrigin = "anonymous";
-      document.head.appendChild(script);
-    }
-
-    // Push the ad
-    try {
-      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("AdSense error:", e);
-    }
-  }, []);
-
-  return (
-    <div>
-      <ins
-        className="adsbygoogle"
-        style={{
-          display: "block",
-          ...style,
-        }}
-        data-ad-client="ca-pub-7172866420926779"
-        data-ad-slot={slot}
-        data-ad-format={format === "auto" ? "auto" : ""}
-        data-full-width-responsive={format === "auto" ? "true" : "false"}
-      ></ins>
-    </div>
-  );
-}
-
-// Main TopAdBar component
 export function TopAdBar() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(true);
@@ -91,11 +40,7 @@ export function TopAdBar() {
             (open ? "max-h-[140px] opacity-100" : "max-h-0 opacity-0")
           }
         >
-          <AdSlot
-            slot="3250761747"
-            format="auto"
-            style={{ minHeight: isMobile ? 56 : 72 }}
-          />
+          <AdSlot slot="3250761747" format="horizontal" style={{ minHeight: isMobile ? 56 : 72 }} />
         </div>
       </div>
     </div>
