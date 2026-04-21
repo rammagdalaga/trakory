@@ -69,11 +69,7 @@ export function AdGateModal({
 
         <div className="bg-background p-6">
           <div className="min-h-[250px] overflow-hidden rounded-2xl border border-dashed border-border bg-muted/40">
-            <AdSlot
-              slot="1234567890"
-              format="rectangle"
-              style={{ minHeight: 250 }}
-            />
+            <AdSlot slot="5081658672" format="square" style={{ minHeight: 250 }} />
           </div>
 
           <div className="mt-5 space-y-3">
