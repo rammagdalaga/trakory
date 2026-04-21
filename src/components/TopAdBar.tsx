@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { AdSlot } from "./AdSlot";
@@ -6,16 +6,9 @@ import { AdSlot } from "./AdSlot";
 export function TopAdBar() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(true);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
 
   return (
-    <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 shadow-soft backdrop-blur-xl" suppressHydrationWarning>
+    <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 shadow-soft backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-3 py-2 sm:px-4">
         <div className="flex items-center justify-between gap-3">
           <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">

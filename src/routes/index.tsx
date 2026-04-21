@@ -4,10 +4,10 @@ import { InterstitialAd } from "@/components/InterstitialAd";
 import { BottomAdBar } from "@/components/BottomAdBar";
 import { TopAdBar } from "@/components/TopAdBar";
 
-const SITE_URL = "https://trakory.com";
-const OG_TITLE = "Trakory — Free Converter Tools for Everyone";
+const SITE_URL = "https://trakory.app";
+const OG_TITLE = "Trakory — Free Video to Audio Converter (MP3, WAV, FLAC)";
 const OG_DESC =
-  "Trakory is a powerful all-in-one online file converter platform designed to make file conversion fast, simple, and accessible for everyone.";
+  "Convert MP4, MOV, MKV, WEBM and more to MP3, WAV or FLAC instantly in your browser. 100% private — no uploads, no signup, no watermark. Free forever.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -36,18 +36,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:title", content: OG_TITLE },
       { name: "twitter:description", content: OG_DESC },
     ],
-    links: [
-      { rel: "canonical", href: SITE_URL },
-      // Website icon (favicon)
-      { rel: "icon", type: "image/png", href: "/logo/32x32.png", sizes: "32x32" },
-      { rel: "icon", type: "image/png", href: "/logo/16x16.png", sizes: "16x16" },
-
-      // Main shortcut icon (fallback)
-      { rel: "shortcut icon", href: "/logo/logo.png" },
-
-      // Apple devices icon
-      { rel: "apple-touch-icon", href: "/logo/180x180.png", sizes: "180x180" },
-    ],
+    links: [{ rel: "canonical", href: SITE_URL }],
     scripts: [
       {
         type: "application/ld+json",
@@ -130,6 +119,11 @@ function Index() {
 
       <header className="relative z-10 mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pt-4 sm:px-6 sm:pt-6 lg:pt-8">
         <a href="/" className="flex min-w-0 items-center gap-2.5" aria-label="Trakory home">
+          <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-brand shadow-soft">
+            <span className="font-mono text-sm font-bold text-primary-foreground">
+              T
+            </span>
+          </div>
           <span className="truncate text-lg font-semibold tracking-tight text-foreground">
             Trakory
           </span>
@@ -148,11 +142,12 @@ function Index() {
             Private · In-browser · No uploads
           </span>
           <h1 className="text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl">
-            Free File Converter — <span className="text-gradient-brand">MP3, WAV, FLAC</span>
+            Free Video to Audio Converter —{" "}
+            <span className="text-gradient-brand">MP3, WAV, FLAC</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base md:text-lg">
-            Convert MP4, MOV, MKV, WEBM, PDF, and WORD videos into high-quality audio directly in
-            your browser. No uploads, no signup, 100% private.
+            Convert MP4, MOV, MKV and WEBM videos into high-quality audio
+            directly in your browser. No uploads, no signup, 100% private.
           </p>
         </div>
 
@@ -160,7 +155,7 @@ function Index() {
 
         <section
           aria-label="Why Trakory"
-          className="mt-12 grid w-full max-w-4xl grid-cols-1 gap-3 sm:mt-16 sm:grid-cols-3 sm:gap-4"
+            className="mt-12 grid w-full max-w-4xl grid-cols-1 gap-3 sm:mt-16 sm:grid-cols-3 sm:gap-4"
         >
           {[
             {
@@ -180,8 +175,12 @@ function Index() {
               key={f.title}
               className="rounded-2xl border border-border bg-card/70 p-5 shadow-soft backdrop-blur"
             >
-              <h3 className="text-sm font-semibold text-foreground">{f.title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
+              <h3 className="text-sm font-semibold text-foreground">
+                {f.title}
+              </h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                {f.body}
+              </p>
             </div>
           ))}
         </section>
@@ -216,7 +215,9 @@ function Index() {
               <summary className="cursor-pointer list-none text-sm font-semibold text-foreground sm:text-base">
                 {f.q}
               </summary>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {f.a}
+              </p>
             </details>
           ))}
         </div>
