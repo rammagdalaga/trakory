@@ -69,13 +69,19 @@ export function Converter() {
       setStatus("loading");
       await getFFmpeg();
       setStatus("converting");
-      const blob = await convertVideoToAudio(file, {
+      const res = await convertVideoToAudio(file, {
         format,
         bitrate,
         onProgress: (r) => setProgress(r),
       });
-      const url = URL.createObjectURL(blob);
-      setResult({ url, blob });
+      const url = URL.createObjectURL(res.blob);
+      setResult({ url, blob: res.blob });
+      if (res.fellBack) {
+        setFormat(res.format);
+        setError(
+          `Your browser can't encode ${format.toUpperCase()} — exported as ${res.format.toUpperCase()} instead.`,
+        );
+      }
       setProgress(1);
       setStatus("done");
     } catch (e) {
