@@ -69,7 +69,7 @@ export function AdGateModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-3 sm:p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-foreground/60 p-3 sm:p-4 backdrop-blur-md"
       role="dialog"
       aria-modal="true"
       suppressHydrationWarning
