@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /.git/
+Disallow: /node_modules/
+
+Sitemap: https://trakory.com/sitemap.xml
+
+# Googlebot specific
+User-agent: Googlebot
+Allow: /
+
+# Bingbot specific
+User-agent: Bingbot
+Allow: /
+
+# Slow crawlers
+User-agent: AhrefsBot
+Allow: /
+
+# Block bad bots
+User-agent: MJ12bot
+Disallow: /

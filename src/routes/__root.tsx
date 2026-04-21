@@ -29,21 +29,35 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Trakory — Video to Audio Converter" },
+      { title: "Trakory — Free Online Converter for Video, Audio, PDF, Images & More" },
       {
         name: "description",
         content:
-          "Convert your videos to MP3, WAV, or FLAC right in your browser. Private, fast, and free.",
+          "Convert videos to MP3, audio to WAV, resize images, convert PDFs & Word files. 100% free, private, browser-based. No uploads, no signup required.",
+      },
+      {
+        name: "keywords",
+        content:
+          "online converter, video converter, audio converter, image resizer, PDF converter, Word converter, mp3 converter, file conversion tools, free converter",
       },
       { name: "author", content: "Trakory" },
-      { property: "og:title", content: "Trakory — Video to Audio Converter" },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+      { name: "theme-color", content: "#0ea5b7" },
+      { name: "application-name", content: "Trakory" },
+      { property: "og:title", content: "Trakory — Free Multi-Format File Converter Tools" },
       {
         property: "og:description",
-        content: "Convert your videos to audio in your browser. Private by design.",
+        content: "Convert videos, audio, PDFs, images and more instantly in your browser. 100% private & free.",
       },
+      { property: "og:image", content: "https://trakory.com/logo/logo.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:site_name", content: "Trakory" },
+      { property: "og:locale", content: "en_US" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Trakory — Free Online File Converter" },
+      { name: "twitter:description", content: "Convert videos, audio, images, PDFs & more. Fast, secure, and 100% free." },
     ],
     links: [
       {

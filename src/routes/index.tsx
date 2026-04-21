@@ -4,15 +4,16 @@ import { InterstitialAd } from "@/components/InterstitialAd";
 import { BottomAdBar } from "@/components/BottomAdBar";
 import { TopAdBar } from "@/components/TopAdBar";
 
-const SITE_URL = "https://trakory.app";
-const OG_TITLE = "Trakory — Free Video to Audio Converter (MP3, WAV, FLAC)";
+const SITE_URL = "https://trakory.com";
+const OG_TITLE = "Trakory — Free Online File Converter Tools";
 const OG_DESC =
-  "Convert MP4, MOV, MKV, WEBM and more to MP3, WAV or FLAC instantly in your browser. 100% private — no uploads, no signup, no watermark. Free forever.";
+  "Convert videos to MP3, resize images, convert PDFs to Word, compress files & more. 100% free, fast, and private. All conversions happen in your browser. No uploads, no signup.";
+const SCHEMA_DESC = "Free online converter platform supporting video to audio conversion, image resizing, PDF conversion, Word document conversion, and more. Browser-based conversion with no uploads or registration required.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Free Video to Audio Converter — MP3, WAV, FLAC | Trakory" },
+      { title: "Free Online Converter: Video, Audio, PDF, Images, Word & More | Trakory" },
       {
         name: "description",
         content: OG_DESC,
@@ -20,14 +21,20 @@ export const Route = createFileRoute("/")({
       {
         name: "keywords",
         content:
-          "video to audio converter, video to mp3, mp4 to mp3, convert video to audio, extract audio from video, video to wav, video to flac, online audio converter, free mp3 converter, browser video converter, private video converter",
+          "online converter, file converter, video to audio, mp3 converter, image resizer, PDF converter, word converter, audio converter, free online tools, browser converter, private conversion, no upload required, video converter, format converter, media converter, document converter",
       },
-      { name: "robots", content: "index, follow, max-image-preview:large" },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
       { name: "author", content: "Trakory" },
       { name: "theme-color", content: "#0ea5b7" },
       { name: "application-name", content: "Trakory" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { property: "og:title", content: OG_TITLE },
       { property: "og:description", content: OG_DESC },
+      { property: "og:image", content: `${SITE_URL}/logo/logo.png` },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Trakory" },
       { property: "og:url", content: SITE_URL },
@@ -35,9 +42,44 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: OG_TITLE },
       { name: "twitter:description", content: OG_DESC },
+      { name: "twitter:image", content: `${SITE_URL}/logo/logo.png` },
+      { name: "twitter:creator", content: "@Trakory" },
     ],
-    links: [{ rel: "canonical", href: SITE_URL }],
+    links: [
+      { rel: "canonical", href: SITE_URL },
+      // Website icon (favicon)
+      { rel: "icon", type: "image/png", href: "/logo/32x32.png", sizes: "32x32" },
+      { rel: "icon", type: "image/png", href: "/logo/16x16.png", sizes: "16x16" },
+
+      // Main shortcut icon (fallback)
+      { rel: "shortcut icon", href: "/logo/logo.png" },
+
+      // Apple devices icon
+      { rel: "apple-touch-icon", href: "/logo/180x180.png", sizes: "180x180" },
+      
+      // Preconnect for better performance
+      { rel: "preconnect", href: "https://www.googletagmanager.com" },
+    ],
     scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Trakory",
+          url: SITE_URL,
+          logo: `${SITE_URL}/logo/logo.png`,
+          description: SCHEMA_DESC,
+          sameAs: [
+            "https://twitter.com/Trakory",
+          ],
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "Customer Support",
+            url: SITE_URL,
+          },
+        }),
+      },
       {
         type: "application/ld+json",
         children: JSON.stringify({
@@ -47,21 +89,60 @@ export const Route = createFileRoute("/")({
           url: SITE_URL,
           applicationCategory: "MultimediaApplication",
           operatingSystem: "Any (Web Browser)",
-          description: OG_DESC,
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          description: SCHEMA_DESC,
+          offers: { 
+            "@type": "Offer", 
+            price: "0", 
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+          },
           featureList: [
-            "Convert video to MP3",
-            "Convert video to WAV",
-            "Convert video to FLAC",
+            "Convert video to MP3, WAV, FLAC",
+            "Convert video to audio",
+            "Resize images",
+            "Convert PDF files",
+            "Convert Word documents",
             "100% in-browser conversion",
-            "No uploads, fully private",
-            "Supports MP4, MOV, MKV, WEBM, AVI",
+            "No file uploads required",
+            "Fully private & secure",
+            "Browser-based processing",
+            "Multiple format support",
+            "Batch conversion ready",
+            "No account needed",
           ],
           aggregateRating: {
             "@type": "AggregateRating",
             ratingValue: "4.9",
             ratingCount: "1280",
+            bestRating: "5",
+            worstRating: "1",
           },
+          potentialAction: {
+            "@type": "UseAction",
+            target: `${SITE_URL}/#converter`,
+            name: "Convert Files",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: SITE_URL,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Converter Tools",
+              item: `${SITE_URL}/#converter`,
+            },
+          ],
         }),
       },
       {
@@ -72,26 +153,50 @@ export const Route = createFileRoute("/")({
           mainEntity: [
             {
               "@type": "Question",
-              name: "Is Trakory free to use?",
+              name: "Is Trakory really free?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "Yes. Trakory is 100% free with no account required.",
+                text: "Yes. Trakory is 100% free with no hidden charges, ads interruption, or account requirements.",
               },
             },
             {
               "@type": "Question",
-              name: "Are my video files uploaded to a server?",
+              name: "Are my files secure and private?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "No. All conversion runs locally in your browser using WebAssembly. Your files never leave your device.",
+                text: "Absolutely. All conversion runs locally in your browser using WebAssembly. Your files never leave your device and are never uploaded to any server.",
               },
             },
             {
               "@type": "Question",
-              name: "What audio formats can I export to?",
+              name: "What file formats does Trakory support?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "You can export MP3 (128/192/320 kbps), lossless WAV, or compressed FLAC.",
+                text: "Trakory supports multiple formats including video to audio (MP3, WAV, FLAC), image resizing, PDF conversion, Word document conversion, and more.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "What is the maximum file size for conversion?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "You can convert files up to 500 MB in size, all processed directly in your browser for maximum privacy.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Do I need to create an account?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "No. Trakory requires no account creation or login. Just visit, select your file, and convert instantly.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Can I convert multiple files at once?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, Trakory supports batch conversion for efficient processing of multiple files.",
               },
             },
           ],
