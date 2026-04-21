@@ -5,7 +5,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export function TopAdBar() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(true);
-  const adHeight = isMobile ? 50 : 90;
+  const adHeight = isMobile ? 50 : 60;
   const adContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -14,19 +14,32 @@ export function TopAdBar() {
     const container = adContainerRef.current;
     container.innerHTML = "";
 
-    // Create and append the ad script
-    const adScript = document.createElement("script");
-    adScript.src =
-      "https://pl29211371.profitablecpmratenetwork.com/72/a0/07/72a0075509660e39b4965cd32736ad5b.js";
-    adScript.async = true;
-    container.appendChild(adScript);
+    // Create and append first script with config
+    const configScript = document.createElement("script");
+    configScript.textContent = `
+      window.atOptions = {
+        'key' : '3f22fa6031a61d2f5c0f26c81ba99787',
+        'format' : 'iframe',
+        'height' : 90,
+        'width' : 728,
+        'params' : {}
+      };
+    `;
+    container.appendChild(configScript);
+
+    // Create and append the invoke script
+    const invokeScript = document.createElement("script");
+    invokeScript.src =
+      "https://www.highperformanceformat.com/3f22fa6031a61d2f5c0f26c81ba99787/invoke.js";
+    invokeScript.async = true;
+    container.appendChild(invokeScript);
   }, [open]);
 
   return (
     <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 shadow-soft backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-full flex-col px-0 py-2">
+      <div className="mx-auto flex w-full max-w-6xl flex-col px-3 py-2 sm:px-4">
         {/* Header - Always visible */}
-        <div className="flex items-center justify-between gap-3 px-3 sm:px-4">
+        <div className="flex items-center justify-between gap-3">
           <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             Sponsored
           </span>
@@ -50,21 +63,17 @@ export function TopAdBar() {
           </button>
         </div>
 
-        {/* Ad Container - Full width with smooth animation */}
+        {/* Ad Container - With smooth animation */}
         <div
-          className="overflow-hidden bg-muted/40 transition-all duration-300 ease-in-out"
+          className="overflow-hidden rounded-lg bg-muted/40 transition-all duration-300 ease-in-out"
           style={{
             maxHeight: open ? adHeight + 12 : 0,
             opacity: open ? 1 : 0,
             marginTop: open ? 8 : 0,
           }}
-        >
-          <div
-            className="flex w-full items-center justify-center px-3 py-2 sm:px-4"
-            ref={adContainerRef}
-            suppressHydrationWarning
-          />
-        </div>
+          ref={adContainerRef}
+          suppressHydrationWarning
+        />
       </div>
     </div>
   );
