@@ -1,42 +1,54 @@
 import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { AdSlot } from "./AdSlot";
 
 export function BottomAdBar() {
-  const [closed, setClosed] = useState(false);
-  
-  if (closed) return null;
+  const isMobile = useIsMobile();
+  const [open, setOpen] = useState(true);
+  const adHeight = isMobile ? 50 : 60;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 shadow-elevated backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-6xl items-center gap-1 px-2 py-1 sm:gap-2 sm:px-3 sm:py-1.5">
-        {/* "Ad" Label - Hidden on mobile */}
-        <span className="hidden font-mono text-[9px] uppercase tracking-widest text-muted-foreground sm:inline whitespace-nowrap">
-          Sponsored
-        </span>
+    <div className="fixed inset-x-0 bottom-0 z-30 w-full border-t border-border bg-card/95 shadow-elevated backdrop-blur-xl">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-3 py-2 sm:px-4">
+        {/* Header with Sponsored label and Toggle button */}
+        <div className="flex items-center justify-between gap-3">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            Sponsored
+          </span>
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
+            aria-label={open ? "Hide bottom ad" : "Show bottom ad"}
+            aria-expanded={open}
+          >
+            {open ? (
+              <>
+                <ChevronDown className="size-3.5" />
+                <span>{isMobile ? "Hide" : "Hide ad"}</span>
+              </>
+            ) : (
+              <>
+                <ChevronUp className="size-3.5" />
+                <span>{isMobile ? "Show" : "Show ad"}</span>
+              </>
+            )}
+          </button>
+        </div>
 
-        {/* Ad Container - Responsive heights */}
-        <div className="h-[50px] min-w-0 flex-1 overflow-hidden rounded-lg bg-muted/40 sm:h-[60px]">
+        {/* Ad Container with smooth collapse animation */}
+        <div
+          className={
+            "overflow-hidden rounded-lg bg-muted/40 transition-all duration-300 " +
+            (open ? "max-h-[50px] opacity-100 sm:max-h-[70px]" : "max-h-0 opacity-0")
+          }
+        >
           <AdSlot
             slot="3111160949"
             format="horizontal"
-            style={{ 
-              minHeight: "100%", 
-              height: "100%", 
-              maxHeight: "100%",
-              width: "100%"
-            }}
+            style={{ minHeight: adHeight, height: adHeight, maxHeight: adHeight }}
           />
         </div>
-
-        {/* Close Button */}
-        <button
-          onClick={() => setClosed(true)}
-          className="shrink-0 rounded-md px-1.5 py-1 text-sm font-semibold text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground active:bg-foreground/10"
-          aria-label="Close ad"
-          title="Close ad"
-        >
-          ✕
-        </button>
       </div>
     </div>
   );
