@@ -224,11 +224,6 @@ function Index() {
 
       <header className="relative z-10 mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pt-4 sm:px-6 sm:pt-6 lg:pt-8">
         <a href="/" className="flex min-w-0 items-center gap-2.5" aria-label="Trakory home">
-          <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-brand shadow-soft">
-            <span className="font-mono text-sm font-bold text-primary-foreground">
-              T
-            </span>
-          </div>
           <span className="truncate text-lg font-semibold tracking-tight text-foreground">
             Trakory
           </span>
