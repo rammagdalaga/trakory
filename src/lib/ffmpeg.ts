@@ -1,42 +1,16 @@
-import { FFmpeg } from "@ffmpeg/ffmpeg";
-
-let ffmpegInstance: FFmpeg | null = null;
-let loadPromise: Promise<FFmpeg> | null = null;
-
-const CORE_VERSION = "0.12.9";
-const CORE_BASE = `https://unpkg.com/@ffmpeg/core@${CORE_VERSION}/dist/umd`;
-const CORE_URL = `${CORE_BASE}/ffmpeg-core.js`;
-const WASM_URL = `${CORE_BASE}/ffmpeg-core.wasm`;
-
-export async function getFFmpeg(
-  onLog?: (msg: string) => void,
-): Promise<FFmpeg> {
-  if (ffmpegInstance) return ffmpegInstance;
-  if (loadPromise) return loadPromise;
-
-  loadPromise = (async () => {
-    const ffmpeg = new FFmpeg();
-    ffmpeg.on("log", ({ message }) => {
-      console.log("[ffmpeg]", message);
-      onLog?.(message);
-    });
-
-    await ffmpeg.load({
-      coreURL: CORE_URL,
-      wasmURL: WASM_URL,
-    });
-
-    ffmpegInstance = ffmpeg;
-    return ffmpeg;
-  })();
-
-  try {
-    return await loadPromise;
-  } catch (err) {
-    loadPromise = null;
-    throw err;
-  }
-}
+// Media conversion powered by Mediabunny (pure JS, no WASM, no native deps).
+// Runs in the browser using WebCodecs and bundles cleanly for Cloudflare.
+import {
+  Input,
+  Output,
+  Conversion,
+  BlobSource,
+  BufferTarget,
+  ALL_FORMATS,
+  Mp3OutputFormat,
+  WavOutputFormat,
+  FlacOutputFormat,
+} from "mediabunny";
 
 export type AudioFormat = "mp3" | "wav" | "flac";
 export type Bitrate = "128" | "192" | "320";
@@ -47,53 +21,67 @@ export interface ConvertOptions {
   onProgress?: (ratio: number) => void;
 }
 
+// Kept for API compatibility with the previous ffmpeg.wasm implementation.
+// Mediabunny needs no async engine load, so this is a no-op.
+export async function getFFmpeg(): Promise<void> {
+  return;
+}
+
+function makeOutputFormat(format: AudioFormat) {
+  if (format === "mp3") return new Mp3OutputFormat();
+  if (format === "wav") return new WavOutputFormat();
+  return new FlacOutputFormat();
+}
+
+function mimeFor(format: AudioFormat): string {
+  if (format === "mp3") return "audio/mpeg";
+  if (format === "wav") return "audio/wav";
+  return "audio/flac";
+}
+
 export async function convertVideoToAudio(
   file: File,
   { format, bitrate, onProgress }: ConvertOptions,
 ): Promise<Blob> {
-  const ffmpeg = await getFFmpeg();
+  const input = new Input({
+    formats: ALL_FORMATS,
+    source: new BlobSource(file),
+  });
 
-  const progressHandler = ({ progress }: { progress: number }) => {
-    onProgress?.(Math.min(Math.max(progress, 0), 1));
-  };
-  ffmpeg.on("progress", progressHandler);
+  const output = new Output({
+    format: makeOutputFormat(format),
+    target: new BufferTarget(),
+  });
 
-  const inputName = `input_${Date.now()}_${file.name || "source"}`;
-  const outputName = `output_${Date.now()}.${format}`;
-
-  try {
-    const buf = new Uint8Array(await file.arrayBuffer());
-    await ffmpeg.writeFile(inputName, buf);
-
-    const args = ["-i", inputName, "-vn"];
-    if (format === "mp3") {
-      args.push("-c:a", "libmp3lame", "-b:a", `${bitrate}k`);
-    } else if (format === "wav") {
-      args.push("-c:a", "pcm_s16le");
-    } else {
-      args.push("-c:a", "flac");
-    }
-    args.push(outputName);
-
-    const exitCode = await ffmpeg.exec(args);
-    if (exitCode !== 0) {
-      throw new Error("Conversion failed. Try a smaller or different video file.");
-    }
-
-    const data = (await ffmpeg.readFile(outputName)) as Uint8Array;
-    const mime =
+  const conversion = await Conversion.init({
+    input,
+    output,
+    video: { discard: true }, // strip video, we only want audio
+    audio:
       format === "mp3"
-        ? "audio/mpeg"
-        : format === "wav"
-          ? "audio/wav"
-          : "audio/flac";
+        ? { codec: "mp3", bitrate: Number(bitrate) * 1000 }
+        : undefined, // wav/flac: let Mediabunny pick sensible defaults
+  });
 
-    return new Blob([data.slice().buffer], { type: mime });
-  } finally {
-    ffmpeg.off("progress", progressHandler);
-    await ffmpeg.deleteFile(inputName).catch(() => {});
-    await ffmpeg.deleteFile(outputName).catch(() => {});
+  if (!conversion.isValid) {
+    const reasons = conversion.discardedTracks
+      .map((t) => `${t.track.type}: ${t.reason}`)
+      .join("; ");
+    throw new Error(
+      `This file can't be converted${reasons ? ` (${reasons})` : ""}.`,
+    );
   }
+
+  if (onProgress) {
+    conversion.onProgress = (p: number) => onProgress(Math.min(Math.max(p, 0), 1));
+  }
+
+  await conversion.execute();
+
+  const buffer = (output.target as BufferTarget).buffer;
+  if (!buffer) throw new Error("Conversion produced no output.");
+
+  return new Blob([buffer], { type: mimeFor(format) });
 }
 
 export function formatBytes(bytes: number): string {
