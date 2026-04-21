@@ -41,13 +41,17 @@ export const Route = createRootRoute({
           "online converter, video converter, audio converter, image resizer, PDF converter, Word converter, mp3 converter, file conversion tools, free converter",
       },
       { name: "author", content: "Trakory" },
-      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+      {
+        name: "robots",
+        content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      },
       { name: "theme-color", content: "#0ea5b7" },
       { name: "application-name", content: "Trakory" },
       { property: "og:title", content: "Trakory — Free Multi-Format File Converter Tools" },
       {
         property: "og:description",
-        content: "Convert videos, audio, PDFs, images and more instantly in your browser. 100% private & free.",
+        content:
+          "Convert videos, audio, PDFs, images and more instantly in your browser. 100% private & free.",
       },
       { property: "og:image", content: "https://trakory.com/logo/logo.png" },
       { property: "og:image:width", content: "1200" },
@@ -57,7 +61,10 @@ export const Route = createRootRoute({
       { property: "og:locale", content: "en_US" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Trakory — Free Online File Converter" },
-      { name: "twitter:description", content: "Convert videos, audio, images, PDFs & more. Fast, secure, and 100% free." },
+      {
+        name: "twitter:description",
+        content: "Convert videos, audio, images, PDFs & more. Fast, secure, and 100% free.",
+      },
     ],
     links: [
       {
@@ -77,7 +84,7 @@ export const Route = createRootRoute({
     ],
     scripts: [
       {
-        src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX",
+        src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7172866420926779",
         async: true,
         crossOrigin: "anonymous",
       },
