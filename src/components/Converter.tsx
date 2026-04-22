@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import { AdGateModal } from "./AdGateModal";
 import {
   convertVideoToAudio,
   formatBytes,
@@ -6,12 +8,132 @@ import {
   type AudioFormat,
   type Bitrate,
 } from "@/lib/ffmpeg";
-import { cn } from "@/lib/utils";
-import { AdGateModal } from "./AdGateModal";
+import {
+  pdfToDocx,
+  docxToPdf,
+  compressPdf,
+  compressDocx,
+  extOf,
+} from "@/lib/docConvert";
+import {
+  Film,
+  Music,
+  FileText,
+  FileType2,
+  Minimize2,
+  FileMinus,
+} from "lucide-react";
 
 const SITE_NAME = "trakory";
 
+type ToolId =
+  | "video-to-audio"
+  | "audio"
+  | "pdf-to-word"
+  | "word-to-pdf"
+  | "compress-pdf"
+  | "compress-word";
+
 type Status = "idle" | "ready" | "loading" | "converting" | "done" | "error";
+
+interface ToolDef {
+  id: ToolId;
+  label: string;
+  short: string;
+  icon: React.ElementType;
+  accept: string;
+  hint: string;
+  outExt: string;
+  outMime: string;
+  validate: (f: File) => string | null;
+}
+
+const TOOLS: ToolDef[] = [
+  {
+    id: "video-to-audio",
+    label: "Video → Audio",
+    short: "Video",
+    icon: Film,
+    accept: "video/*",
+    hint: "MP4, MOV, MKV, WEBM, AVI",
+    outExt: "mp3",
+    outMime: "audio/mpeg",
+    validate: (f) =>
+      f.type.startsWith("video/") || f.type.startsWith("audio/")
+        ? null
+        : "Please choose a video file.",
+  },
+  {
+    id: "audio",
+    label: "Audio Converter",
+    short: "Audio",
+    icon: Music,
+    accept: "audio/*,video/*",
+    hint: "MP3, WAV, FLAC",
+    outExt: "mp3",
+    outMime: "audio/mpeg",
+    validate: (f) =>
+      f.type.startsWith("audio/") || f.type.startsWith("video/")
+        ? null
+        : "Please choose an audio file.",
+  },
+  {
+    id: "pdf-to-word",
+    label: "PDF → Word",
+    short: "PDF→Word",
+    icon: FileText,
+    accept: "application/pdf,.pdf",
+    hint: "Editable .docx output",
+    outExt: "docx",
+    outMime:
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    validate: (f) =>
+      extOf(f.name) === "pdf" || f.type === "application/pdf"
+        ? null
+        : "Please choose a PDF file.",
+  },
+  {
+    id: "word-to-pdf",
+    label: "Word → PDF",
+    short: "Word→PDF",
+    icon: FileType2,
+    accept:
+      ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    hint: "Selectable text in PDF",
+    outExt: "pdf",
+    outMime: "application/pdf",
+    validate: (f) =>
+      extOf(f.name) === "docx" ? null : "Please choose a .docx file.",
+  },
+  {
+    id: "compress-pdf",
+    label: "Compress PDF",
+    short: "Compress PDF",
+    icon: FileMinus,
+    accept: "application/pdf,.pdf",
+    hint: "Reduce PDF file size",
+    outExt: "pdf",
+    outMime: "application/pdf",
+    validate: (f) =>
+      extOf(f.name) === "pdf" || f.type === "application/pdf"
+        ? null
+        : "Please choose a PDF file.",
+  },
+  {
+    id: "compress-word",
+    label: "Compress Word",
+    short: "Compress DOCX",
+    icon: Minimize2,
+    accept:
+      ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    hint: "Shrink images inside DOCX",
+    outExt: "docx",
+    outMime:
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    validate: (f) =>
+      extOf(f.name) === "docx" ? null : "Please choose a .docx file.",
+  },
+];
 
 const FORMATS: { value: AudioFormat; label: string }[] = [
   { value: "mp3", label: "MP3" },
@@ -22,18 +144,24 @@ const FORMATS: { value: AudioFormat; label: string }[] = [
 const BITRATES: Bitrate[] = ["128", "192", "320"];
 
 export function Converter() {
+  const [tool, setTool] = useState<ToolId>("video-to-audio");
   const [file, setFile] = useState<File | null>(null);
   const [format, setFormat] = useState<AudioFormat>("mp3");
   const [bitrate, setBitrate] = useState<Bitrate>("192");
   const [status, setStatus] = useState<Status>("idle");
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<{ url: string; blob: Blob } | null>(
-    null,
-  );
+  const [result, setResult] = useState<{
+    url: string;
+    blob: Blob;
+    ext: string;
+  } | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [adGateOpen, setAdGateOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const current = TOOLS.find((t) => t.id === tool)!;
+  const isAudioTool = tool === "video-to-audio" || tool === "audio";
 
   useEffect(() => {
     return () => {
@@ -41,53 +169,84 @@ export function Converter() {
     };
   }, [result]);
 
-  const handleFile = useCallback((f: File | null) => {
-    if (!f) return;
-    if (!f.type.startsWith("video/") && !f.type.startsWith("audio/")) {
-      setError("Please select a video or audio file.");
-      setStatus("error");
-      return;
-    }
-    if (f.size > 500 * 1024 * 1024) {
-      setError("File too large. Max 500 MB for in-browser processing.");
-      setStatus("error");
-      return;
-    }
-    setError(null);
+  // Reset state when switching tools
+  const switchTool = (id: ToolId) => {
+    if (result) URL.revokeObjectURL(result.url);
+    setTool(id);
+    setFile(null);
     setResult(null);
     setProgress(0);
-    setFile(f);
-    setStatus("ready");
-  }, []);
+    setError(null);
+    setStatus("idle");
+    if (inputRef.current) inputRef.current.value = "";
+  };
+
+  const handleFile = useCallback(
+    (f: File | null) => {
+      if (!f) return;
+      const err = current.validate(f);
+      if (err) {
+        setError(err);
+        setStatus("error");
+        return;
+      }
+      if (f.size > 500 * 1024 * 1024) {
+        setError("File too large. Max 500 MB for in-browser processing.");
+        setStatus("error");
+        return;
+      }
+      setError(null);
+      setResult(null);
+      setProgress(0);
+      setFile(f);
+      setStatus("ready");
+    },
+    [current],
+  );
 
   const handleConvert = async () => {
     if (!file) return;
     setError(null);
     setProgress(0);
     setResult(null);
+
     try {
       setStatus("loading");
-      await getFFmpeg();
-      setStatus("converting");
-      const res = await convertVideoToAudio(file, {
-        format,
-        bitrate,
-        onProgress: (r) => setProgress(r),
-      });
-      const url = URL.createObjectURL(res.blob);
-      setResult({ url, blob: res.blob });
-      if (res.fellBack) {
-        setFormat(res.format);
-        setError(
-          `Your browser can't encode ${format.toUpperCase()} — exported as ${res.format.toUpperCase()} instead.`,
-        );
+      let blob: Blob;
+      let ext = current.outExt;
+
+      if (isAudioTool) {
+        await getFFmpeg();
+        setStatus("converting");
+        const res = await convertVideoToAudio(file, {
+          format,
+          bitrate,
+          onProgress: (r) => setProgress(r),
+        });
+        blob = res.blob;
+        ext = res.format;
+        if (res.fellBack) {
+          setFormat(res.format);
+        }
+      } else {
+        setStatus("converting");
+        const onP = (r: number) => setProgress(r);
+        if (tool === "pdf-to-word") blob = await pdfToDocx(file, onP);
+        else if (tool === "word-to-pdf") blob = await docxToPdf(file, onP);
+        else if (tool === "compress-pdf") blob = await compressPdf(file, onP);
+        else blob = await compressDocx(file, onP);
       }
+
+      const url = URL.createObjectURL(blob);
+      setResult({ url, blob, ext });
       setProgress(1);
       setStatus("done");
     } catch (e) {
       console.error(e);
       setError(
-        e instanceof Error ? e.message : "Conversion failed. Please try again.",
+        e instanceof Error
+          ? e.message
+          : "Conversion failed. Please try a different file.",
       );
       setStatus("error");
     }
@@ -105,8 +264,8 @@ export function Converter() {
 
   const downloadName =
     file && result
-      ? `${file.name.replace(/\.[^.]+$/, "")}.${SITE_NAME}.${format}`
-      : `audio.${SITE_NAME}.${format}`;
+      ? `${file.name.replace(/\.[^.]+$/, "")}.${SITE_NAME}.${result.ext}`
+      : `output.${SITE_NAME}.${current.outExt}`;
 
   const triggerDownload = () => {
     if (!result) return;
@@ -121,7 +280,6 @@ export function Converter() {
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="relative w-full max-w-2xl">
-        {/* Glow */}
         <div
           aria-hidden
           className="pointer-events-none absolute -inset-x-10 -top-20 h-64 bg-gradient-glow blur-2xl"
@@ -129,6 +287,35 @@ export function Converter() {
 
         <div className="relative rounded-3xl border border-border/60 bg-card/90 p-1 shadow-elevated backdrop-blur-xl">
           <div className="rounded-[calc(1.5rem-2px)] bg-gradient-soft p-3 sm:p-5 lg:p-6">
+            {/* Tool tabs */}
+            <div
+              role="tablist"
+              aria-label="Choose converter"
+              className="mb-5 flex gap-1.5 overflow-x-auto rounded-2xl border border-border bg-background/70 p-1.5 scrollbar-none"
+            >
+              {TOOLS.map((t) => {
+                const Icon = t.icon;
+                const active = t.id === tool;
+                return (
+                  <button
+                    key={t.id}
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => switchTool(t.id)}
+                    className={cn(
+                      "flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold transition-all",
+                      active
+                        ? "bg-gradient-brand text-primary-foreground shadow-soft"
+                        : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
+                    )}
+                  >
+                    <Icon className="size-3.5" />
+                    <span>{t.short}</span>
+                  </button>
+                );
+              })}
+            </div>
+
             {/* Drop zone */}
             {!file ? (
               <button
@@ -144,32 +331,20 @@ export function Converter() {
                   setDragOver(false);
                   handleFile(e.dataTransfer.files?.[0] ?? null);
                 }}
-                  className={cn(
-                    "group relative flex w-full flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-border bg-background/60 p-6 text-center transition-all hover:border-primary/50 hover:bg-primary-soft/40 sm:p-10 lg:p-12",
+                className={cn(
+                  "group relative flex w-full flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-border bg-background/60 p-6 text-center transition-all hover:border-primary/50 hover:bg-primary-soft/40 sm:p-10 lg:p-12",
                   dragOver && "border-primary bg-primary-soft/60",
                 )}
               >
                 <div className="flex size-16 items-center justify-center rounded-2xl bg-gradient-brand shadow-soft">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="size-7 text-primary-foreground"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M12 3v12" />
-                    <path d="m7 8 5-5 5 5" />
-                    <path d="M5 21h14" />
-                  </svg>
+                  <current.icon className="size-7 text-primary-foreground" />
                 </div>
                 <div className="space-y-1.5">
                   <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                    Drop a video here
+                    Drop a file for {current.label}
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    or click to choose from your device · MP4, MOV, WebM, MKV…
+                    or click to choose · {current.hint}
                   </p>
                 </div>
                 <span className="mt-2 rounded-full bg-foreground/5 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -180,18 +355,7 @@ export function Converter() {
               <div className="flex flex-col gap-3 rounded-2xl border border-border bg-background/80 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                 <div className="flex min-w-0 items-center gap-3">
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      className="size-5 text-primary"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect x="2" y="6" width="20" height="12" rx="2" />
-                      <path d="m10 9 5 3-5 3z" fill="currentColor" />
-                    </svg>
+                    <current.icon className="size-5 text-primary" />
                   </div>
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-foreground">
@@ -213,65 +377,68 @@ export function Converter() {
 
             <input
               ref={inputRef}
+              key={tool}
               type="file"
-              accept="video/*,audio/*"
+              accept={current.accept}
               className="hidden"
               onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
             />
 
-            {/* Settings */}
-            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <label className="px-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Format
-                </label>
-                <div className="flex rounded-xl border border-border bg-background/70 p-1">
-                  {FORMATS.map((f) => (
-                    <button
-                      key={f.value}
-                      onClick={() => setFormat(f.value)}
-                      className={cn(
-                        "flex-1 rounded-lg py-2 text-xs font-semibold transition-all",
-                        format === f.value
-                          ? "bg-gradient-brand text-primary-foreground shadow-soft"
-                          : "text-muted-foreground hover:text-foreground",
-                      )}
-                    >
-                      {f.label}
-                    </button>
-                  ))}
+            {/* Audio settings */}
+            {isAudioTool && (
+              <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="px-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    Format
+                  </label>
+                  <div className="flex rounded-xl border border-border bg-background/70 p-1">
+                    {FORMATS.map((f) => (
+                      <button
+                        key={f.value}
+                        onClick={() => setFormat(f.value)}
+                        className={cn(
+                          "flex-1 rounded-lg py-2 text-xs font-semibold transition-all",
+                          format === f.value
+                            ? "bg-gradient-brand text-primary-foreground shadow-soft"
+                            : "text-muted-foreground hover:text-foreground",
+                        )}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="px-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    Bitrate {format !== "mp3" && "(MP3 only)"}
+                  </label>
+                  <div
+                    className={cn(
+                      "flex rounded-xl border border-border bg-background/70 p-1 font-mono",
+                      format !== "mp3" && "opacity-50",
+                    )}
+                  >
+                    {BITRATES.map((b) => (
+                      <button
+                        key={b}
+                        disabled={format !== "mp3"}
+                        onClick={() => setBitrate(b)}
+                        className={cn(
+                          "flex-1 rounded-lg py-2 text-[11px] font-bold transition-all",
+                          bitrate === b && format === "mp3"
+                            ? "bg-primary-soft text-primary ring-1 ring-primary/30"
+                            : "text-muted-foreground hover:text-foreground",
+                        )}
+                      >
+                        {b}k
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="space-y-2">
-                <label className="px-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Bitrate {format !== "mp3" && "(MP3 only)"}
-                </label>
-                <div
-                  className={cn(
-                    "flex rounded-xl border border-border bg-background/70 p-1 font-mono",
-                    format !== "mp3" && "opacity-50",
-                  )}
-                >
-                  {BITRATES.map((b) => (
-                    <button
-                      key={b}
-                      disabled={format !== "mp3"}
-                      onClick={() => setBitrate(b)}
-                      className={cn(
-                        "flex-1 rounded-lg py-2 text-[11px] font-bold transition-all",
-                        bitrate === b && format === "mp3"
-                          ? "bg-primary-soft text-primary ring-1 ring-primary/30"
-                          : "text-muted-foreground hover:text-foreground",
-                      )}
-                    >
-                      {b}k
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
+            )}
 
-            {/* Status / Progress */}
+            {/* Progress */}
             {(status === "loading" ||
               status === "converting" ||
               status === "done") && (
@@ -279,7 +446,7 @@ export function Converter() {
                 <div className="flex items-end justify-between px-1">
                   <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                     {status === "loading" && "Loading engine…"}
-                    {status === "converting" && "Extracting audio…"}
+                    {status === "converting" && "Working…"}
                     {status === "done" && "Complete"}
                   </p>
                   <p className="font-mono text-sm font-semibold text-primary tabular-nums">
@@ -313,18 +480,23 @@ export function Converter() {
                     </p>
                     <p className="truncate font-mono text-xs text-muted-foreground">
                       {downloadName} · {formatBytes(result.blob.size)}
+                      {file && (tool === "compress-pdf" || tool === "compress-word") && (
+                        <> · saved {Math.max(0, Math.round((1 - result.blob.size / file.size) * 100))}%</>
+                      )}
                     </p>
                   </div>
                   <span className="w-fit rounded-full bg-primary-soft px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary">
                     ✓ Done
                   </span>
                 </div>
-                <audio
-                  src={result.url}
-                  controls
-                  className="w-full"
-                  preload="metadata"
-                />
+                {isAudioTool && (
+                  <audio
+                    src={result.url}
+                    controls
+                    className="w-full"
+                    preload="metadata"
+                  />
+                )}
               </div>
             )}
 
@@ -342,7 +514,7 @@ export function Converter() {
                     onClick={() => setAdGateOpen(true)}
                     className="rounded-xl bg-gradient-brand px-6 py-3 text-center text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-elevated active:scale-[0.98]"
                   >
-                    Download {format.toUpperCase()}
+                    Download {result.ext.toUpperCase()}
                   </button>
                 </>
               ) : (
@@ -362,7 +534,7 @@ export function Converter() {
                     ? "Loading engine…"
                     : status === "converting"
                       ? "Converting…"
-                      : "Convert to audio"}
+                      : `Run ${current.label}`}
                 </button>
               )}
             </div>

@@ -29,9 +29,9 @@ const SITE_URL = "https://trakory.com";
 const OG_TITLE =
   "Trakory — Free Online Converter: Video, Audio, PDF, Image & Word Converter";
 const OG_DESC =
-  "Free online converter for everyone. Convert video to MP3, MP4 to audio, PDF to Word, image resizer, audio converter, document converter & more. 100% free, private, in-browser. No uploads, no signup.";
+  "Trakory is a free online converter tool — convert MP3, video, audio, PDF and Word files in your browser. Free file converter with download support: convert video free, convert audio, PDF to Word, Word to PDF, compress PDF and compress Word.";
 const SCHEMA_DESC =
-  "Trakory is a free all-in-one online converter platform: video converter, audio converter, PDF converter, Word converter, image converter and document converter. Browser-based conversion with no uploads, no signup, fully private.";
+  "Trakory is a free online converter tool and free file converter for video, audio, PDF and Word. Convert MP3, free convert video, file converter download, PDF to Word, Word to PDF, plus PDF and Word size compression — all in the browser.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,7 +44,7 @@ export const Route = createFileRoute("/")({
       {
         name: "keywords",
         content:
-          "converter, online converter, free converter, video converter, audio converter, pdf converter, word converter, image converter, document converter, file converter, mp4 to mp3, video to audio, video to mp3, mp3 converter, wav converter, flac converter, pdf to word, word to pdf, image resizer, jpg to png, png to jpg, free online tools, browser converter, private converter, no upload converter, fastest converter, best converter 2026, convert files online free",
+          "Online converter tool, Converter free, Free converter tool, Converter MP3, File converter, Free file converter, File converter Download, Free convert video, video converter, audio converter, pdf converter, word converter, pdf to word, word to pdf, compress pdf, compress word, mp4 to mp3, free online converter",
       },
       {
         name: "robots",
@@ -233,26 +233,26 @@ const TOOLS = [
   },
   {
     icon: FileText,
-    title: "PDF Converter",
-    body: "Convert PDF to Word, extract pages, compress and merge PDF files — privately in your browser.",
-    available: false,
+    title: "PDF → Word",
+    body: "Free convert PDF into a fully editable Word .docx — text, headings and paragraphs preserved.",
+    available: true,
   },
   {
     icon: FileType,
-    title: "Word Converter",
-    body: "Turn DOCX into PDF, plain text or images. Convert legacy DOC files into modern formats.",
-    available: false,
+    title: "Word → PDF",
+    body: "Turn DOCX into a clean PDF with selectable, searchable text — not flattened images.",
+    available: true,
+  },
+  {
+    icon: FileArchive,
+    title: "Compress PDF & Word",
+    body: "Shrink PDF and DOCX file size in your browser. Great for email and upload limits.",
+    available: true,
   },
   {
     icon: FileImage,
     title: "Image Converter",
     body: "Resize, compress and convert JPG, PNG, WEBP and HEIC images without losing quality.",
-    available: false,
-  },
-  {
-    icon: FileArchive,
-    title: "Document Converter",
-    body: "Convert TXT, RTF, ODT and more. Every document type — one fast, free converter.",
     available: false,
   },
 ];
@@ -326,9 +326,7 @@ function Index() {
             <span className="text-gradient-brand">video, audio, PDF, Word & images</span>
           </h1>
           <p className="animate-float-up delay-200 mx-auto mt-6 max-w-2xl text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-8 sm:text-base md:text-lg">
-            Convert MP4 to MP3, video to audio, PDF to Word, resize images and more — directly in
-            your browser. Trakory is a free file converter built for everyone. No signup, no
-            uploads, no limits, 100% private.
+            Trakory is the <strong className="text-foreground font-semibold">online converter tool</strong> built for everyone — pick a tab, drop a file, get a download. Use our <strong className="text-foreground font-semibold">free file converter</strong> to convert MP3, turn video into audio, transform PDF into editable Word, change Word back to PDF, or shrink the size of your documents. Every <strong className="text-foreground font-semibold">file converter download</strong> happens locally in your browser — no signup, no uploads, total privacy.
           </p>
         </div>
 
@@ -594,19 +592,8 @@ function Index() {
             })}
           </div>
 
-          {/* Mission Statement */}
-          <div className="animate-float-up delay-500 relative overflow-hidden rounded-3xl border border-border bg-gradient-to-r from-primary/10 via-card/70 to-accent/10 p-6 shadow-soft backdrop-blur sm:p-8">
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-10" />
-            </div>
-            <div className="relative z-10 text-center max-w-2xl mx-auto">
-              <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-4">Our Mission</h3>
-              <p className="text-sm sm:text-base leading-relaxed text-muted-foreground">
-                Trakory's mission is simple: give everyone — students, creators, freelancers and businesses — access to professional-quality file conversion tools without compromise. Whether you're extracting audio from a YouTube video or converting documents for work, Trakory is the all-in-one converter you need.
-              </p>
-            </div>
-          </div>
         </section>
+
       </main>
 
       {/* FAQ — fixed z-index to stay below modals but above background */}
