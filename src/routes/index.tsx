@@ -29,9 +29,9 @@ const SITE_URL = "https://trakory.com";
 const OG_TITLE =
   "Trakory — Free Online Converter: Video, Audio, PDF, Image & Word Converter";
 const OG_DESC =
-  "Free online converter for everyone. Convert video to MP3, MP4 to audio, PDF to Word, image resizer, audio converter, document converter & more. 100% free, private, in-browser. No uploads, no signup.";
+  "Trakory is a free online converter tool — convert MP3, video, audio, PDF and Word files in your browser. Free file converter with download support: convert video free, convert audio, PDF to Word, Word to PDF, compress PDF and compress Word.";
 const SCHEMA_DESC =
-  "Trakory is a free all-in-one online converter platform: video converter, audio converter, PDF converter, Word converter, image converter and document converter. Browser-based conversion with no uploads, no signup, fully private.";
+  "Trakory is a free online converter tool and free file converter for video, audio, PDF and Word. Convert MP3, free convert video, file converter download, PDF to Word, Word to PDF, plus PDF and Word size compression — all in the browser.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
