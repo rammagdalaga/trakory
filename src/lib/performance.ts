@@ -75,7 +75,8 @@ export function monitorWebVitals() {
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
-        console.log('LCP:', lastEntry.renderTime || lastEntry.loadTime);
+        const lcp = lastEntry as PerformanceEntry & { renderTime?: number; loadTime?: number };
+        console.log('LCP:', lcp.renderTime || lcp.loadTime);
       });
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
 
