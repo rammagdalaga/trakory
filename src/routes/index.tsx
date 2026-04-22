@@ -44,7 +44,7 @@ export const Route = createFileRoute("/")({
       {
         name: "keywords",
         content:
-          "converter, online converter, free converter, video converter, audio converter, pdf converter, word converter, image converter, document converter, file converter, mp4 to mp3, video to audio, video to mp3, mp3 converter, wav converter, flac converter, pdf to word, word to pdf, image resizer, jpg to png, png to jpg, free online tools, browser converter, private converter, no upload converter, fastest converter, best converter 2026, convert files online free",
+          "Online converter tool, Converter free, Free converter tool, Converter MP3, File converter, Free file converter, File converter Download, Free convert video, video converter, audio converter, pdf converter, word converter, pdf to word, word to pdf, compress pdf, compress word, mp4 to mp3, free online converter",
       },
       {
         name: "robots",
@@ -326,9 +326,7 @@ function Index() {
             <span className="text-gradient-brand">video, audio, PDF, Word & images</span>
           </h1>
           <p className="animate-float-up delay-200 mx-auto mt-6 max-w-2xl text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-8 sm:text-base md:text-lg">
-            Convert MP4 to MP3, video to audio, PDF to Word, resize images and more — directly in
-            your browser. Trakory is a free file converter built for everyone. No signup, no
-            uploads, no limits, 100% private.
+            Trakory is the <strong className="text-foreground font-semibold">online converter tool</strong> built for everyone — pick a tab, drop a file, get a download. Use our <strong className="text-foreground font-semibold">free file converter</strong> to convert MP3, turn video into audio, transform PDF into editable Word, change Word back to PDF, or shrink the size of your documents. Every <strong className="text-foreground font-semibold">file converter download</strong> happens locally in your browser — no signup, no uploads, total privacy.
           </p>
         </div>
 
