@@ -31,7 +31,7 @@ async function getPdfjs() {
 }
 
 // ============================================================
-//  PDF -> Word (.docx)  — extracts real, editable text
+//  PDF -> Word (.docx)  — extracts real, editable text with colors & images
 // ============================================================
 export async function pdfToDocx(
   file: File,
@@ -47,20 +47,57 @@ export async function pdfToDocx(
     const page = await pdf.getPage(pageNum);
     const content = await page.getTextContent();
 
-    // Group text items into lines by Y position, preserving order.
-    type Item = { str: string; x: number; y: number; h: number };
+    // Try to extract images from page
+    const operatorList = await page.getOperatorList();
+    const images: string[] = [];
+
+    try {
+      if (operatorList.fnArray) {
+        for (let i = 0; i < operatorList.fnArray.length; i++) {
+          if (operatorList.fnArray[i] === 83) { // paintImageXObject
+            const imageName = operatorList.argsArray[i]?.[0];
+            if (imageName && page.objs) {
+              const img = await page.objs.get(imageName);
+              if (img && img.data) {
+                try {
+                  const canvas = document.createElement("canvas");
+                  const ctx = canvas.getContext("2d");
+                  if (ctx) {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const imageData = ctx.createImageData(img.width, img.height);
+                    imageData.data.set(img.data);
+                    ctx.putImageData(imageData, 0, 0);
+                    images.push(canvas.toDataURL("image/jpeg"));
+                  }
+                } catch (e) {
+                  console.error("Failed to extract image:", e);
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.error("Error extracting images:", e);
+    }
+
+    // Group text items into lines by Y position, preserving order and colors.
+    type Item = { str: string; x: number; y: number; h: number; color?: string };
     const items: Item[] = content.items
       .map((it) => {
         const t = it as unknown as {
           str: string;
           transform: number[];
           height: number;
+          color?: string;
         };
         return {
           str: t.str,
           x: t.transform[4],
           y: t.transform[5],
           h: t.height || 12,
+          color: t.color,
         };
       })
       .filter((i) => i.str !== undefined);
@@ -83,6 +120,7 @@ export async function pdfToDocx(
       line.sort((a, b) => a.x - b.x);
       // Reconstruct text with spaces where horizontal gaps exist.
       let text = "";
+      let color = line[0]?.color;
       for (let i = 0; i < line.length; i++) {
         const cur = line[i];
         if (i === 0) {
@@ -98,6 +136,17 @@ export async function pdfToDocx(
       const trimmed = text.trim();
       if (!trimmed) continue;
       const isHeading = line[0].h >= 14 && trimmed.length < 120;
+
+      // Parse color from PDF format
+      let colorValue: number | undefined;
+      if (color) {
+        // Assuming color format is like "rgb(r,g,b)" or a hex string
+        const rgbMatch = color.match(/\d+/g);
+        if (rgbMatch && rgbMatch.length >= 3) {
+          colorValue = parseInt(`${rgbMatch[0].padStart(2, "0")}${rgbMatch[1].padStart(2, "0")}${rgbMatch[2].padStart(2, "0")}`, 16);
+        }
+      }
+
       allParagraphs.push(
         new Paragraph({
           heading: isHeading ? HeadingLevel.HEADING_2 : undefined,
@@ -106,11 +155,27 @@ export async function pdfToDocx(
               text: trimmed,
               size: Math.max(20, Math.round(line[0].h * 2)),
               bold: isHeading,
+              color: colorValue ? colorValue.toString(16).padStart(6, "0") : undefined,
             }),
           ],
           spacing: { after: 120 },
         }),
       );
+    }
+
+    // Add extracted images to document
+    if (images.length > 0) {
+      for (const imgData of images) {
+        allParagraphs.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: " ",
+              }),
+            ],
+          }),
+        );
+      }
     }
 
     // Page break (empty paragraph + pageBreakBefore on next)
@@ -154,7 +219,26 @@ export async function docxToPdf(
 ): Promise<Blob> {
   onProgress?.(0.1);
   const buf = await file.arrayBuffer();
-  // Extract semantic HTML to preserve headings, lists, bold/italic.
+
+  // Extract images from DOCX (ZIP file)
+  const docxZip = await JSZip.loadAsync(buf);
+  const imageMap: Record<string, string> = {};
+  const mediaFiles = Object.keys(docxZip.files).filter((p) =>
+    /^word\/media\/.+\.(png|jpe?g|gif)$/i.test(p),
+  );
+
+  for (const path of mediaFiles) {
+    const blob = await docxZip.files[path].async("blob");
+    const dataUrl = await new Promise<string>((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.readAsDataURL(blob);
+    });
+    const filename = path.split("/").pop() || "";
+    imageMap[filename] = dataUrl;
+  }
+
+  // Extract semantic HTML to preserve headings, lists, bold/italic, colors.
   const { value: html } = await mammoth.convertToHtml({ arrayBuffer: buf });
   onProgress?.(0.4);
 
@@ -172,13 +256,34 @@ export async function docxToPdf(
   const maxWidth = pageWidth - margin * 2;
   let y = margin;
 
-  const writeBlock = (text: string, opts: { size: number; bold?: boolean; italic?: boolean }) => {
+  const getComputedColor = (el: HTMLElement): string => {
+    const style = window.getComputedStyle(el);
+    const color = style.color || "#000000";
+    const match = color.match(/\d+/g);
+    if (match && match.length >= 3) {
+      return `#${parseInt(match[0]).toString(16).padStart(2, "0")}${parseInt(match[1]).toString(16).padStart(2, "0")}${parseInt(match[2]).toString(16).padStart(2, "0")}`;
+    }
+    return "#000000";
+  };
+
+  const writeBlock = (text: string, opts: { size: number; bold?: boolean; italic?: boolean; color?: string }) => {
     if (!text.trim()) {
       y += opts.size * 0.6;
       return;
     }
     pdf.setFont("helvetica", opts.bold ? (opts.italic ? "bolditalic" : "bold") : opts.italic ? "italic" : "normal");
     pdf.setFontSize(opts.size);
+
+    // Set text color
+    if (opts.color && opts.color !== "#000000") {
+      const r = parseInt(opts.color.slice(1, 3), 16);
+      const g = parseInt(opts.color.slice(3, 5), 16);
+      const b = parseInt(opts.color.slice(5, 7), 16);
+      pdf.setTextColor(r, g, b);
+    } else {
+      pdf.setTextColor(0, 0, 0);
+    }
+
     const lines = pdf.splitTextToSize(text, maxWidth) as string[];
     for (const line of lines) {
       if (y + opts.size > pageHeight - margin) {
@@ -192,32 +297,63 @@ export async function docxToPdf(
   };
 
   const walk = (node: ChildNode) => {
-    if (node.nodeType === Node.TEXT_NODE) return;
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = (node.textContent || "").trim();
+      if (text && node.parentElement) {
+        const color = getComputedColor(node.parentElement);
+        const isBold = window.getComputedStyle(node.parentElement).fontWeight === "bold" ||
+                       parseInt(window.getComputedStyle(node.parentElement).fontWeight) >= 700;
+        const isItalic = window.getComputedStyle(node.parentElement).fontStyle === "italic";
+        writeBlock(text, { size: 12, bold: isBold, italic: isItalic, color });
+      }
+      return;
+    }
     if (node.nodeType !== Node.ELEMENT_NODE) return;
     const el = node as HTMLElement;
     const tag = el.tagName.toLowerCase();
     const text = (el.textContent || "").replace(/\s+/g, " ").trim();
+    const color = getComputedColor(el);
+    const isBold = window.getComputedStyle(el).fontWeight === "bold" ||
+                   parseInt(window.getComputedStyle(el).fontWeight) >= 700;
+    const isItalic = window.getComputedStyle(el).fontStyle === "italic";
 
     switch (tag) {
       case "h1":
-        writeBlock(text, { size: 22, bold: true });
+        writeBlock(text, { size: 22, bold: true, color });
         break;
       case "h2":
-        writeBlock(text, { size: 18, bold: true });
+        writeBlock(text, { size: 18, bold: true, color });
         break;
       case "h3":
-        writeBlock(text, { size: 15, bold: true });
+        writeBlock(text, { size: 15, bold: true, color });
         break;
       case "h4":
       case "h5":
       case "h6":
-        writeBlock(text, { size: 13, bold: true });
+        writeBlock(text, { size: 13, bold: true, color });
         break;
       case "p":
-        writeBlock(text, { size: 12 });
+        writeBlock(text, { size: 12, bold: isBold, italic: isItalic, color });
         break;
       case "li":
-        writeBlock("• " + text, { size: 12 });
+        writeBlock("• " + text, { size: 12, bold: isBold, italic: isItalic, color });
+        break;
+      case "img":
+        const src = (el as HTMLImageElement).src;
+        if (src.startsWith("data:")) {
+          try {
+            const imgHeight = 40;
+            const imgWidth = 80;
+            if (y + imgHeight > pageHeight - margin) {
+              pdf.addPage();
+              y = margin;
+            }
+            pdf.addImage(src, "PNG", margin, y, imgWidth, imgHeight);
+            y += imgHeight + 8;
+          } catch (e) {
+            console.error("Failed to add image:", e);
+          }
+        }
         break;
       case "ul":
       case "ol":
@@ -228,7 +364,8 @@ export async function docxToPdf(
         el.childNodes.forEach(walk);
         break;
       default:
-        if (text) writeBlock(text, { size: 12 });
+        if (text) writeBlock(text, { size: 12, bold: isBold, italic: isItalic, color });
+        else el.childNodes.forEach(walk);
     }
   };
 
