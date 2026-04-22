@@ -233,26 +233,26 @@ const TOOLS = [
   },
   {
     icon: FileText,
-    title: "PDF Converter",
-    body: "Convert PDF to Word, extract pages, compress and merge PDF files — privately in your browser.",
-    available: false,
+    title: "PDF → Word",
+    body: "Free convert PDF into a fully editable Word .docx — text, headings and paragraphs preserved.",
+    available: true,
   },
   {
     icon: FileType,
-    title: "Word Converter",
-    body: "Turn DOCX into PDF, plain text or images. Convert legacy DOC files into modern formats.",
-    available: false,
+    title: "Word → PDF",
+    body: "Turn DOCX into a clean PDF with selectable, searchable text — not flattened images.",
+    available: true,
+  },
+  {
+    icon: FileArchive,
+    title: "Compress PDF & Word",
+    body: "Shrink PDF and DOCX file size in your browser. Great for email and upload limits.",
+    available: true,
   },
   {
     icon: FileImage,
     title: "Image Converter",
     body: "Resize, compress and convert JPG, PNG, WEBP and HEIC images without losing quality.",
-    available: false,
-  },
-  {
-    icon: FileArchive,
-    title: "Document Converter",
-    body: "Convert TXT, RTF, ODT and more. Every document type — one fast, free converter.",
     available: false,
   },
 ];
