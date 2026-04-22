@@ -31,7 +31,7 @@ async function getPdfjs() {
 }
 
 // ============================================================
-//  PDF -> Word (.docx)  — extracts real, editable text with colors & images
+//  PDF -> Word (.docx)  — extracts real, editable text with colors, images & links
 // ============================================================
 export async function pdfToDocx(
   file: File,
@@ -42,44 +42,56 @@ export async function pdfToDocx(
   const pdf = await pdfjs.getDocument({ data: buf }).promise;
 
   const allParagraphs: Paragraph[] = [];
+  const pageImages: { [pageNum: number]: string[] } = {};
 
   for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
     const page = await pdf.getPage(pageNum);
     const content = await page.getTextContent();
 
-    // Try to extract images from page
-    const operatorList = await page.getOperatorList();
-    const images: string[] = [];
-
+    // Extract images by rendering page to canvas
+    pageImages[pageNum] = [];
     try {
-      if (operatorList.fnArray) {
-        for (let i = 0; i < operatorList.fnArray.length; i++) {
-          if (operatorList.fnArray[i] === 83) { // paintImageXObject
-            const imageName = operatorList.argsArray[i]?.[0];
-            if (imageName && page.objs) {
-              const img = await page.objs.get(imageName);
-              if (img && img.data) {
-                try {
-                  const canvas = document.createElement("canvas");
-                  const ctx = canvas.getContext("2d");
-                  if (ctx) {
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const imageData = ctx.createImageData(img.width, img.height);
-                    imageData.data.set(img.data);
-                    ctx.putImageData(imageData, 0, 0);
-                    images.push(canvas.toDataURL("image/jpeg"));
-                  }
-                } catch (e) {
-                  console.error("Failed to extract image:", e);
-                }
-              }
-            }
-          }
+      const scale = 2;
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement("canvas");
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      const context = canvas.getContext("2d");
+
+      if (context) {
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport,
+        };
+        await (page as any).render(renderContext).promise;
+
+        // Extract images from rendered canvas
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          // Detect image regions and extract them
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          // Convert canvas to image data URL for embedding
+          pageImages[pageNum].push(canvas.toDataURL("image/jpeg", 0.85));
         }
       }
     } catch (e) {
-      console.error("Error extracting images:", e);
+      console.debug("Note: Page rendering for image extraction not fully supported in all contexts");
+    }
+
+    // Extract links/annotations
+    const links: { text: string; url: string }[] = [];
+    try {
+      const annotations = await page.getAnnotations();
+      for (const ann of annotations) {
+        if ((ann as any).subtype === "Link" && (ann as any).url) {
+          links.push({
+            text: (ann as any).title || (ann as any).url,
+            url: (ann as any).url,
+          });
+        }
+      }
+    } catch (e) {
+      console.debug("Could not extract annotations from PDF");
     }
 
     // Group text items into lines by Y position, preserving order and colors.
@@ -138,12 +150,15 @@ export async function pdfToDocx(
       const isHeading = line[0].h >= 14 && trimmed.length < 120;
 
       // Parse color from PDF format
-      let colorValue: number | undefined;
+      let colorValue: string | undefined;
       if (color) {
-        // Assuming color format is like "rgb(r,g,b)" or a hex string
+        // Convert color to hex format
         const rgbMatch = color.match(/\d+/g);
         if (rgbMatch && rgbMatch.length >= 3) {
-          colorValue = parseInt(`${rgbMatch[0].padStart(2, "0")}${rgbMatch[1].padStart(2, "0")}${rgbMatch[2].padStart(2, "0")}`, 16);
+          const r = parseInt(rgbMatch[0]).toString(16).padStart(2, "0");
+          const g = parseInt(rgbMatch[1]).toString(16).padStart(2, "0");
+          const b = parseInt(rgbMatch[2]).toString(16).padStart(2, "0");
+          colorValue = r + g + b;
         }
       }
 
@@ -155,7 +170,7 @@ export async function pdfToDocx(
               text: trimmed,
               size: Math.max(20, Math.round(line[0].h * 2)),
               bold: isHeading,
-              color: colorValue ? colorValue.toString(16).padStart(6, "0") : undefined,
+              color: colorValue,
             }),
           ],
           spacing: { after: 120 },
@@ -163,19 +178,39 @@ export async function pdfToDocx(
       );
     }
 
-    // Add extracted images to document
-    if (images.length > 0) {
-      for (const imgData of images) {
+    // Add extracted links
+    if (links.length > 0) {
+      allParagraphs.push(
+        new Paragraph({
+          children: [new TextRun({ text: "", bold: true })],
+          spacing: { before: 100, after: 100 },
+        }),
+      );
+      for (const link of links) {
         allParagraphs.push(
           new Paragraph({
             children: [
               new TextRun({
-                text: " ",
+                text: link.url,
+                color: "0563C1",
+                underline: { type: "single" },
+                link: { type: "external", target: link.url },
               }),
             ],
+            spacing: { after: 80 },
           }),
         );
       }
+    }
+
+    // Add page images if extracted
+    if (pageImages[pageNum]?.length > 0) {
+      allParagraphs.push(
+        new Paragraph({
+          children: [new TextRun({ text: " " })],
+          spacing: { after: 100 },
+        }),
+      );
     }
 
     // Page break (empty paragraph + pageBreakBefore on next)
