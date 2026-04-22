@@ -13,9 +13,22 @@ export function InterstitialAd() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    // Only show once per browser session, and not until the user has had time
+    // to interact with the converter. This prevents the ad modal from blocking
+    // tab clicks and dropzone interactions on first load.
+    try {
+      if (sessionStorage.getItem("trakory_interstitial_shown") === "1") return;
+    } catch {
+      // ignore
+    }
     const t = setTimeout(() => {
       setOpen(true);
-    }, 5000);
+      try {
+        sessionStorage.setItem("trakory_interstitial_shown", "1");
+      } catch {
+        // ignore
+      }
+    }, 45000);
     return () => clearTimeout(t);
   }, []);
 
