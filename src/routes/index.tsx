@@ -594,19 +594,8 @@ function Index() {
             })}
           </div>
 
-          {/* Mission Statement */}
-          <div className="animate-float-up delay-500 relative overflow-hidden rounded-3xl border border-border bg-gradient-to-r from-primary/10 via-card/70 to-accent/10 p-6 shadow-soft backdrop-blur sm:p-8">
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-10" />
-            </div>
-            <div className="relative z-10 text-center max-w-2xl mx-auto">
-              <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-4">Our Mission</h3>
-              <p className="text-sm sm:text-base leading-relaxed text-muted-foreground">
-                Trakory's mission is simple: give everyone — students, creators, freelancers and businesses — access to professional-quality file conversion tools without compromise. Whether you're extracting audio from a YouTube video or converting documents for work, Trakory is the all-in-one converter you need.
-              </p>
-            </div>
-          </div>
         </section>
+
       </main>
 
       {/* FAQ — fixed z-index to stay below modals but above background */}
