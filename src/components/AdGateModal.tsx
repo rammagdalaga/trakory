@@ -76,6 +76,7 @@ export function AdGateModal({
     >
       <div
         className={`relative w-full ${isMobile ? "max-w-sm" : "max-w-lg"} overflow-hidden rounded-3xl border border-border bg-card shadow-elevated`}
+        suppressHydrationWarning
       >
         <button
           onClick={onClose}

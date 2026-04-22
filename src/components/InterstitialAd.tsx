@@ -44,6 +44,7 @@ export function InterstitialAd() {
     >
       <div
         className={`relative w-full ${isMobile ? "max-w-sm" : "max-w-xl"} overflow-hidden rounded-3xl border border-border bg-card shadow-elevated`}
+        suppressHydrationWarning
       >
         <button
           onClick={() => setOpen(false)}

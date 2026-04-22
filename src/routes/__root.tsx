@@ -1,4 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { initializePerformanceOptimizations } from "@/lib/performance";
 
 import appCss from "../styles.css?url";
 
@@ -110,5 +112,9 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  useEffect(() => {
+    initializePerformanceOptimizations();
+  }, []);
+
   return <Outlet />;
 }

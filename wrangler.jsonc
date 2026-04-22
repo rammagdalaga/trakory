@@ -4,4 +4,28 @@
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
+  "env": {
+    "production": {
+      "routes": [
+        {
+          "pattern": "example.com/assets/*",
+          "zone_name": "example.com"
+        }
+      ]
+    }
+  },
+  "routes": [
+    {
+      "pattern": "*.js",
+      "custom_domain": false
+    },
+    {
+      "pattern": "*.css",
+      "custom_domain": false
+    },
+    {
+      "pattern": "*.woff2",
+      "custom_domain": false
+    }
+  ]
 }

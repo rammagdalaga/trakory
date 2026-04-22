@@ -128,7 +128,7 @@ export function Converter() {
         />
 
         <div className="relative rounded-3xl border border-border/60 bg-card/90 p-1 shadow-elevated backdrop-blur-xl">
-          <div className="rounded-[calc(1.5rem-2px)] bg-gradient-soft p-5 sm:p-8 lg:p-10">
+          <div className="rounded-[calc(1.5rem-2px)] bg-gradient-soft p-3 sm:p-5 lg:p-6">
             {/* Drop zone */}
             {!file ? (
               <button

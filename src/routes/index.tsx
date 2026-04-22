@@ -22,6 +22,7 @@ import {
   Globe,
   Sparkles,
   Lock,
+  Gift,
 } from "lucide-react";
 
 const SITE_URL = "https://trakory.com";
@@ -285,7 +286,10 @@ const FAQS = [
 
 function Index() {
   return (
-    <div className="relative min-h-dvh overflow-x-clip bg-background pb-24 sm:pb-28 md:pb-32 pt-0">
+    <div
+      className="relative min-h-dvh overflow-x-clip bg-background pb-24 sm:pb-28 md:pb-32 pt-0"
+      suppressHydrationWarning
+    >
       {/* Ambient gradient blobs */}
       <div
         aria-hidden
@@ -312,41 +316,43 @@ function Index() {
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
-        <div className="mb-8 max-w-3xl text-center sm:mb-10">
-          <span className="animate-float-up mb-4 inline-block rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur sm:mb-5">
+      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
+        <div className="mb-6 max-w-3xl text-center sm:mb-8 lg:mb-10">
+          <span className="animate-float-up mb-5 inline-block rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur sm:mb-6">
             Private · In-browser · No uploads
           </span>
           <h1 className="animate-float-up delay-100 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl">
             The free online converter for{" "}
             <span className="text-gradient-brand">video, audio, PDF, Word & images</span>
           </h1>
-          <p className="animate-float-up delay-200 mx-auto mt-4 max-w-2xl text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base md:text-lg">
+          <p className="animate-float-up delay-200 mx-auto mt-6 max-w-2xl text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-8 sm:text-base md:text-lg">
             Convert MP4 to MP3, video to audio, PDF to Word, resize images and more — directly in
             your browser. Trakory is a free file converter built for everyone. No signup, no
             uploads, no limits, 100% private.
           </p>
         </div>
 
-        <div id="converter" className="w-full animate-float-up delay-300">
+        <div id="converter" className="w-full max-w-2xl mx-auto animate-float-up delay-300 px-4 sm:px-0 mt-4 sm:mt-6">
           <Converter />
         </div>
 
         {/* Mission / About */}
         <section
           aria-labelledby="mission-heading"
-          className="mt-16 w-full max-w-4xl text-center sm:mt-20"
+          className="mt-20 w-full max-w-4xl text-center sm:mt-24 lg:mt-28"
         >
-          <span className="mb-3 inline-block rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
-            Our mission
-          </span>
+          <div className="animate-float-up">
+            <span className="mb-3 inline-block rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
+              Our mission
+            </span>
+          </div>
           <h2
             id="mission-heading"
-            className="text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl"
+            className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl"
           >
             Small team. <span className="text-gradient-brand">Big impact.</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base">
+          <p className="animate-float-up delay-200 mx-auto mt-6 max-w-3xl text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-8 sm:text-base md:text-lg">
             Trakory exists to give everyone — students, creators, freelancers, businesses — a fast,
             free, and private online converter that just works. Whether you need a video converter
             for MP4 to MP3, an audio converter for FLAC to WAV, a PDF converter to turn PDFs into
@@ -360,17 +366,20 @@ function Index() {
         {/* Tools showcase */}
         <section
           aria-labelledby="tools-heading"
-          className="mt-14 w-full sm:mt-20"
+          className="mt-20 w-full sm:mt-24 lg:mt-28"
         >
-          <div className="mb-8 text-center sm:mb-10">
+          <div className="mb-10 text-center sm:mb-14">
+            <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
+              Available & Coming Soon
+            </span>
             <h2
               id="tools-heading"
-              className="text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl"
+              className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl"
             >
               Every converter you need,{" "}
               <span className="text-gradient-brand">in one place</span>
             </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+            <p className="animate-float-up delay-200 mx-auto mt-4 max-w-2xl text-sm text-muted-foreground sm:text-base">
               From video converter and audio converter to PDF converter, Word converter and image
               converter — Trakory is the all-in-one online file converter for 2026.
             </p>
@@ -382,21 +391,24 @@ function Index() {
               return (
                 <article
                   key={t.title}
-                  className="group hover-lift animate-float-up relative overflow-hidden rounded-2xl border border-border bg-card/70 p-5 shadow-soft backdrop-blur"
-                  style={{ animationDelay: `${i * 80}ms` }}
+                  className="group hover-lift animate-float-up relative overflow-hidden rounded-2xl border border-border bg-card/70 p-6 shadow-soft backdrop-blur transition-all duration-300 hover:shadow-elevated hover:border-primary/40"
+                  style={{ animationDelay: `${i * 60}ms` }}
                 >
-                  <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-soft transition-transform duration-300 group-hover:scale-110">
-                    <Icon className="size-5" />
+                  <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
+                  <div className="relative z-10">
+                    <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-soft transition-transform duration-300 group-hover:scale-110">
+                      <Icon className="size-6" />
+                    </div>
+                    <h3 className="flex items-center gap-2 text-base font-semibold text-foreground">
+                      {t.title}
+                      {!t.available && (
+                        <span className="rounded-full border border-border bg-muted px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+                          Soon
+                        </span>
+                      )}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t.body}</p>
                   </div>
-                  <h3 className="flex items-center gap-2 text-base font-semibold text-foreground">
-                    {t.title}
-                    {!t.available && (
-                      <span className="rounded-full border border-border bg-muted px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
-                        Soon
-                      </span>
-                    )}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{t.body}</p>
                 </article>
               );
             })}
@@ -406,12 +418,15 @@ function Index() {
         {/* Why Trakory */}
         <section
           aria-labelledby="why-heading"
-          className="mt-16 w-full max-w-5xl sm:mt-20"
+          className="mt-20 w-full sm:mt-24 lg:mt-28"
         >
-          <div className="mb-8 text-center sm:mb-10">
+          <div className="mb-10 text-center sm:mb-14">
+            <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
+              Features & Benefits
+            </span>
             <h2
               id="why-heading"
-              className="text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl"
+              className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl"
             >
               Why people pick Trakory as their{" "}
               <span className="text-gradient-brand">go-to converter</span>
@@ -455,33 +470,159 @@ function Index() {
               return (
                 <div
                   key={f.title}
-                  className="hover-lift animate-float-up rounded-2xl border border-border bg-card/70 p-5 shadow-soft backdrop-blur"
-                  style={{ animationDelay: `${i * 80}ms` }}
+                  className="hover-lift animate-float-up group relative overflow-hidden rounded-2xl border border-border bg-card/70 p-6 shadow-soft backdrop-blur transition-all duration-300 hover:shadow-elevated hover:border-primary/40"
+                  style={{ animationDelay: `${i * 60}ms` }}
                 >
-                  <Icon className="mb-3 size-5 text-primary" />
-                  <h3 className="text-sm font-semibold text-foreground">{f.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
+                  <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
+                  <div className="relative z-10">
+                    <Icon className="mb-4 size-6 text-primary transition-transform duration-300 group-hover:scale-110" />
+                    <h3 className="text-base font-semibold text-foreground mb-2">{f.title}</h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{f.body}</p>
+                  </div>
                 </div>
               );
             })}
           </div>
         </section>
+
+        {/* Comprehensive SEO Content Section - Enhanced with Cards */}
+        <section
+          aria-labelledby="comprehensive-heading"
+          className="mt-16 w-full sm:mt-20"
+        >
+          <div className="mb-10 text-center sm:mb-14">
+            <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
+              Why choose Trakory
+            </span>
+            <h2
+              id="comprehensive-heading"
+              className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl"
+            >
+              The ultimate online converter for <span className="text-gradient-brand">every file type</span>
+            </h2>
+          </div>
+
+          {/* Feature Cards Grid */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-12">
+            {[
+              {
+                icon: FileVideo,
+                title: "Video Converter",
+                desc: "MP4, MOV, MKV, WEBM, AVI to MP3 & audio formats",
+              },
+              {
+                icon: FileAudio,
+                title: "Audio Converter",
+                desc: "MP3, WAV, FLAC, AAC, OGG with quality control",
+              },
+              {
+                icon: FileText,
+                title: "PDF Converter",
+                desc: "Transform PDFs to Word, images, compress & merge",
+              },
+              {
+                icon: FileType,
+                title: "Document Converter",
+                desc: "DOCX, DOC, TXT, RTF, ODT formats supported",
+              },
+            ].map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.title}
+                  className="animate-float-up group relative overflow-hidden rounded-2xl border border-border bg-card/70 p-4 shadow-soft backdrop-blur hover:shadow-elevated transition-all duration-300 hover:border-primary/40"
+                  style={{ animationDelay: `${i * 60}ms` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-center size-12 rounded-xl bg-gradient-brand text-primary-foreground shadow-soft mb-3 transition-transform duration-300 group-hover:scale-110">
+                      <Icon className="size-6" />
+                    </div>
+                    <h3 className="font-semibold text-foreground text-sm sm:text-base">{item.title}</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-2 leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Main Content Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {[
+              {
+                title: "100% Private & Secure",
+                desc: "Trakory is a free online converter designed to solve all your file conversion needs in one place. Unlike other online converter tools, Trakory keeps everything 100% private — your files never leave your device because conversions run directly in your browser using WebAssembly technology.",
+                icon: Lock,
+              },
+              {
+                title: "Complete Format Support",
+                desc: "Our image converter lets you resize, compress and convert JPG, PNG, WEBP and HEIC images without quality loss. We support document converters for TXT, RTF, ODT and dozens of other formats. Whether you're converting a video for TikTok or resizing images for your blog, Trakory handles everything.",
+                icon: Sparkles,
+              },
+              {
+                title: "Free Forever",
+                desc: "As a small team with big goals, we built Trakory to be the most trusted converter on the internet. The video converter, audio converter, PDF converter, Word converter and image converter are completely free forever. Ads only help us cover hosting costs so we can keep improving.",
+                icon: Gift,
+              },
+              {
+                title: "Works Everywhere",
+                desc: "Just fast, private, browser-based conversion that works on Chrome, Safari, Firefox, Edge and Brave across iPhone, Android, Windows, Mac and Linux. No signup, no upload delays, no hidden charges — everything you need in one all-in-one converter.",
+                icon: Globe,
+              },
+            ].map((card, i) => {
+              const Icon = card.icon;
+              return (
+                <div
+                  key={card.title}
+                  className="animate-float-up group relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card/80 to-card/50 p-6 shadow-soft backdrop-blur hover:shadow-elevated transition-all duration-300 hover:border-primary/40"
+                  style={{ animationDelay: `${(i + 4) * 60}ms` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
+                  <div className="relative z-10">
+                    <div className="flex items-start gap-4">
+                      <div className="flex items-center justify-center size-14 rounded-xl bg-gradient-brand text-primary-foreground shadow-soft flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                        <Icon className="size-7" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">{card.title}</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{card.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Mission Statement */}
+          <div className="animate-float-up delay-500 relative overflow-hidden rounded-3xl border border-border bg-gradient-to-r from-primary/10 via-card/70 to-accent/10 p-6 shadow-soft backdrop-blur sm:p-8">
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-10" />
+            </div>
+            <div className="relative z-10 text-center max-w-2xl mx-auto">
+              <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-4">Our Mission</h3>
+              <p className="text-sm sm:text-base leading-relaxed text-muted-foreground">
+                Trakory's mission is simple: give everyone — students, creators, freelancers and businesses — access to professional-quality file conversion tools without compromise. Whether you're extracting audio from a YouTube video or converting documents for work, Trakory is the all-in-one converter you need.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
 
-      {/* FAQ — lower z than modals (z-[100]) so AdGate sits on top */}
+      {/* FAQ — fixed z-index to stay below modals but above background */}
       <section
         aria-label="Frequently asked questions"
-        className="relative z-0 mx-auto mt-2 w-full max-w-3xl px-4 pb-12 sm:px-6 sm:pb-16"
+        className="relative z-10 mx-auto mt-20 w-full max-w-3xl px-4 pb-24 sm:mt-24 sm:px-6 sm:pb-28 lg:mt-28 lg:pb-32"
       >
-        <div className="mb-8 text-center">
-          <span className="mb-3 inline-block rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
+        <div className="mb-10 text-center sm:mb-14">
+          <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
             FAQ
           </span>
-          <h2 className="text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-            Frequently asked questions
+          <h2 className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            Frequently asked questions about our free converter
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
-            Everything you need to know about the Trakory free online converter.
+          <p className="animate-float-up delay-200 mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+            Learn more about Trakory's video converter, audio converter, PDF converter, image converter and other tools.
           </p>
         </div>
 
@@ -492,10 +633,10 @@ function Index() {
         >
           {FAQS.map((f, i) => (
             <AccordionItem key={f.q} value={`item-${i}`} className="border-border last:border-b-0">
-              <AccordionTrigger className="text-left text-sm font-semibold text-foreground sm:text-base">
+              <AccordionTrigger className="text-left text-sm font-semibold text-foreground sm:text-base py-4">
                 {f.q}
               </AccordionTrigger>
-              <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+              <AccordionContent className="text-sm leading-relaxed text-muted-foreground pb-4">
                 {f.a}
               </AccordionContent>
             </AccordionItem>
@@ -503,9 +644,9 @@ function Index() {
         </Accordion>
       </section>
 
-      <footer className="relative z-0 mx-auto w-full max-w-6xl px-4 pb-6 text-center sm:px-6">
+      <footer className="relative z-10 mx-auto w-full max-w-6xl px-4 py-8 text-center border-t border-border/40 sm:px-6">
         <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-          Trakory · Free converter for everyone
+          Trakory · Free converter for everyone · © 2026
         </p>
       </footer>
 
