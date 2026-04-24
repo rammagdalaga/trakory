@@ -54,7 +54,7 @@ export function ToolSwitcher() {
     <div className="space-y-4">
       {/* Main Tools Section */}
       <div>
-        <h3 className="text-xs font-semibold text-muted-foreground mb-2 px-1">Tools</h3>
+        <h3 className="text-xs font-semibold text-muted-foreground mb-2 px-1 mx-auto text-center">Tools</h3>
         <div
           role="tablist"
           aria-label="Choose converter tool"
@@ -69,7 +69,7 @@ export function ToolSwitcher() {
 
       {/* TikTok Tools Section */}
       <div>
-        <h3 className="text-xs font-semibold text-muted-foreground mb-2 px-1">TikTok Tools</h3>
+        <h3 className="text-xs font-semibold text-muted-foreground mb-2 px-1 text-center">TikTok Tools</h3>
         <div
           role="tablist"
           aria-label="Choose TikTok tool"
