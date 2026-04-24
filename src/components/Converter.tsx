@@ -138,9 +138,10 @@ const BITRATES: Bitrate[] = ["128", "192", "320"];
 
 interface ConverterProps {
   tool: ConverterToolId;
+  disableAds?: boolean;
 }
 
-export function Converter({ tool }: ConverterProps) {
+export function Converter({ tool, disableAds = true }: ConverterProps) {
   const [file, setFile] = useState<File | null>(null);
   const [format, setFormat] = useState<AudioFormat>("mp3");
   const [bitrate, setBitrate] = useState<Bitrate>("192");
@@ -159,7 +160,6 @@ export function Converter({ tool }: ConverterProps) {
   const current = TOOLS[tool];
   const isAudioTool = tool === "video-to-audio" || tool === "audio";
 
-  // Reset everything when the tool changes (route change)
   useEffect(() => {
     setFile(null);
     setResult(null);
@@ -270,7 +270,7 @@ export function Converter({ tool }: ConverterProps) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex min-h-full items-center justify-center p-4">
       <div className="relative w-full max-w-2xl">
         <div
           aria-hidden
@@ -401,7 +401,6 @@ export function Converter({ tool }: ConverterProps) {
               </div>
             )}
 
-            {/* Progress */}
             {(status === "loading" ||
               status === "converting" ||
               status === "done") && (
@@ -433,7 +432,6 @@ export function Converter({ tool }: ConverterProps) {
               </div>
             )}
 
-            {/* Result */}
             {result && (
               <div className="mt-6 space-y-4 rounded-2xl border border-border bg-background/80 p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -463,7 +461,6 @@ export function Converter({ tool }: ConverterProps) {
               </div>
             )}
 
-            {/* Actions */}
             <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               {result ? (
                 <>
@@ -474,7 +471,7 @@ export function Converter({ tool }: ConverterProps) {
                     Convert another
                   </button>
                   <button
-                    onClick={() => setAdGateOpen(true)}
+                    onClick={disableAds ? triggerDownload : () => setAdGateOpen(true)}
                     className="rounded-xl bg-gradient-brand px-6 py-3 text-center text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-elevated active:scale-[0.98]"
                   >
                     Download {result.ext.toUpperCase()}
@@ -505,15 +502,17 @@ export function Converter({ tool }: ConverterProps) {
         </div>
       </div>
 
-      <AdGateModal
-        open={adGateOpen}
-        durationSec={8}
-        onComplete={() => {
-          setAdGateOpen(false);
-          triggerDownload();
-        }}
-        onClose={() => setAdGateOpen(false)}
-      />
+      {!disableAds && (
+        <AdGateModal
+          open={adGateOpen}
+          durationSec={8}
+          onComplete={() => {
+            setAdGateOpen(false);
+            triggerDownload();
+          }}
+          onClose={() => setAdGateOpen(false)}
+        />
+      )}
     </div>
   );
 }

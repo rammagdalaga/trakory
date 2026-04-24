@@ -9,6 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WordToPdfRouteImport } from './routes/word-to-pdf'
+import { Route as VideoToAudioRouteImport } from './routes/video-to-audio'
+import { Route as TiktokVideoDownloaderRouteImport } from './routes/tiktok-video-downloader'
+import { Route as TiktokProfileDownloaderRouteImport } from './routes/tiktok-profile-downloader'
+import { Route as PdfToWordRouteImport } from './routes/pdf-to-word'
+import { Route as CompressWordRouteImport } from './routes/compress-word'
+import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
+import { Route as AudioConverterRouteImport } from './routes/audio-converter'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsWordToPdfRouteImport } from './routes/tools.word-to-pdf'
 import { Route as ToolsVideoToAudioRouteImport } from './routes/tools.video-to-audio'
@@ -19,6 +27,46 @@ import { Route as ToolsCompressWordRouteImport } from './routes/tools.compress-w
 import { Route as ToolsCompressPdfRouteImport } from './routes/tools.compress-pdf'
 import { Route as ToolsAudioConverterRouteImport } from './routes/tools.audio-converter'
 
+const WordToPdfRoute = WordToPdfRouteImport.update({
+  id: '/word-to-pdf',
+  path: '/word-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VideoToAudioRoute = VideoToAudioRouteImport.update({
+  id: '/video-to-audio',
+  path: '/video-to-audio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TiktokVideoDownloaderRoute = TiktokVideoDownloaderRouteImport.update({
+  id: '/tiktok-video-downloader',
+  path: '/tiktok-video-downloader',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TiktokProfileDownloaderRoute = TiktokProfileDownloaderRouteImport.update({
+  id: '/tiktok-profile-downloader',
+  path: '/tiktok-profile-downloader',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PdfToWordRoute = PdfToWordRouteImport.update({
+  id: '/pdf-to-word',
+  path: '/pdf-to-word',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressWordRoute = CompressWordRouteImport.update({
+  id: '/compress-word',
+  path: '/compress-word',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfRoute = CompressPdfRouteImport.update({
+  id: '/compress-pdf',
+  path: '/compress-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AudioConverterRoute = AudioConverterRouteImport.update({
+  id: '/audio-converter',
+  path: '/audio-converter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -69,6 +117,14 @@ const ToolsAudioConverterRoute = ToolsAudioConverterRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/audio-converter': typeof AudioConverterRoute
+  '/compress-pdf': typeof CompressPdfRoute
+  '/compress-word': typeof CompressWordRoute
+  '/pdf-to-word': typeof PdfToWordRoute
+  '/tiktok-profile-downloader': typeof TiktokProfileDownloaderRoute
+  '/tiktok-video-downloader': typeof TiktokVideoDownloaderRoute
+  '/video-to-audio': typeof VideoToAudioRoute
+  '/word-to-pdf': typeof WordToPdfRoute
   '/tools/audio-converter': typeof ToolsAudioConverterRoute
   '/tools/compress-pdf': typeof ToolsCompressPdfRoute
   '/tools/compress-word': typeof ToolsCompressWordRoute
@@ -80,6 +136,14 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/audio-converter': typeof AudioConverterRoute
+  '/compress-pdf': typeof CompressPdfRoute
+  '/compress-word': typeof CompressWordRoute
+  '/pdf-to-word': typeof PdfToWordRoute
+  '/tiktok-profile-downloader': typeof TiktokProfileDownloaderRoute
+  '/tiktok-video-downloader': typeof TiktokVideoDownloaderRoute
+  '/video-to-audio': typeof VideoToAudioRoute
+  '/word-to-pdf': typeof WordToPdfRoute
   '/tools/audio-converter': typeof ToolsAudioConverterRoute
   '/tools/compress-pdf': typeof ToolsCompressPdfRoute
   '/tools/compress-word': typeof ToolsCompressWordRoute
@@ -92,6 +156,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/audio-converter': typeof AudioConverterRoute
+  '/compress-pdf': typeof CompressPdfRoute
+  '/compress-word': typeof CompressWordRoute
+  '/pdf-to-word': typeof PdfToWordRoute
+  '/tiktok-profile-downloader': typeof TiktokProfileDownloaderRoute
+  '/tiktok-video-downloader': typeof TiktokVideoDownloaderRoute
+  '/video-to-audio': typeof VideoToAudioRoute
+  '/word-to-pdf': typeof WordToPdfRoute
   '/tools/audio-converter': typeof ToolsAudioConverterRoute
   '/tools/compress-pdf': typeof ToolsCompressPdfRoute
   '/tools/compress-word': typeof ToolsCompressWordRoute
@@ -105,6 +177,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/audio-converter'
+    | '/compress-pdf'
+    | '/compress-word'
+    | '/pdf-to-word'
+    | '/tiktok-profile-downloader'
+    | '/tiktok-video-downloader'
+    | '/video-to-audio'
+    | '/word-to-pdf'
     | '/tools/audio-converter'
     | '/tools/compress-pdf'
     | '/tools/compress-word'
@@ -116,6 +196,14 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/audio-converter'
+    | '/compress-pdf'
+    | '/compress-word'
+    | '/pdf-to-word'
+    | '/tiktok-profile-downloader'
+    | '/tiktok-video-downloader'
+    | '/video-to-audio'
+    | '/word-to-pdf'
     | '/tools/audio-converter'
     | '/tools/compress-pdf'
     | '/tools/compress-word'
@@ -127,6 +215,14 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/audio-converter'
+    | '/compress-pdf'
+    | '/compress-word'
+    | '/pdf-to-word'
+    | '/tiktok-profile-downloader'
+    | '/tiktok-video-downloader'
+    | '/video-to-audio'
+    | '/word-to-pdf'
     | '/tools/audio-converter'
     | '/tools/compress-pdf'
     | '/tools/compress-word'
@@ -139,6 +235,14 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AudioConverterRoute: typeof AudioConverterRoute
+  CompressPdfRoute: typeof CompressPdfRoute
+  CompressWordRoute: typeof CompressWordRoute
+  PdfToWordRoute: typeof PdfToWordRoute
+  TiktokProfileDownloaderRoute: typeof TiktokProfileDownloaderRoute
+  TiktokVideoDownloaderRoute: typeof TiktokVideoDownloaderRoute
+  VideoToAudioRoute: typeof VideoToAudioRoute
+  WordToPdfRoute: typeof WordToPdfRoute
   ToolsAudioConverterRoute: typeof ToolsAudioConverterRoute
   ToolsCompressPdfRoute: typeof ToolsCompressPdfRoute
   ToolsCompressWordRoute: typeof ToolsCompressWordRoute
@@ -151,6 +255,62 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/word-to-pdf': {
+      id: '/word-to-pdf'
+      path: '/word-to-pdf'
+      fullPath: '/word-to-pdf'
+      preLoaderRoute: typeof WordToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/video-to-audio': {
+      id: '/video-to-audio'
+      path: '/video-to-audio'
+      fullPath: '/video-to-audio'
+      preLoaderRoute: typeof VideoToAudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tiktok-video-downloader': {
+      id: '/tiktok-video-downloader'
+      path: '/tiktok-video-downloader'
+      fullPath: '/tiktok-video-downloader'
+      preLoaderRoute: typeof TiktokVideoDownloaderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tiktok-profile-downloader': {
+      id: '/tiktok-profile-downloader'
+      path: '/tiktok-profile-downloader'
+      fullPath: '/tiktok-profile-downloader'
+      preLoaderRoute: typeof TiktokProfileDownloaderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pdf-to-word': {
+      id: '/pdf-to-word'
+      path: '/pdf-to-word'
+      fullPath: '/pdf-to-word'
+      preLoaderRoute: typeof PdfToWordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-word': {
+      id: '/compress-word'
+      path: '/compress-word'
+      fullPath: '/compress-word'
+      preLoaderRoute: typeof CompressWordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf': {
+      id: '/compress-pdf'
+      path: '/compress-pdf'
+      fullPath: '/compress-pdf'
+      preLoaderRoute: typeof CompressPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audio-converter': {
+      id: '/audio-converter'
+      path: '/audio-converter'
+      fullPath: '/audio-converter'
+      preLoaderRoute: typeof AudioConverterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -219,6 +379,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AudioConverterRoute: AudioConverterRoute,
+  CompressPdfRoute: CompressPdfRoute,
+  CompressWordRoute: CompressWordRoute,
+  PdfToWordRoute: PdfToWordRoute,
+  TiktokProfileDownloaderRoute: TiktokProfileDownloaderRoute,
+  TiktokVideoDownloaderRoute: TiktokVideoDownloaderRoute,
+  VideoToAudioRoute: VideoToAudioRoute,
+  WordToPdfRoute: WordToPdfRoute,
   ToolsAudioConverterRoute: ToolsAudioConverterRoute,
   ToolsCompressPdfRoute: ToolsCompressPdfRoute,
   ToolsCompressWordRoute: ToolsCompressWordRoute,

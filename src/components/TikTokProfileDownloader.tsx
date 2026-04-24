@@ -4,7 +4,11 @@ import { UserCircle2, Download, Loader2 } from "lucide-react";
 import { AdGateModal } from "./AdGateModal";
 import { fetchTikTokProfilePicture, downloadFile } from "@/lib/tikwm";
 
-export function TikTokProfileDownloader() {
+interface TikTokProfileDownloaderProps {
+  disableAds?: boolean;
+}
+
+export function TikTokProfileDownloader({ disableAds = true }: TikTokProfileDownloaderProps) {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,7 +59,7 @@ export function TikTokProfileDownloader() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex min-h-full items-center justify-center p-4">
       <div className="relative w-full max-w-2xl">
         <div
           aria-hidden
@@ -141,7 +145,7 @@ export function TikTokProfileDownloader() {
                     Search another
                   </button>
                   <button
-                    onClick={() => setAdGateOpen(true)}
+                    onClick={disableAds ? triggerDownload : () => setAdGateOpen(true)}
                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-elevated active:scale-[0.98]"
                   >
                     <Download className="size-4" />
@@ -154,15 +158,17 @@ export function TikTokProfileDownloader() {
         </div>
       </div>
 
-      <AdGateModal
-        open={adGateOpen}
-        durationSec={8}
-        onComplete={() => {
-          setAdGateOpen(false);
-          triggerDownload();
-        }}
-        onClose={() => setAdGateOpen(false)}
-      />
+      {!disableAds && (
+        <AdGateModal
+          open={adGateOpen}
+          durationSec={8}
+          onComplete={() => {
+            setAdGateOpen(false);
+            triggerDownload();
+          }}
+          onClose={() => setAdGateOpen(false)}
+        />
+      )}
     </div>
   );
 }

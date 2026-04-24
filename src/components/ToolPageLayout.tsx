@@ -4,19 +4,25 @@ import { TopAdBar } from "./TopAdBar";
 import { BottomAdBar } from "./BottomAdBar";
 import { InterstitialAd } from "./InterstitialAd";
 import { ToolSwitcher } from "./ToolSwitcher";
+import { ContactSection } from "./ContactSection";
 
 interface ToolPageLayoutProps {
   title: string;
   description: string;
   children: ReactNode;
+  disableAds?: boolean;
 }
 
-export function ToolPageLayout({ title, description, children }: ToolPageLayoutProps) {
+export function ToolPageLayout({
+  title,
+  description,
+  children,
+  disableAds = true,
+}: ToolPageLayoutProps) {
+  const showAds = !disableAds;
+
   return (
-    <div
-      className="relative min-h-dvh overflow-x-clip bg-background pb-24 sm:pb-28 md:pb-32"
-      suppressHydrationWarning
-    >
+    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background" suppressHydrationWarning>
       <div
         aria-hidden
         className="pointer-events-none absolute -left-40 top-[-10%] size-[320px] rounded-full bg-primary/15 blur-[120px] sm:size-[480px]"
@@ -26,7 +32,7 @@ export function ToolPageLayout({ title, description, children }: ToolPageLayoutP
         className="pointer-events-none absolute -right-40 bottom-[-10%] size-[360px] rounded-full bg-accent/15 blur-[120px] sm:size-[520px]"
       />
 
-      <TopAdBar />
+      {showAds && <TopAdBar />}
 
       <header className="relative z-10 mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pt-4 sm:px-6 sm:pt-6 lg:pt-8">
         <Link to="/" className="flex min-w-0 items-center gap-2.5" aria-label="Trakory home">
@@ -42,7 +48,7 @@ export function ToolPageLayout({ title, description, children }: ToolPageLayoutP
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-4 py-10 sm:px-6 sm:py-14 lg:py-16">
+      <main className="relative z-10 mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col items-center px-4 py-10 sm:px-6 sm:py-14 lg:py-16">
         <div className="mb-6 max-w-3xl text-center sm:mb-8">
           <h1 className="animate-float-up text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-5xl">
             {title}
@@ -61,14 +67,18 @@ export function ToolPageLayout({ title, description, children }: ToolPageLayoutP
         </div>
       </main>
 
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <ContactSection />
+      </div>
+
       <footer className="relative z-10 mx-auto w-full max-w-6xl px-4 py-8 text-center border-t border-border/40 sm:px-6">
         <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
           Trakory · Free converter for everyone · © 2026
         </p>
       </footer>
 
-      <InterstitialAd />
-      <BottomAdBar />
+      {showAds && <InterstitialAd />}
+      {showAds && <BottomAdBar />}
     </div>
   );
 }
