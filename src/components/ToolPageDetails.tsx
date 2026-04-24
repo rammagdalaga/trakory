@@ -43,7 +43,10 @@ export function ToolPageDetails({
           <h2 className="text-xl font-semibold text-foreground">Why use this tool?</h2>
           <ul className="mt-4 grid gap-3 text-sm leading-7 text-muted-foreground sm:grid-cols-2">
             {features.map((feature) => (
-              <li key={feature} className="space-y-1 rounded-2xl border border-border/60 bg-background/80 p-4">
+              <li
+                key={feature}
+                className="space-y-1 rounded-2xl border border-border/60 bg-background/80 p-4"
+              >
                 <p>{feature}</p>
               </li>
             ))}
@@ -89,9 +92,7 @@ export function ToolPageDetails({
               <summary className="cursor-pointer font-semibold text-foreground">
                 {item.question}
               </summary>
-              <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                {item.answer}
-              </p>
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">{item.answer}</p>
             </details>
           ))}
         </div>

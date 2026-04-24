@@ -22,7 +22,10 @@ export function ToolPageLayout({
   const showAds = !disableAds;
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background" suppressHydrationWarning>
+    <div
+      className="relative flex min-h-screen flex-col overflow-x-clip bg-background"
+      suppressHydrationWarning
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute -left-40 top-[-10%] size-[320px] rounded-full bg-primary/15 blur-[120px] sm:size-[480px]"

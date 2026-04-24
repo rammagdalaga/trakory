@@ -61,14 +61,32 @@ export function AudioConverterPage() {
         ]}
         seoContent="This free online audio converter makes it easy to change formats without losing quality. Convert MP3 to WAV, WAV to FLAC, or export audio for podcasts and projects while keeping everything private and fast."
         relatedLinks={[
-          { label: "Try Video to MP3 converter to extract audio from video for free!", href: "/video-to-audio" },
-          { label: "Try Audio Converter to convert MP3, WAV, FLAC for free!", href: "/audio-converter" },
+          {
+            label: "Try Video to MP3 converter to extract audio from video for free!",
+            href: "/video-to-audio",
+          },
+          {
+            label: "Try Audio Converter to convert MP3, WAV, FLAC for free!",
+            href: "/audio-converter",
+          },
           { label: "Try PDF Compressor to reduce PDF files for free!", href: "/compress-pdf" },
           { label: "Try Word Compressor to shrink DOCX files for free!", href: "/compress-word" },
-          { label: "Try PDF to Word converter to convert PDF files to Word for free!", href: "/pdf-to-word" },
-          { label: "Try Word to PDF converter to convert Word files to PDF for free!", href: "/word-to-pdf" },
-          { label: "Try TikTok Video Downloader to save TikTok videos for free!", href: "/tiktok-video-downloader" },
-          { label: "Try TikTok Profile Picture Downloader to save profile pictures for free!", href: "/tiktok-profile-downloader" },
+          {
+            label: "Try PDF to Word converter to convert PDF files to Word for free!",
+            href: "/pdf-to-word",
+          },
+          {
+            label: "Try Word to PDF converter to convert Word files to PDF for free!",
+            href: "/word-to-pdf",
+          },
+          {
+            label: "Try TikTok Video Downloader to save TikTok videos for free!",
+            href: "/tiktok-video-downloader",
+          },
+          {
+            label: "Try TikTok Profile Picture Downloader to save profile pictures for free!",
+            href: "/tiktok-profile-downloader",
+          },
         ]}
         trustSignals={[
           "All audio conversions happen locally in your browser.",

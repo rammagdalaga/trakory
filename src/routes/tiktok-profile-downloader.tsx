@@ -1,5 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { TikTokProfileDownloaderPage, ROUTE_URL, PAGE_TITLE, PAGE_DESC } from "./tools.tiktok-profile-downloader";
+import {
+  TikTokProfileDownloaderPage,
+  ROUTE_URL,
+  PAGE_TITLE,
+  PAGE_DESC,
+} from "./tools.tiktok-profile-downloader";
 
 const KEYWORDS =
   "tiktok profile picture downloader, download tiktok avatar, tiktok profile pic downloader, tiktok dp saver, download tiktok profile image";

@@ -8,21 +8,8 @@ import {
   type AudioFormat,
   type Bitrate,
 } from "@/lib/ffmpeg";
-import {
-  pdfToDocx,
-  docxToPdf,
-  compressPdf,
-  compressDocx,
-  extOf,
-} from "@/lib/docConvert";
-import {
-  Film,
-  Music,
-  FileText,
-  FileType2,
-  Minimize2,
-  FileMinus,
-} from "lucide-react";
+import { pdfToDocx, docxToPdf, compressPdf, compressDocx, extOf } from "@/lib/docConvert";
+import { Film, Music, FileText, FileType2, Minimize2, FileMinus } from "lucide-react";
 
 const SITE_NAME = "trakory";
 
@@ -81,24 +68,19 @@ const TOOLS: Record<ConverterToolId, ToolDef> = {
     accept: "application/pdf,.pdf",
     hint: "Editable .docx output",
     outExt: "docx",
-    outMime:
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    outMime: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     validate: (f) =>
-      extOf(f.name) === "pdf" || f.type === "application/pdf"
-        ? null
-        : "Please choose a PDF file.",
+      extOf(f.name) === "pdf" || f.type === "application/pdf" ? null : "Please choose a PDF file.",
   },
   "word-to-pdf": {
     id: "word-to-pdf",
     label: "Word → PDF",
     icon: FileType2,
-    accept:
-      ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    accept: ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     hint: "Selectable text in PDF",
     outExt: "pdf",
     outMime: "application/pdf",
-    validate: (f) =>
-      extOf(f.name) === "docx" ? null : "Please choose a .docx file.",
+    validate: (f) => (extOf(f.name) === "docx" ? null : "Please choose a .docx file."),
   },
   "compress-pdf": {
     id: "compress-pdf",
@@ -109,22 +91,17 @@ const TOOLS: Record<ConverterToolId, ToolDef> = {
     outExt: "pdf",
     outMime: "application/pdf",
     validate: (f) =>
-      extOf(f.name) === "pdf" || f.type === "application/pdf"
-        ? null
-        : "Please choose a PDF file.",
+      extOf(f.name) === "pdf" || f.type === "application/pdf" ? null : "Please choose a PDF file.",
   },
   "compress-word": {
     id: "compress-word",
     label: "Compress Word",
     icon: Minimize2,
-    accept:
-      ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    accept: ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     hint: "Shrink images inside DOCX",
     outExt: "docx",
-    outMime:
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    validate: (f) =>
-      extOf(f.name) === "docx" ? null : "Please choose a .docx file.",
+    outMime: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    validate: (f) => (extOf(f.name) === "docx" ? null : "Please choose a .docx file."),
   },
 };
 
@@ -235,11 +212,7 @@ export function Converter({ tool, disableAds = true }: ConverterProps) {
       setStatus("done");
     } catch (e) {
       console.error(e);
-      setError(
-        e instanceof Error
-          ? e.message
-          : "Conversion failed. Please try a different file.",
-      );
+      setError(e instanceof Error ? e.message : "Conversion failed. Please try a different file.");
       setStatus("error");
     }
   };
@@ -321,9 +294,7 @@ export function Converter({ tool, disableAds = true }: ConverterProps) {
                     <current.icon className="size-5 text-primary" />
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-foreground">
-                      {file.name}
-                    </p>
+                    <p className="truncate text-sm font-medium text-foreground">{file.name}</p>
                     <p className="font-mono text-xs text-muted-foreground">
                       {formatBytes(file.size)}
                     </p>
@@ -401,9 +372,7 @@ export function Converter({ tool, disableAds = true }: ConverterProps) {
               </div>
             )}
 
-            {(status === "loading" ||
-              status === "converting" ||
-              status === "done") && (
+            {(status === "loading" || status === "converting" || status === "done") && (
               <div className="mt-6 space-y-3">
                 <div className="flex items-end justify-between px-1">
                   <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -436,13 +405,15 @@ export function Converter({ tool, disableAds = true }: ConverterProps) {
               <div className="mt-6 space-y-4 rounded-2xl border border-border bg-background/80 p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-foreground">
-                      Ready to download
-                    </p>
+                    <p className="text-sm font-semibold text-foreground">Ready to download</p>
                     <p className="truncate font-mono text-xs text-muted-foreground">
                       {downloadName} · {formatBytes(result.blob.size)}
                       {file && (tool === "compress-pdf" || tool === "compress-word") && (
-                        <> · saved {Math.max(0, Math.round((1 - result.blob.size / file.size) * 100))}%</>
+                        <>
+                          {" "}
+                          · saved{" "}
+                          {Math.max(0, Math.round((1 - result.blob.size / file.size) * 100))}%
+                        </>
                       )}
                     </p>
                   </div>
@@ -451,12 +422,7 @@ export function Converter({ tool, disableAds = true }: ConverterProps) {
                   </span>
                 </div>
                 {isAudioTool && (
-                  <audio
-                    src={result.url}
-                    controls
-                    className="w-full"
-                    preload="metadata"
-                  />
+                  <audio src={result.url} controls className="w-full" preload="metadata" />
                 )}
               </div>
             )}
@@ -480,9 +446,7 @@ export function Converter({ tool, disableAds = true }: ConverterProps) {
               ) : (
                 <button
                   onClick={handleConvert}
-                  disabled={
-                    !file || status === "loading" || status === "converting"
-                  }
+                  disabled={!file || status === "loading" || status === "converting"}
                   className={cn(
                     "rounded-xl px-6 py-3 text-sm font-semibold transition-all",
                     !file || status === "loading" || status === "converting"

@@ -61,14 +61,32 @@ export function WordToPdfPage() {
         ]}
         seoContent="This Word to PDF converter is perfect for turning DOCX files into ready-to-share PDFs fast. The browser-based tool works without uploads, giving you secure PDF output for business, school, and personal use."
         relatedLinks={[
-          { label: "Try Video to MP3 converter to extract audio from video for free!", href: "/video-to-audio" },
-          { label: "Try Audio Converter to convert MP3, WAV, FLAC for free!", href: "/audio-converter" },
+          {
+            label: "Try Video to MP3 converter to extract audio from video for free!",
+            href: "/video-to-audio",
+          },
+          {
+            label: "Try Audio Converter to convert MP3, WAV, FLAC for free!",
+            href: "/audio-converter",
+          },
           { label: "Try PDF Compressor to reduce PDF files for free!", href: "/compress-pdf" },
           { label: "Try Word Compressor to shrink DOCX files for free!", href: "/compress-word" },
-          { label: "Try PDF to Word converter to convert PDF files to Word for free!", href: "/pdf-to-word" },
-          { label: "Try Word to PDF converter to convert Word files to PDF for free!", href: "/word-to-pdf" },
-          { label: "Try TikTok Video Downloader to save TikTok videos for free!", href: "/tiktok-video-downloader" },
-          { label: "Try TikTok Profile Picture Downloader to save profile pictures for free!", href: "/tiktok-profile-downloader" },
+          {
+            label: "Try PDF to Word converter to convert PDF files to Word for free!",
+            href: "/pdf-to-word",
+          },
+          {
+            label: "Try Word to PDF converter to convert Word files to PDF for free!",
+            href: "/word-to-pdf",
+          },
+          {
+            label: "Try TikTok Video Downloader to save TikTok videos for free!",
+            href: "/tiktok-video-downloader",
+          },
+          {
+            label: "Try TikTok Profile Picture Downloader to save profile pictures for free!",
+            href: "/tiktok-profile-downloader",
+          },
         ]}
         trustSignals={[
           "DOCX files are converted locally in the browser.",
@@ -76,10 +94,10 @@ export function WordToPdfPage() {
           "Free use with no signup required.",
         ]}
         faq={[
-
           {
             question: "Does the converted PDF keep formatting?",
-            answer: "Yes. The tool preserves your document layout and formatting as it converts DOCX to PDF.",
+            answer:
+              "Yes. The tool preserves your document layout and formatting as it converts DOCX to PDF.",
           },
           {
             question: "Do I need to upload my file?",

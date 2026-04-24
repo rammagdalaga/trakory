@@ -61,14 +61,32 @@ export function PdfToWordPage() {
         ]}
         seoContent="This PDF to Word converter is ideal for anyone who needs editable DOCX output from PDF files. It delivers fast, private results in the browser, so you can continue working without uploading sensitive documents."
         relatedLinks={[
-          { label: "Try Video to MP3 converter to extract audio from video for free!", href: "/video-to-audio" },
-          { label: "Try Audio Converter to convert MP3, WAV, FLAC for free!", href: "/audio-converter" },
+          {
+            label: "Try Video to MP3 converter to extract audio from video for free!",
+            href: "/video-to-audio",
+          },
+          {
+            label: "Try Audio Converter to convert MP3, WAV, FLAC for free!",
+            href: "/audio-converter",
+          },
           { label: "Try PDF Compressor to reduce PDF files for free!", href: "/compress-pdf" },
           { label: "Try Word Compressor to shrink DOCX files for free!", href: "/compress-word" },
-          { label: "Try PDF to Word converter to convert PDF files to Word for free!", href: "/pdf-to-word" },
-          { label: "Try Word to PDF converter to convert Word files to PDF for free!", href: "/word-to-pdf" },
-          { label: "Try TikTok Video Downloader to save TikTok videos for free!", href: "/tiktok-video-downloader" },
-          { label: "Try TikTok Profile Picture Downloader to save profile pictures for free!", href: "/tiktok-profile-downloader" },
+          {
+            label: "Try PDF to Word converter to convert PDF files to Word for free!",
+            href: "/pdf-to-word",
+          },
+          {
+            label: "Try Word to PDF converter to convert Word files to PDF for free!",
+            href: "/word-to-pdf",
+          },
+          {
+            label: "Try TikTok Video Downloader to save TikTok videos for free!",
+            href: "/tiktok-video-downloader",
+          },
+          {
+            label: "Try TikTok Profile Picture Downloader to save profile pictures for free!",
+            href: "/tiktok-profile-downloader",
+          },
         ]}
         trustSignals={[
           "No PDFs are uploaded to our servers.",
@@ -78,7 +96,8 @@ export function PdfToWordPage() {
         faq={[
           {
             question: "Will the Word file keep PDF formatting?",
-            answer: "The converter preserves layout and text structure as much as possible while producing an editable DOCX.",
+            answer:
+              "The converter preserves layout and text structure as much as possible while producing an editable DOCX.",
           },
           {
             question: "Do I need to upload my PDF?",

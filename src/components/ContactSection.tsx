@@ -18,9 +18,7 @@ export function ContactSection() {
     setError("");
 
     const subject = encodeURIComponent("Trakory website contact request");
-    const body = encodeURIComponent(
-      `Email: ${email.trim()}\n\nMessage:\n${message.trim()}`,
-    );
+    const body = encodeURIComponent(`Email: ${email.trim()}\n\nMessage:\n${message.trim()}`);
     window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${subject}&body=${body}`;
   };
 
@@ -31,7 +29,9 @@ export function ContactSection() {
         We’re always looking to improve and collaborate.
       </p>
       <p className="mt-4 text-sm leading-7 text-muted-foreground">
-        If you have feedback, feature requests, business inquiries, or partnership opportunities, feel free to reach out. Whether you’ve found a bug, have an idea to make the tool better, or want to work together — we’d love to hear from you.
+        If you have feedback, feature requests, business inquiries, or partnership opportunities,
+        feel free to reach out. Whether you’ve found a bug, have an idea to make the tool better, or
+        want to work together — we’d love to hear from you.
       </p>
 
       <div className="mt-6 rounded-3xl border border-border/60 bg-background/80 p-6">
@@ -39,14 +39,18 @@ export function ContactSection() {
           <div>
             <p className="font-semibold">💬 Send Us a Message</p>
             <p className="mt-2 text-sm leading-7 text-muted-foreground">
-              Use the input fields below to share your thoughts, suggestions, or inquiries directly with us. Please add your email address so we can respond.
+              Use the input fields below to share your thoughts, suggestions, or inquiries directly
+              with us. Please add your email address so we can respond.
             </p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-foreground" htmlFor="trakory-contact-email">
+            <label
+              className="block text-sm font-medium text-foreground"
+              htmlFor="trakory-contact-email"
+            >
               Your email address
             </label>
             <input
@@ -61,7 +65,10 @@ export function ContactSection() {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-foreground" htmlFor="trakory-contact-message">
+            <label
+              className="block text-sm font-medium text-foreground"
+              htmlFor="trakory-contact-message"
+            >
               Your message
             </label>
             <textarea
@@ -108,7 +115,8 @@ export function ContactSection() {
           </div>
 
           <p className="text-sm leading-7 text-muted-foreground">
-            🔒 Your privacy matters. We respect your privacy. Any information you provide will only be used to respond to your inquiry and will never be shared with third parties.
+            🔒 Your privacy matters. We respect your privacy. Any information you provide will only
+            be used to respond to your inquiry and will never be shared with third parties.
           </p>
         </div>
       </div>

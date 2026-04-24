@@ -61,14 +61,32 @@ export function VideoToAudioPage() {
         ]}
         seoContent="This video to MP3 converter makes it easy to extract audio from video files without uploading anything. Convert MP4 to MP3 or export WAV and FLAC while keeping your media private, fast, and accessible on desktop or mobile."
         relatedLinks={[
-          { label: "Try Video to MP3 converter to extract audio from video for free!", href: "/video-to-audio" },
-          { label: "Try Audio Converter to convert MP3, WAV, FLAC for free!", href: "/audio-converter" },
+          {
+            label: "Try Video to MP3 converter to extract audio from video for free!",
+            href: "/video-to-audio",
+          },
+          {
+            label: "Try Audio Converter to convert MP3, WAV, FLAC for free!",
+            href: "/audio-converter",
+          },
           { label: "Try PDF Compressor to reduce PDF files for free!", href: "/compress-pdf" },
           { label: "Try Word Compressor to shrink DOCX files for free!", href: "/compress-word" },
-          { label: "Try PDF to Word converter to convert PDF files to Word for free!", href: "/pdf-to-word" },
-          { label: "Try Word to PDF converter to convert Word files to PDF for free!", href: "/word-to-pdf" },
-          { label: "Try TikTok Video Downloader to save TikTok videos for free!", href: "/tiktok-video-downloader" },
-          { label: "Try TikTok Profile Picture Downloader to save profile pictures for free!", href: "/tiktok-profile-downloader" },
+          {
+            label: "Try PDF to Word converter to convert PDF files to Word for free!",
+            href: "/pdf-to-word",
+          },
+          {
+            label: "Try Word to PDF converter to convert Word files to PDF for free!",
+            href: "/word-to-pdf",
+          },
+          {
+            label: "Try TikTok Video Downloader to save TikTok videos for free!",
+            href: "/tiktok-video-downloader",
+          },
+          {
+            label: "Try TikTok Profile Picture Downloader to save profile pictures for free!",
+            href: "/tiktok-profile-downloader",
+          },
         ]}
         trustSignals={[
           "No files are uploaded to our servers.",
@@ -86,7 +104,8 @@ export function VideoToAudioPage() {
           },
           {
             question: "Does my video leave my device?",
-            answer: "No. Conversion runs locally in your browser so your video file remains private.",
+            answer:
+              "No. Conversion runs locally in your browser so your video file remains private.",
           },
           {
             question: "Can I download audio in different formats?",
