@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Converter } from "@/components/Converter";
+import { ToolSwitcher } from "@/components/ToolSwitcher";
 import { InterstitialAd } from "@/components/InterstitialAd";
 import { BottomAdBar } from "@/components/BottomAdBar";
 import { TopAdBar } from "@/components/TopAdBar";
@@ -330,8 +331,12 @@ function Index() {
           </p>
         </div>
 
+        <div className="w-full animate-float-up delay-250 px-2 sm:px-0">
+          <ToolSwitcher />
+        </div>
+
         <div id="converter" className="w-full max-w-2xl mx-auto animate-float-up delay-300 px-4 sm:px-0 mt-4 sm:mt-6">
-          <Converter />
+          <Converter tool="video-to-audio" />
         </div>
 
 
