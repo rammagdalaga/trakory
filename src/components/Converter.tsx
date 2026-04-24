@@ -26,7 +26,7 @@ import {
 
 const SITE_NAME = "trakory";
 
-type ToolId =
+export type ConverterToolId =
   | "video-to-audio"
   | "audio"
   | "pdf-to-word"
@@ -37,9 +37,8 @@ type ToolId =
 type Status = "idle" | "ready" | "loading" | "converting" | "done" | "error";
 
 interface ToolDef {
-  id: ToolId;
+  id: ConverterToolId;
   label: string;
-  short: string;
   icon: React.ElementType;
   accept: string;
   hint: string;
@@ -48,11 +47,10 @@ interface ToolDef {
   validate: (f: File) => string | null;
 }
 
-const TOOLS: ToolDef[] = [
-  {
+const TOOLS: Record<ConverterToolId, ToolDef> = {
+  "video-to-audio": {
     id: "video-to-audio",
     label: "Video → Audio",
-    short: "Video",
     icon: Film,
     accept: "video/*",
     hint: "MP4, MOV, MKV, WEBM, AVI",
@@ -63,10 +61,9 @@ const TOOLS: ToolDef[] = [
         ? null
         : "Please choose a video file.",
   },
-  {
+  audio: {
     id: "audio",
     label: "Audio Converter",
-    short: "Audio",
     icon: Music,
     accept: "audio/*,video/*",
     hint: "MP3, WAV, FLAC",
@@ -77,10 +74,9 @@ const TOOLS: ToolDef[] = [
         ? null
         : "Please choose an audio file.",
   },
-  {
+  "pdf-to-word": {
     id: "pdf-to-word",
     label: "PDF → Word",
-    short: "PDF→Word",
     icon: FileText,
     accept: "application/pdf,.pdf",
     hint: "Editable .docx output",
@@ -92,10 +88,9 @@ const TOOLS: ToolDef[] = [
         ? null
         : "Please choose a PDF file.",
   },
-  {
+  "word-to-pdf": {
     id: "word-to-pdf",
     label: "Word → PDF",
-    short: "Word→PDF",
     icon: FileType2,
     accept:
       ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -105,10 +100,9 @@ const TOOLS: ToolDef[] = [
     validate: (f) =>
       extOf(f.name) === "docx" ? null : "Please choose a .docx file.",
   },
-  {
+  "compress-pdf": {
     id: "compress-pdf",
     label: "Compress PDF",
-    short: "Compress PDF",
     icon: FileMinus,
     accept: "application/pdf,.pdf",
     hint: "Reduce PDF file size",
@@ -119,10 +113,9 @@ const TOOLS: ToolDef[] = [
         ? null
         : "Please choose a PDF file.",
   },
-  {
+  "compress-word": {
     id: "compress-word",
     label: "Compress Word",
-    short: "Compress DOCX",
     icon: Minimize2,
     accept:
       ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -133,7 +126,7 @@ const TOOLS: ToolDef[] = [
     validate: (f) =>
       extOf(f.name) === "docx" ? null : "Please choose a .docx file.",
   },
-];
+};
 
 const FORMATS: { value: AudioFormat; label: string }[] = [
   { value: "mp3", label: "MP3" },
@@ -143,8 +136,11 @@ const FORMATS: { value: AudioFormat; label: string }[] = [
 
 const BITRATES: Bitrate[] = ["128", "192", "320"];
 
-export function Converter() {
-  const [tool, setTool] = useState<ToolId>("video-to-audio");
+interface ConverterProps {
+  tool: ConverterToolId;
+}
+
+export function Converter({ tool }: ConverterProps) {
   const [file, setFile] = useState<File | null>(null);
   const [format, setFormat] = useState<AudioFormat>("mp3");
   const [bitrate, setBitrate] = useState<Bitrate>("192");
@@ -160,26 +156,24 @@ export function Converter() {
   const [adGateOpen, setAdGateOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const current = TOOLS.find((t) => t.id === tool)!;
+  const current = TOOLS[tool];
   const isAudioTool = tool === "video-to-audio" || tool === "audio";
 
+  // Reset everything when the tool changes (route change)
   useEffect(() => {
-    return () => {
-      if (result) URL.revokeObjectURL(result.url);
-    };
-  }, [result]);
-
-  // Reset state when switching tools
-  const switchTool = (id: ToolId) => {
-    if (result) URL.revokeObjectURL(result.url);
-    setTool(id);
     setFile(null);
     setResult(null);
     setProgress(0);
     setError(null);
     setStatus("idle");
     if (inputRef.current) inputRef.current.value = "";
-  };
+  }, [tool]);
+
+  useEffect(() => {
+    return () => {
+      if (result) URL.revokeObjectURL(result.url);
+    };
+  }, [result]);
 
   const handleFile = useCallback(
     (f: File | null) => {
@@ -225,9 +219,7 @@ export function Converter() {
         });
         blob = res.blob;
         ext = res.format;
-        if (res.fellBack) {
-          setFormat(res.format);
-        }
+        if (res.fellBack) setFormat(res.format);
       } else {
         setStatus("converting");
         const onP = (r: number) => setProgress(r);
@@ -287,35 +279,6 @@ export function Converter() {
 
         <div className="relative rounded-3xl border border-border/60 bg-card/90 p-1 shadow-elevated backdrop-blur-xl">
           <div className="rounded-[calc(1.5rem-2px)] bg-gradient-soft p-3 sm:p-5 lg:p-6">
-            {/* Tool tabs */}
-            <div
-              role="tablist"
-              aria-label="Choose converter"
-              className="mb-5 flex gap-1.5 overflow-x-auto rounded-2xl border border-border bg-background/70 p-1.5 scrollbar-none"
-            >
-              {TOOLS.map((t) => {
-                const Icon = t.icon;
-                const active = t.id === tool;
-                return (
-                  <button
-                    key={t.id}
-                    role="tab"
-                    aria-selected={active}
-                    onClick={() => switchTool(t.id)}
-                    className={cn(
-                      "flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold transition-all",
-                      active
-                        ? "bg-gradient-brand text-primary-foreground shadow-soft"
-                        : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
-                    )}
-                  >
-                    <Icon className="size-3.5" />
-                    <span>{t.short}</span>
-                  </button>
-                );
-              })}
-            </div>
-
             {/* Drop zone */}
             {!file ? (
               <button

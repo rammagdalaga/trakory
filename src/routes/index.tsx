@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Converter } from "@/components/Converter";
+import { ToolSwitcher } from "@/components/ToolSwitcher";
 import { InterstitialAd } from "@/components/InterstitialAd";
 import { BottomAdBar } from "@/components/BottomAdBar";
 import { TopAdBar } from "@/components/TopAdBar";
@@ -330,8 +331,12 @@ function Index() {
           </p>
         </div>
 
+        <div className="w-full animate-float-up delay-250 px-2 sm:px-0">
+          <ToolSwitcher />
+        </div>
+
         <div id="converter" className="w-full max-w-2xl mx-auto animate-float-up delay-300 px-4 sm:px-0 mt-4 sm:mt-6">
-          <Converter />
+          <Converter tool="video-to-audio" />
         </div>
 
 
@@ -407,26 +412,38 @@ function Index() {
               {
                 title: "PDF to Word Converter",
                 desc: "Convert PDF documents to fully editable Word files. Perfect for editing scanned documents or PDFs received from clients. Preserves text formatting and layout.",
-                link: "/pdf-to-word",
+                link: "/tools/pdf-to-word",
                 keywords: "PDF to Word, convert PDF to Word, PDF to DOCX, free PDF converter",
               },
               {
                 title: "Word to PDF Converter",
                 desc: "Turn DOCX and DOC files into professional PDFs. Ideal for sharing documents, archiving, and ensuring formatting stays perfect across all devices.",
-                link: "/word-to-pdf",
+                link: "/tools/word-to-pdf",
                 keywords: "Word to PDF, convert DOCX to PDF, Word to PDF converter, DOC to PDF",
               },
               {
                 title: "PDF Compressor",
                 desc: "Reduce PDF file size by up to 80% while maintaining quality. Great for email attachments, cloud storage limits, and faster downloads.",
-                link: "/pdf-compressor",
+                link: "/tools/compress-pdf",
                 keywords: "PDF compressor, compress PDF, reduce PDF size, PDF optimizer",
               },
               {
                 title: "Word Compressor",
                 desc: "Shrink DOCX and DOC files by up to 75%. Perfect for storage efficiency and sharing large documents without email size restrictions.",
-                link: "/word-compressor",
+                link: "/tools/compress-word",
                 keywords: "Word compressor, compress DOCX, reduce Word size, compress Word",
+              },
+              {
+                title: "TikTok Video Downloader",
+                desc: "Download TikTok videos with no watermark in MP4 format. Paste a link, hit fetch, save the video. Free and instant on any device.",
+                link: "/tools/tiktok-video-downloader",
+                keywords: "TikTok video downloader, no watermark TikTok, download TikTok MP4",
+              },
+              {
+                title: "TikTok Profile Picture Downloader",
+                desc: "Get any TikTok profile picture in HD. Type the username, download the full-size avatar — perfect for fan pages and reposts.",
+                link: "/tools/tiktok-profile-downloader",
+                keywords: "TikTok profile picture downloader, TikTok avatar HD, save TikTok DP",
               },
             ].map((tool, i) => (
               <article
