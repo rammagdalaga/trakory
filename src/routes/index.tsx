@@ -205,6 +205,11 @@ export const Route = createFileRoute("/")({
                 text: "No installation. Trakory is a fully browser-based converter — no apps, no plugins, no extensions, no signup.",
               },
             },
+            {
+              src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7172866420926779",
+              async: true,
+              crossOrigin: "anonymous",
+            },
           ],
         }),
       },
