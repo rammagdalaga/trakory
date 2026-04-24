@@ -1,9 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Converter } from "@/components/Converter";
 import { ToolSwitcher } from "@/components/ToolSwitcher";
-import { InterstitialAd } from "@/components/InterstitialAd";
-import { BottomAdBar } from "@/components/BottomAdBar";
-import { TopAdBar } from "@/components/TopAdBar";
 import {
   Accordion,
   AccordionContent,
@@ -300,8 +297,6 @@ function Index() {
         aria-hidden
         className="pointer-events-none absolute -right-40 bottom-[-10%] size-[360px] rounded-full bg-accent/15 blur-[120px] sm:size-[520px]"
       />
-
-      <TopAdBar />
 
       <header className="relative z-10 mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pt-4 sm:px-6 sm:pt-6 lg:pt-8">
         <a href="/" className="flex min-w-0 items-center gap-2.5" aria-label="Trakory home">
@@ -722,9 +717,6 @@ function Index() {
           Trakory · Free converter for everyone · © 2026
         </p>
       </footer>
-
-      <InterstitialAd />
-      <BottomAdBar />
     </div>
   );
 }
