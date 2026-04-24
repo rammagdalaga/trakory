@@ -29,9 +29,9 @@ const SITE_URL = "https://trakory.com";
 const OG_TITLE =
   "Trakory — Free Online Converter: Video, Audio, PDF, Image & Word Converter";
 const OG_DESC =
-  "Trakory is a free online converter tool — convert MP3, video, audio, PDF and Word files in your browser. Free file converter with download support: convert video free, convert audio, PDF to Word, Word to PDF, compress PDF and compress Word.";
+  "Trakory is a free online converter tool — convert MP3, video, audio, PDF to Word, Word to PDF, compress PDF, compress Word files in your browser. Free file converter with download support: convert video free, convert audio, PDF compressor, Word compressor, and more.";
 const SCHEMA_DESC =
-  "Trakory is a free online converter tool and free file converter for video, audio, PDF and Word. Convert MP3, free convert video, file converter download, PDF to Word, Word to PDF, plus PDF and Word size compression — all in the browser.";
+  "Trakory is a free online converter tool and free file converter for video, audio, PDF to Word, Word to PDF compression, and more. Convert MP3, free convert video, PDF compressor, Word compressor, file converter download — all browser-based and private.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -222,31 +222,31 @@ const TOOLS = [
   {
     icon: FileVideo,
     title: "Video Converter",
-    body: "Convert MP4, MOV, MKV, WEBM and AVI to MP3, WAV or FLAC audio with full quality control.",
+    body: "Convert MP4, MOV, MKV, WEBM and AVI to MP3, WAV or FLAC audio with full quality control. Free convert video to MP3 with multiple bitrate options.",
     available: true,
   },
   {
     icon: FileAudio,
-    title: "Audio Converter",
-    body: "Switch between MP3, WAV, FLAC, AAC and OGG. Adjust bitrate, sample rate and channels.",
+    title: "Converter MP3",
+    body: "Switch between MP3, WAV, FLAC, AAC and OGG formats. Adjust bitrate, sample rate and channels for perfect audio quality.",
     available: true,
   },
   {
     icon: FileText,
-    title: "PDF → Word",
-    body: "Free convert PDF into a fully editable Word .docx — text, headings and paragraphs preserved.",
+    title: "PDF to Word",
+    body: "Free convert PDF to Word .docx format with text, formatting and paragraphs preserved. Fully editable in Microsoft Word.",
     available: true,
   },
   {
     icon: FileType,
-    title: "Word → PDF",
-    body: "Turn DOCX into a clean PDF with selectable, searchable text — not flattened images.",
+    title: "Word to PDF",
+    body: "Convert DOCX to PDF with clean, searchable text. Perfect for sharing and printing Word documents securely.",
     available: true,
   },
   {
     icon: FileArchive,
-    title: "Compress PDF & Word",
-    body: "Shrink PDF and DOCX file size in your browser. Great for email and upload limits.",
+    title: "Compress Files",
+    body: "Compress PDF files up to 80% smaller and reduce Word documents by 75%. Maintain quality while shrinking file size for email and storage.",
     available: true,
   },
   {
@@ -334,32 +334,7 @@ function Index() {
           <Converter />
         </div>
 
-        {/* Mission / About */}
-        <section
-          aria-labelledby="mission-heading"
-          className="mt-20 w-full max-w-4xl text-center sm:mt-24 lg:mt-28"
-        >
-          <div className="animate-float-up">
-            <span className="mb-3 inline-block rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
-              Our mission
-            </span>
-          </div>
-          <h2
-            id="mission-heading"
-            className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl"
-          >
-            Small team. <span className="text-gradient-brand">Big impact.</span>
-          </h2>
-          <p className="animate-float-up delay-200 mx-auto mt-6 max-w-3xl text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-8 sm:text-base md:text-lg">
-            Trakory exists to give everyone — students, creators, freelancers, businesses — a fast,
-            free, and private online converter that just works. Whether you need a video converter
-            for MP4 to MP3, an audio converter for FLAC to WAV, a PDF converter to turn PDFs into
-            Word documents, or an image converter to resize JPG and PNG files, every tool lives in
-            one place. We may be a small team, but our goal is huge: solve real problems with
-            simple, beautiful tools that respect your privacy. The ads you see only help keep this
-            converter running — the tools themselves will always be free.
-          </p>
-        </section>
+
 
         {/* Tools showcase */}
         <section
@@ -413,7 +388,101 @@ function Index() {
           </div>
         </section>
 
-        {/* Why Trakory */}
+        {/* Specialized Tools Section */}
+        <section className="mt-20 w-full sm:mt-24 lg:mt-28">
+          <div className="mb-10 text-center sm:mb-14">
+            <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
+              Popular Tools
+            </span>
+            <h2 className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
+              Specialized converters for your <span className="text-gradient-brand">specific needs</span>
+            </h2>
+            <p className="animate-float-up delay-200 mx-auto mt-4 max-w-2xl text-sm text-muted-foreground sm:text-base">
+              Choose a dedicated tool with optimized settings and advanced features for PDF conversion, Word compression, and document transformation.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
+            {[
+              {
+                title: "PDF to Word Converter",
+                desc: "Convert PDF documents to fully editable Word files. Perfect for editing scanned documents or PDFs received from clients. Preserves text formatting and layout.",
+                link: "/pdf-to-word",
+                keywords: "PDF to Word, convert PDF to Word, PDF to DOCX, free PDF converter",
+              },
+              {
+                title: "Word to PDF Converter",
+                desc: "Turn DOCX and DOC files into professional PDFs. Ideal for sharing documents, archiving, and ensuring formatting stays perfect across all devices.",
+                link: "/word-to-pdf",
+                keywords: "Word to PDF, convert DOCX to PDF, Word to PDF converter, DOC to PDF",
+              },
+              {
+                title: "PDF Compressor",
+                desc: "Reduce PDF file size by up to 80% while maintaining quality. Great for email attachments, cloud storage limits, and faster downloads.",
+                link: "/pdf-compressor",
+                keywords: "PDF compressor, compress PDF, reduce PDF size, PDF optimizer",
+              },
+              {
+                title: "Word Compressor",
+                desc: "Shrink DOCX and DOC files by up to 75%. Perfect for storage efficiency and sharing large documents without email size restrictions.",
+                link: "/word-compressor",
+                keywords: "Word compressor, compress DOCX, reduce Word size, compress Word",
+              },
+            ].map((tool, i) => (
+              <article
+                key={tool.title}
+                className="group animate-float-up relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card/80 to-card/50 p-6 shadow-soft backdrop-blur hover:shadow-elevated transition-all duration-300 hover:border-primary/40"
+                style={{ animationDelay: `${i * 60}ms` }}
+              >
+                <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <h3 className="text-lg font-semibold text-foreground mb-3">{tool.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{tool.desc}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-muted-foreground">{tool.keywords}</span>
+                    <a
+                      href={tool.link}
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                    >
+                      Open Tool
+                      <svg
+                        className="size-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7m0 0l-7 7m7-7H5"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* SEO Content Section */}
+        <section className="mt-20 w-full max-w-4xl mx-auto sm:mt-24 lg:mt-28">
+          <div className="rounded-2xl border border-border bg-card/70 p-6 shadow-soft backdrop-blur sm:p-8">
+            <h2 className="text-2xl font-semibold text-foreground mb-4 sm:text-3xl">Complete File Conversion Solution</h2>
+            <div className="space-y-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              <p>
+                Trakory is your comprehensive online converter tool for every file type. Whether you need to convert PDF to Word for editing, transform Word documents to PDF for sharing, compress PDF files for email, or reduce Word document size for storage — we have a specialized tool for each task.
+              </p>
+              <p>
+                Our PDF to Word converter maintains perfect formatting when converting documents. The Word to PDF converter ensures your DOCX files look professional on any device. Both the PDF compressor and Word compressor use advanced algorithms to dramatically reduce file size while preserving quality.
+              </p>
+              <p>
+                Free convert video to MP3, convert MP3 to WAV, use our converter MP3 for audio formats, and access every file converter download capability — all without payment or signup. Trakory is the free converter tool trusted by millions for reliable, private conversions.
+              </p>
+            </div>
+          </div>
+        </section>
         <section
           aria-labelledby="why-heading"
           className="mt-20 w-full sm:mt-24 lg:mt-28"
@@ -506,11 +575,11 @@ function Index() {
               {
                 icon: FileVideo,
                 title: "Video Converter",
-                desc: "MP4, MOV, MKV, WEBM, AVI to MP3 & audio formats",
+                desc: "Free convert video: MP4, MOV, MKV, WEBM, AVI to MP3 & audio formats",
               },
               {
                 icon: FileAudio,
-                title: "Audio Converter",
+                title: "Converter MP3",
                 desc: "MP3, WAV, FLAC, AAC, OGG with quality control",
               },
               {
@@ -520,7 +589,7 @@ function Index() {
               },
               {
                 icon: FileType,
-                title: "Document Converter",
+                title: "File Converter",
                 desc: "DOCX, DOC, TXT, RTF, ODT formats supported",
               },
             ].map((item, i) => {
@@ -549,22 +618,22 @@ function Index() {
             {[
               {
                 title: "100% Private & Secure",
-                desc: "Trakory is a free online converter designed to solve all your file conversion needs in one place. Unlike other online converter tools, Trakory keeps everything 100% private — your files never leave your device because conversions run directly in your browser using WebAssembly technology.",
+                desc: "Trakory is a free file converter tool designed for everyone. Your files never leave your device because conversions run directly in your browser using WebAssembly. As a free converter tool, we keep everything 100% private without any uploads to servers.",
                 icon: Lock,
               },
               {
                 title: "Complete Format Support",
-                desc: "Our image converter lets you resize, compress and convert JPG, PNG, WEBP and HEIC images without quality loss. We support document converters for TXT, RTF, ODT and dozens of other formats. Whether you're converting a video for TikTok or resizing images for your blog, Trakory handles everything.",
+                desc: "Our free file converter supports MP3, MP4, PDF, Word, and image formats. Whether you need a converter MP3 for audio or a file converter download for documents, every format is supported. Works as a converter free tool on all browsers.",
                 icon: Sparkles,
               },
               {
-                title: "Free Forever",
-                desc: "As a small team with big goals, we built Trakory to be the most trusted converter on the internet. The video converter, audio converter, PDF converter, Word converter and image converter are completely free forever. Ads only help us cover hosting costs so we can keep improving.",
+                title: "Converter Free Forever",
+                desc: "As a free converter tool, Trakory offers unlimited conversions with no paywalls. Free convert video, free convert audio, free convert documents — all completely free. This online converter tool will always be free forever with no hidden charges.",
                 icon: Gift,
               },
               {
                 title: "Works Everywhere",
-                desc: "Just fast, private, browser-based conversion that works on Chrome, Safari, Firefox, Edge and Brave across iPhone, Android, Windows, Mac and Linux. No signup, no upload delays, no hidden charges — everything you need in one all-in-one converter.",
+                desc: "Our online converter tool works on any device with a browser. No installation, no downloads needed for this file converter. Use this converter free across Chrome, Safari, Firefox, Edge and Brave on iPhone, Android, Windows, Mac and Linux.",
                 icon: Globe,
               },
             ].map((card, i) => {

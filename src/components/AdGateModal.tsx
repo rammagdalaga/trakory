@@ -69,14 +69,13 @@ export function AdGateModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-foreground/60 p-3 sm:p-4 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-3 sm:p-4 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       suppressHydrationWarning
     >
       <div
         className={`relative w-full ${isMobile ? "max-w-sm" : "max-w-lg"} overflow-hidden rounded-3xl border border-border bg-card shadow-elevated`}
-        suppressHydrationWarning
       >
         <button
           onClick={onClose}

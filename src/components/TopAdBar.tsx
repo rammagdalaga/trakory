@@ -36,7 +36,7 @@ export function TopAdBar() {
   }, [open]);
 
   return (
-    <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 shadow-soft backdrop-blur-xl" suppressHydrationWarning>
+    <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 shadow-soft backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-6xl flex-col px-3 py-2 sm:px-4">
         {/* Header - Always visible */}
         <div className="flex items-center justify-between gap-3">

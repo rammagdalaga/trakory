@@ -29,7 +29,7 @@ export function BottomAdBar() {
   }, [open]);
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 w-full border-t border-border bg-card/95 shadow-elevated backdrop-blur-xl" suppressHydrationWarning>
+    <div className="fixed inset-x-0 bottom-0 z-30 w-full border-t border-border bg-card/95 shadow-elevated backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-6xl flex-col px-3 py-2 sm:px-4">
         {/* Header - Always visible */}
         <div className="flex items-center justify-between gap-3">
@@ -64,9 +64,8 @@ export function BottomAdBar() {
             opacity: open ? 1 : 0,
             marginTop: open ? 8 : 0,
           }}
-          suppressHydrationWarning
         >
-          <div className="rounded-lg bg-muted/40" ref={adContainerRef} suppressHydrationWarning />
+          <div className="rounded-lg bg-muted/40" ref={adContainerRef} />
         </div>
       </div>
     </div>
