@@ -36,9 +36,8 @@ export function VideoToAudioPage() {
     <ToolPageLayout
       title="Video to MP3 Converter"
       description="Convert video files to MP3, WAV, or FLAC instantly in your browser. Free, private, and no upload required."
-      disableAds
     >
-      <Converter tool="video-to-audio" disableAds />
+      <Converter tool="video-to-audio" />
       <ToolPageDetails
         overview="Extract audio from any supported video file without sending it to a server. This browser-based tool converts MP4, MOV, MKV, WEBM, and AVI into MP3, WAV or FLAC while keeping your file private."
         features={[

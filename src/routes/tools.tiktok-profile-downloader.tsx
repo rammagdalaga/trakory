@@ -36,9 +36,8 @@ export function TikTokProfileDownloaderPage() {
     <ToolPageLayout
       title="TikTok Profile Picture Downloader"
       description="Download public TikTok profile pictures in HD. Free, instant, and browser-based — no login or signup needed."
-      disableAds
     >
-      <TikTokProfileDownloader disableAds />
+      <TikTokProfileDownloader />
       <ToolPageDetails
         overview="Download TikTok profile pictures in high resolution without extra apps or login. This free browser tool fetches public profile avatars quickly and privately."
         features={[

@@ -36,9 +36,8 @@ export function WordToPdfPage() {
     <ToolPageLayout
       title="Word to PDF Converter"
       description="Convert DOCX documents to clean, searchable PDFs in seconds. Free, private, and browser-based."
-      disableAds
     >
-      <Converter tool="word-to-pdf" disableAds />
+      <Converter tool="word-to-pdf" />
       <ToolPageDetails
         overview="Create polished PDF files from Word documents in your browser. This free converter preserves text and layout while generating a searchable PDF for sharing, printing, or archiving."
         features={[

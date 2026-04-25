@@ -36,9 +36,8 @@ export function TikTokVideoDownloaderPage() {
     <ToolPageLayout
       title="TikTok Video Downloader"
       description="Paste a TikTok link and download a watermark-free MP4 instantly. Free, fast, and works on mobile and desktop."
-      disableAds
     >
-      <TikTokVideoDownloader disableAds />
+      <TikTokVideoDownloader />
       <ToolPageDetails
         overview="Download TikTok videos as clean MP4 files from your browser. This free downloader removes extra steps, works on both mobile and desktop, and does not require login or apps."
         features={[

@@ -88,9 +88,8 @@ export function AudioConverterPage() {
     <ToolPageLayout
       title="Audio Converter Online"
       description="Convert audio files between MP3, WAV, and FLAC directly in your browser — no uploads, no signup, and full privacy on mobile and desktop."
-      disableAds
     >
-      <Converter tool="audio" disableAds />
+      <Converter tool="audio" />
       <ToolPageDetails
         overview="Trakory's audio converter helps you switch between popular formats like MP3, WAV, and FLAC for better compatibility, quality, or smaller file size. Whether you're preparing audio for editing, streaming, or sharing, everything happens locally on your device — nothing is ever uploaded to a server."
         features={[

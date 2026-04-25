@@ -36,9 +36,8 @@ export function CompressWordPage() {
     <ToolPageLayout
       title="Word Compressor"
       description="Reduce DOCX file size instantly without uploading. Free, private compression for Word documents that keeps text and layout intact."
-      disableAds
     >
-      <Converter tool="compress-word" disableAds />
+      <Converter tool="compress-word" />
       <ToolPageDetails
         overview="Compress Word documents directly in your browser to make large DOCX files easier to share. This free tool optimizes embedded images and reduces file size while preserving your content."
         features={[

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { AdGateModal } from "./AdGateModal";
+import { useAdGate } from "@/hooks/use-adgate";
 import {
   convertVideoToAudio,
   formatBytes,
@@ -118,7 +118,7 @@ interface ConverterProps {
   disableAds?: boolean;
 }
 
-export function Converter({ tool, disableAds = true }: ConverterProps) {
+export function Converter({ tool, disableAds = false }: ConverterProps) {
   const [file, setFile] = useState<File | null>(null);
   const [format, setFormat] = useState<AudioFormat>("mp3");
   const [bitrate, setBitrate] = useState<Bitrate>("192");
@@ -131,7 +131,7 @@ export function Converter({ tool, disableAds = true }: ConverterProps) {
     ext: string;
   } | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [adGateOpen, setAdGateOpen] = useState(false);
+  const { triggerAdGate } = useAdGate();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const current = TOOLS[tool];
@@ -437,7 +437,9 @@ export function Converter({ tool, disableAds = true }: ConverterProps) {
                     Convert another
                   </button>
                   <button
-                    onClick={disableAds ? triggerDownload : () => setAdGateOpen(true)}
+                    onClick={() =>
+                      disableAds ? triggerDownload() : triggerAdGate(triggerDownload)
+                    }
                     className="rounded-xl bg-gradient-brand px-6 py-3 text-center text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-elevated active:scale-[0.98]"
                   >
                     Download {result.ext.toUpperCase()}
@@ -465,18 +467,6 @@ export function Converter({ tool, disableAds = true }: ConverterProps) {
           </div>
         </div>
       </div>
-
-      {!disableAds && (
-        <AdGateModal
-          open={adGateOpen}
-          durationSec={8}
-          onComplete={() => {
-            setAdGateOpen(false);
-            triggerDownload();
-          }}
-          onClose={() => setAdGateOpen(false)}
-        />
-      )}
     </div>
   );
 }

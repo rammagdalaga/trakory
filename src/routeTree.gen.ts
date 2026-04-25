@@ -17,6 +17,8 @@ import { Route as PdfToWordRouteImport } from './routes/pdf-to-word'
 import { Route as CompressWordRouteImport } from './routes/compress-word'
 import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
 import { Route as AudioConverterRouteImport } from './routes/audio-converter'
+import { Route as AllInOneDownloaderRouteImport } from './routes/all-in-one-downloader'
+import { Route as SeoSlugRouteImport } from './routes/$seoSlug'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsWordToPdfRouteImport } from './routes/tools.word-to-pdf'
 import { Route as ToolsVideoToAudioRouteImport } from './routes/tools.video-to-audio'
@@ -65,6 +67,16 @@ const CompressPdfRoute = CompressPdfRouteImport.update({
 const AudioConverterRoute = AudioConverterRouteImport.update({
   id: '/audio-converter',
   path: '/audio-converter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AllInOneDownloaderRoute = AllInOneDownloaderRouteImport.update({
+  id: '/all-in-one-downloader',
+  path: '/all-in-one-downloader',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeoSlugRoute = SeoSlugRouteImport.update({
+  id: '/$seoSlug',
+  path: '/$seoSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -117,6 +129,8 @@ const ToolsAudioConverterRoute = ToolsAudioConverterRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$seoSlug': typeof SeoSlugRoute
+  '/all-in-one-downloader': typeof AllInOneDownloaderRoute
   '/audio-converter': typeof AudioConverterRoute
   '/compress-pdf': typeof CompressPdfRoute
   '/compress-word': typeof CompressWordRoute
@@ -136,6 +150,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$seoSlug': typeof SeoSlugRoute
+  '/all-in-one-downloader': typeof AllInOneDownloaderRoute
   '/audio-converter': typeof AudioConverterRoute
   '/compress-pdf': typeof CompressPdfRoute
   '/compress-word': typeof CompressWordRoute
@@ -156,6 +172,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$seoSlug': typeof SeoSlugRoute
+  '/all-in-one-downloader': typeof AllInOneDownloaderRoute
   '/audio-converter': typeof AudioConverterRoute
   '/compress-pdf': typeof CompressPdfRoute
   '/compress-word': typeof CompressWordRoute
@@ -177,6 +195,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$seoSlug'
+    | '/all-in-one-downloader'
     | '/audio-converter'
     | '/compress-pdf'
     | '/compress-word'
@@ -196,6 +216,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$seoSlug'
+    | '/all-in-one-downloader'
     | '/audio-converter'
     | '/compress-pdf'
     | '/compress-word'
@@ -215,6 +237,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/$seoSlug'
+    | '/all-in-one-downloader'
     | '/audio-converter'
     | '/compress-pdf'
     | '/compress-word'
@@ -235,6 +259,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SeoSlugRoute: typeof SeoSlugRoute
+  AllInOneDownloaderRoute: typeof AllInOneDownloaderRoute
   AudioConverterRoute: typeof AudioConverterRoute
   CompressPdfRoute: typeof CompressPdfRoute
   CompressWordRoute: typeof CompressWordRoute
@@ -311,6 +337,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AudioConverterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/all-in-one-downloader': {
+      id: '/all-in-one-downloader'
+      path: '/all-in-one-downloader'
+      fullPath: '/all-in-one-downloader'
+      preLoaderRoute: typeof AllInOneDownloaderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$seoSlug': {
+      id: '/$seoSlug'
+      path: '/$seoSlug'
+      fullPath: '/$seoSlug'
+      preLoaderRoute: typeof SeoSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -379,6 +419,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SeoSlugRoute: SeoSlugRoute,
+  AllInOneDownloaderRoute: AllInOneDownloaderRoute,
   AudioConverterRoute: AudioConverterRoute,
   CompressPdfRoute: CompressPdfRoute,
   CompressWordRoute: CompressWordRoute,

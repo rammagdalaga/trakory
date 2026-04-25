@@ -1,4 +1,5 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { AdGateProvider } from "@/hooks/use-adgate";
 
 import appCss from "../styles.css?url";
 
@@ -105,8 +106,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   return (
-    <div className="flex flex-1 flex-col">
-      <Outlet />
-    </div>
+    <AdGateProvider>
+      <div className="flex flex-1 flex-col">
+        <Outlet />
+      </div>
+    </AdGateProvider>
   );
 }

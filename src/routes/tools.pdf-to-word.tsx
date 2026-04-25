@@ -36,9 +36,8 @@ export function PdfToWordPage() {
     <ToolPageLayout
       title="PDF to Word Converter"
       description="Convert PDFs into editable DOCX files instantly. Free, private, and browser-based — no upload required."
-      disableAds
     >
-      <Converter tool="pdf-to-word" disableAds />
+      <Converter tool="pdf-to-word" />
       <ToolPageDetails
         overview="Convert PDF documents to editable Word files directly in your browser. This free tool helps you reuse and edit PDF content without uploading your document to a server."
         features={[

@@ -7,8 +7,7 @@ import {
   FileType2,
   Minimize2,
   FileMinus,
-  Video,
-  UserCircle2,
+  DownloadCloud,
 } from "lucide-react";
 
 const MAIN_TOOLS = [
@@ -20,14 +19,19 @@ const MAIN_TOOLS = [
   { to: "/tools/compress-word", short: "Compress DOCX", icon: Minimize2 },
 ] as const;
 
-const TIKTOK_TOOLS = [
-  { to: "/tools/tiktok-video-downloader", short: "TikTok Video", icon: Video },
-  { to: "/tools/tiktok-profile-downloader", short: "TikTok Profile", icon: UserCircle2 },
+const SOCIAL_TOOLKIT_TOOLS = [
+  { to: "/all-in-one-downloader", short: "Downloader", icon: DownloadCloud },
 ] as const;
 
-export const TOOL_ROUTES = [...MAIN_TOOLS, ...TIKTOK_TOOLS] as const;
+export const TOOL_ROUTES = [...MAIN_TOOLS, ...SOCIAL_TOOLKIT_TOOLS] as const;
 
-function ToolTab({ tool, active }: { tool: (typeof MAIN_TOOLS)[number] | (typeof TIKTOK_TOOLS)[number]; active: boolean }) {
+function ToolTab({
+  tool,
+  active,
+}: {
+  tool: (typeof MAIN_TOOLS)[number] | (typeof SOCIAL_TOOLKIT_TOOLS)[number];
+  active: boolean;
+}) {
   const Icon = tool.icon;
   return (
     <Link
@@ -67,15 +71,17 @@ export function ToolSwitcher() {
         </div>
       </div>
 
-      {/* TikTok Tools Section */}
+      {/* Social Toolkit Section */}
       <div>
-        <h3 className="text-xs font-semibold text-muted-foreground mb-2 px-1 text-center">TikTok Tools</h3>
+        <h3 className="text-xs font-semibold text-muted-foreground mb-2 px-1 text-center">
+          All-in-One Social Media Downloader + Creator Toolkit
+        </h3>
         <div
           role="tablist"
-          aria-label="Choose TikTok tool"
+          aria-label="Choose social toolkit tool"
           className="mx-auto w-full max-w-3xl flex gap-1.5 overflow-x-auto rounded-2xl border border-border bg-card/70 p-1.5 shadow-soft backdrop-blur scrollbar-none"
         >
-          {TIKTOK_TOOLS.map((t) => {
+          {SOCIAL_TOOLKIT_TOOLS.map((t) => {
             const active = pathname === t.to;
             return <ToolTab key={t.to} tool={t} active={active} />;
           })}

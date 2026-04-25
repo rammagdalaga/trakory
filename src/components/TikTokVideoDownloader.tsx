@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Video, Download, Loader2 } from "lucide-react";
-import { AdGateModal } from "./AdGateModal";
+import { useAdGate } from "@/hooks/use-adgate";
 import { fetchTikTokVideo, downloadFile } from "@/lib/tikwm";
 
 interface TikTokVideoDownloaderProps {
   disableAds?: boolean;
 }
 
-export function TikTokVideoDownloader({ disableAds = true }: TikTokVideoDownloaderProps) {
+export function TikTokVideoDownloader({ disableAds = false }: TikTokVideoDownloaderProps) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +17,7 @@ export function TikTokVideoDownloader({ disableAds = true }: TikTokVideoDownload
     title: string;
     author: string;
   } | null>(null);
-  const [adGateOpen, setAdGateOpen] = useState(false);
+  const { triggerAdGate } = useAdGate();
 
   const handleFetch = async () => {
     if (!url.trim()) {
@@ -138,7 +138,9 @@ export function TikTokVideoDownloader({ disableAds = true }: TikTokVideoDownload
                     Download another
                   </button>
                   <button
-                    onClick={disableAds ? triggerDownload : () => setAdGateOpen(true)}
+                    onClick={() =>
+                      disableAds ? triggerDownload() : triggerAdGate(triggerDownload)
+                    }
                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-elevated active:scale-[0.98]"
                   >
                     <Download className="size-4" />
@@ -150,18 +152,6 @@ export function TikTokVideoDownloader({ disableAds = true }: TikTokVideoDownload
           </div>
         </div>
       </div>
-
-      {!disableAds && (
-        <AdGateModal
-          open={adGateOpen}
-          durationSec={8}
-          onComplete={() => {
-            setAdGateOpen(false);
-            triggerDownload();
-          }}
-          onClose={() => setAdGateOpen(false)}
-        />
-      )}
     </div>
   );
 }

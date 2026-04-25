@@ -36,9 +36,8 @@ export function CompressPdfPage() {
     <ToolPageLayout
       title="PDF Compressor"
       description="Reduce PDF file size instantly in your browser. Free, private, and no upload — compress PDFs for email, storage, or sharing."
-      disableAds
     >
-      <Converter tool="compress-pdf" disableAds />
+      <Converter tool="compress-pdf" />
       <ToolPageDetails
         overview="Shrink PDF files without losing readability. This free browser-based compressor helps you reduce document size for easier sharing and faster upload while keeping your PDF private."
         features={[

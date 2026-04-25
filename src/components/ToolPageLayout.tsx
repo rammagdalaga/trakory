@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { TopAdBar } from "./TopAdBar";
 import { BottomAdBar } from "./BottomAdBar";
-import { InterstitialAd } from "./InterstitialAd";
 import { ToolSwitcher } from "./ToolSwitcher";
 import { ContactSection } from "./ContactSection";
 import { Footer } from "./Footer";
@@ -18,7 +17,7 @@ export function ToolPageLayout({
   title,
   description,
   children,
-  disableAds = true,
+  disableAds = false,
 }: ToolPageLayoutProps) {
   const showAds = !disableAds;
 
@@ -75,7 +74,6 @@ export function ToolPageLayout({
         <ContactSection />
       </div>
 
-      {showAds && <InterstitialAd />}
       {showAds && <BottomAdBar />}
 
       <Footer />

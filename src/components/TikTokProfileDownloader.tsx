@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { UserCircle2, Download, Loader2 } from "lucide-react";
-import { AdGateModal } from "./AdGateModal";
+import { useAdGate } from "@/hooks/use-adgate";
 import { fetchTikTokProfilePicture, downloadFile } from "@/lib/tikwm";
 
 interface TikTokProfileDownloaderProps {
   disableAds?: boolean;
 }
 
-export function TikTokProfileDownloader({ disableAds = true }: TikTokProfileDownloaderProps) {
+export function TikTokProfileDownloader({ disableAds = false }: TikTokProfileDownloaderProps) {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +17,7 @@ export function TikTokProfileDownloader({ disableAds = true }: TikTokProfileDown
     nickname: string;
     uniqueId: string;
   } | null>(null);
-  const [adGateOpen, setAdGateOpen] = useState(false);
+  const { triggerAdGate } = useAdGate();
 
   const handleFetch = async () => {
     if (!username.trim()) {
@@ -145,7 +145,9 @@ export function TikTokProfileDownloader({ disableAds = true }: TikTokProfileDown
                     Search another
                   </button>
                   <button
-                    onClick={disableAds ? triggerDownload : () => setAdGateOpen(true)}
+                    onClick={() =>
+                      disableAds ? triggerDownload() : triggerAdGate(triggerDownload)
+                    }
                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-elevated active:scale-[0.98]"
                   >
                     <Download className="size-4" />
@@ -157,18 +159,6 @@ export function TikTokProfileDownloader({ disableAds = true }: TikTokProfileDown
           </div>
         </div>
       </div>
-
-      {!disableAds && (
-        <AdGateModal
-          open={adGateOpen}
-          durationSec={8}
-          onComplete={() => {
-            setAdGateOpen(false);
-            triggerDownload();
-          }}
-          onClose={() => setAdGateOpen(false)}
-        />
-      )}
     </div>
   );
 }

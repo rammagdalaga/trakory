@@ -26,11 +26,8 @@ const FOOTER_COLS = [
     ],
   },
   {
-    heading: "TikTok Tools",
-    links: [
-      { label: "TikTok Downloader", href: "/tools/tiktok-video-downloader" },
-      { label: "Profile Picture", href: "/tools/tiktok-profile-downloader" },
-    ],
+    heading: "All-in-One Social Media Downloader + Creator Toolkit",
+    links: [{ label: "Downloader", href: "/all-in-one-downloader" }],
   },
   {
     heading: "Company",
