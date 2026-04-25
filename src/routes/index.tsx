@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Converter } from "@/components/Converter";
-import { ToolSwitcher } from "@/components/ToolSwitcher";
+import { Footer } from "@/components/Footer";
+import { NavDropdown } from "@/components/NavDropdown";
 import {
   Accordion,
   AccordionContent,
@@ -20,27 +20,37 @@ import {
   Globe,
   Sparkles,
   Lock,
-  Gift,
+  AlertTriangle,
+  GraduationCap,
+  Briefcase,
+  Video,
+  Laptop,
 } from "lucide-react";
 
+// ─── SEO constants ────────────────────────────────────────────────────────────
 const SITE_URL = "https://trakory.com";
-const OG_TITLE = "Trakory — Free Online Converter: Video, Audio, PDF, Image & Word Converter";
-const OG_DESC =
-  "Trakory is a free online converter tool — convert MP3, video, audio, PDF to Word, Word to PDF, compress PDF, compress Word files in your browser. Free file converter with download support: convert video free, convert audio, PDF compressor, Word compressor, and more.";
-const SCHEMA_DESC =
-  "Trakory is a free online converter tool and free file converter for video, audio, PDF to Word, Word to PDF compression, and more. Convert MP3, free convert video, PDF compressor, Word compressor, file converter download — all browser-based and private.";
 
+// Title: under 60 chars, natural, brand-first
+const PAGE_TITLE = "Trakory — Free Online File Converter for Video, Audio & PDF";
+
+// Description: 150–155 chars, readable sentence, no keyword stuffing
+const META_DESC =
+  "Convert video, audio, PDF and Word files free — right in your browser. No uploads, no signup, total privacy. Fast, easy file conversion for everyone.";
+
+// Schema description: one clear sentence
+const SCHEMA_DESC =
+  "Trakory is a free, browser-based file converter for video, audio, PDF, Word and image files. All conversions run locally — no uploads, no signup required.";
+
+// ─── Route ────────────────────────────────────────────────────────────────────
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      {
-        title: "Free Online Converter — Video, Audio, PDF, Image & Word Converter | Trakory",
-      },
-      { name: "description", content: OG_DESC },
+      { title: PAGE_TITLE },
+      { name: "description", content: META_DESC },
       {
         name: "keywords",
         content:
-          "Online converter tool, Converter free, Free converter tool, Converter MP3, File converter, Free file converter, File converter Download, Free convert video, video converter, audio converter, pdf converter, word converter, pdf to word, word to pdf, compress pdf, compress word, mp4 to mp3, free online converter",
+          "free online converter, convert video to MP3, PDF to Word, Word to PDF, compress PDF, MP4 to MP3, audio converter, file converter, browser converter, no upload converter",
       },
       {
         name: "robots",
@@ -52,8 +62,9 @@ export const Route = createFileRoute("/")({
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { property: "og:title", content: OG_TITLE },
-      { property: "og:description", content: OG_DESC },
+      // Open Graph
+      { property: "og:title", content: PAGE_TITLE },
+      { property: "og:description", content: META_DESC },
       { property: "og:image", content: `${SITE_URL}/logo/logo.png` },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
@@ -61,9 +72,10 @@ export const Route = createFileRoute("/")({
       { property: "og:site_name", content: "Trakory" },
       { property: "og:url", content: SITE_URL },
       { property: "og:locale", content: "en_US" },
+      // Twitter
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: OG_TITLE },
-      { name: "twitter:description", content: OG_DESC },
+      { name: "twitter:title", content: PAGE_TITLE },
+      { name: "twitter:description", content: META_DESC },
       { name: "twitter:image", content: `${SITE_URL}/logo/logo.png` },
       { name: "twitter:creator", content: "@Trakory" },
     ],
@@ -76,6 +88,13 @@ export const Route = createFileRoute("/")({
       { rel: "preconnect", href: "https://www.googletagmanager.com" },
     ],
     scripts: [
+      // AdSense — standalone, NOT inside any JSON-LD block
+      {
+        src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7172866420926779",
+        async: true,
+        crossOrigin: "anonymous",
+      },
+      // Schema: Organization
       {
         type: "application/ld+json",
         children: JSON.stringify({
@@ -93,6 +112,7 @@ export const Route = createFileRoute("/")({
           },
         }),
       },
+      // Schema: WebApplication — no fake aggregateRating
       {
         type: "application/ld+json",
         children: JSON.stringify({
@@ -110,31 +130,25 @@ export const Route = createFileRoute("/")({
             availability: "https://schema.org/InStock",
           },
           featureList: [
-            "Video converter — MP4, MOV, MKV, WEBM, AVI",
+            "Video converter — MP4, MOV, MKV, WEBM, AVI to audio",
             "Audio converter — MP3, WAV, FLAC, AAC, OGG",
-            "PDF converter — PDF to Word, PDF to image, compress PDF",
-            "Word converter — DOCX to PDF, DOC to DOCX",
-            "Image converter — JPG, PNG, WEBP, resize and compress",
-            "Document converter — TXT, RTF, ODT",
+            "PDF to Word converter — preserves formatting",
+            "Word to PDF converter — DOCX and DOC support",
+            "PDF compressor — reduce size up to 80%",
+            "Word compressor — reduce size up to 75%",
+            "TikTok video downloader — no watermark",
             "100% in-browser conversion with WebAssembly",
-            "No file uploads required",
-            "Fully private and secure",
+            "No file uploads — fully private",
             "Free forever, no account needed",
           ],
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: "4.9",
-            ratingCount: "1280",
-            bestRating: "5",
-            worstRating: "1",
-          },
           potentialAction: {
             "@type": "UseAction",
-            target: `${SITE_URL}/#converter`,
-            name: "Convert Files",
+            target: `${SITE_URL}/#tools`,
+            name: "Start Converting",
           },
         }),
       },
+      // Schema: BreadcrumbList
       {
         type: "application/ld+json",
         children: JSON.stringify({
@@ -146,11 +160,12 @@ export const Route = createFileRoute("/")({
               "@type": "ListItem",
               position: 2,
               name: "Converter Tools",
-              item: `${SITE_URL}/#converter`,
+              item: `${SITE_URL}/#tools`,
             },
           ],
         }),
       },
+      // Schema: FAQPage — valid array, no script tags inside
       {
         type: "application/ld+json",
         children: JSON.stringify({
@@ -162,23 +177,23 @@ export const Route = createFileRoute("/")({
               name: "Is Trakory really a free online converter?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "Yes. Trakory is a 100% free online converter for video, audio, PDF, Word and image files. There are no hidden charges, paywalls, or account requirements. Ads only appear to support hosting so we can keep every converter free.",
+                text: "Yes. Trakory is completely free — no hidden charges, paywalls, or account requirements. Ads help cover hosting so every converter stays free forever.",
               },
             },
             {
               "@type": "Question",
-              name: "Are my files safe with this converter?",
+              name: "Are my files safe when I use Trakory?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "Absolutely. Every conversion runs locally in your browser using WebAssembly. Your files never get uploaded to a server, which makes Trakory one of the most private online converters available.",
+                text: "Yes. Every conversion runs locally in your browser using WebAssembly. Your files are never uploaded to any server.",
               },
             },
             {
               "@type": "Question",
-              name: "What file formats does the converter support?",
+              name: "What formats does Trakory support?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "Trakory supports a wide range of formats including video to audio (MP3, WAV, FLAC), MP4, MOV, MKV, WEBM, AVI, image resize (JPG, PNG, WEBP), PDF, Word documents and more — all from one tool.",
+                text: "Trakory supports MP4, MOV, MKV, WEBM, AVI, MP3, WAV, FLAC, AAC, OGG, JPG, PNG, WEBP, PDF, DOCX, DOC and more.",
               },
             },
             {
@@ -186,7 +201,15 @@ export const Route = createFileRoute("/")({
               name: "How do I convert MP4 to MP3 for free?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "Drop your MP4 file into Trakory, choose MP3 and a bitrate (128, 192 or 320 kbps), then click Convert. Your audio is ready to download in seconds — no signup, no upload.",
+                text: "Click the Video → Audio tab, drop your MP4 file, choose MP3 and a bitrate, then click Convert. Your file downloads in seconds — no signup needed.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Can Trakory make mistakes or produce errors?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Yes, sometimes. Trakory is a free, community-maintained browser tool — not a paid professional service. Most conversions work well, but complex or unusual files may not convert perfectly. Always review the result before important use.",
               },
             },
             {
@@ -194,21 +217,24 @@ export const Route = createFileRoute("/")({
               name: "Can I use Trakory on mobile?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "Yes. Trakory works as an online converter on Android, iPhone, iPad, Windows, Mac and Linux — anywhere you have a modern browser.",
+                text: "Yes. Trakory works on Android, iPhone, iPad, Windows, Mac and Linux — anywhere you have a modern browser.",
               },
             },
             {
               "@type": "Question",
-              name: "Do I need to install software?",
+              name: "Do I need to install anything?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "No installation. Trakory is a fully browser-based converter — no apps, no plugins, no extensions, no signup.",
+                text: "No. Trakory runs entirely in your browser — no apps, no plugins, no extensions required.",
               },
             },
             {
-              src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7172866420926779",
-              async: true,
-              crossOrigin: "anonymous",
+              "@type": "Question",
+              name: "Is there a file size limit?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "You can convert files up to 500 MB. Conversion speed depends on your device since everything runs locally.",
+              },
             },
           ],
         }),
@@ -218,79 +244,186 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
 const TOOLS = [
   {
     icon: FileVideo,
     title: "Video Converter",
-    body: "Convert MP4, MOV, MKV, WEBM and AVI to MP3, WAV or FLAC audio with full quality control. Free convert video to MP3 with multiple bitrate options.",
+    body: "Convert MP4, MOV, MKV, WEBM and AVI files to MP3, WAV or FLAC audio. Choose your bitrate and get a clean audio extraction in seconds.",
     available: true,
   },
   {
     icon: FileAudio,
-    title: "Converter MP3",
-    body: "Switch between MP3, WAV, FLAC, AAC and OGG formats. Adjust bitrate, sample rate and channels for perfect audio quality.",
+    title: "Audio Converter",
+    body: "Switch between MP3, WAV, FLAC, AAC and OGG. Adjust bitrate, sample rate and channels for the exact quality you need.",
     available: true,
   },
   {
     icon: FileText,
     title: "PDF to Word",
-    body: "Free convert PDF to Word .docx format with text, formatting and paragraphs preserved. Fully editable in Microsoft Word.",
+    body: "Turn PDF documents into editable DOCX files with text and paragraph structure preserved. Open the result directly in Microsoft Word.",
     available: true,
   },
   {
     icon: FileType,
     title: "Word to PDF",
-    body: "Convert DOCX to PDF with clean, searchable text. Perfect for sharing and printing Word documents securely.",
+    body: "Convert DOCX and DOC files to clean, searchable PDFs. Keeps formatting intact for sharing and printing.",
     available: true,
   },
   {
     icon: FileArchive,
     title: "Compress Files",
-    body: "Compress PDF files up to 80% smaller and reduce Word documents by 75%. Maintain quality while shrinking file size for email and storage.",
+    body: "Shrink PDFs by up to 80% and Word documents by up to 75%. Useful for email attachments and cloud storage limits.",
     available: true,
   },
   {
     icon: FileImage,
     title: "Image Converter",
-    body: "Resize, compress and convert JPG, PNG, WEBP and HEIC images without losing quality.",
+    body: "Resize, compress and convert JPG, PNG, WEBP and HEIC images — coming soon.",
     available: false,
+  },
+];
+
+const POPULAR_TOOLS = [
+  {
+    title: "PDF to Word Converter",
+    desc: "Convert PDF documents into fully editable Word files. Preserves text layout and paragraph structure. Ideal for editing documents you received as PDFs.",
+    link: "/tools/pdf-to-word",
+    tag: "Most used",
+  },
+  {
+    title: "Word to PDF Converter",
+    desc: "Turn DOCX and DOC files into professional PDFs. Perfect for sharing, archiving, and keeping formatting consistent across all devices.",
+    link: "/tools/word-to-pdf",
+    tag: null,
+  },
+  {
+    title: "PDF Compressor",
+    desc: "Reduce PDF file size by up to 80% while maintaining readability. Great for email attachments and cloud storage limits.",
+    link: "/tools/compress-pdf",
+    tag: null,
+  },
+  {
+    title: "Word Compressor",
+    desc: "Shrink DOCX and DOC files by up to 75%. Useful when documents are too large to email or share.",
+    link: "/tools/compress-word",
+    tag: null,
+  },
+  {
+    title: "TikTok Video Downloader",
+    desc: "Download TikTok videos without a watermark in MP4 format. Paste a link, click fetch, save the video instantly.",
+    link: "/tools/tiktok-video-downloader",
+    tag: null,
+  },
+  {
+    title: "TikTok Profile Picture Downloader",
+    desc: "Save any TikTok profile picture in full HD. Enter a username and download the avatar — no app needed.",
+    link: "/tools/tiktok-profile-downloader",
+    tag: null,
+  },
+];
+
+const FEATURES = [
+  {
+    icon: Lock,
+    title: "Stays on your device",
+    body: "Files never touch a server. Every conversion runs locally using WebAssembly.",
+  },
+  {
+    icon: Sparkles,
+    title: "Quality output",
+    body: "MP3 at 128/192/320 kbps, lossless WAV, compressed FLAC — you choose the quality.",
+  },
+  {
+    icon: Zap,
+    title: "Fast & free",
+    body: "No accounts, no queues, no watermarks. Drop a file and convert.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Private by default",
+    body: "Zero uploads. Zero tracking of file content. Nothing leaves your browser.",
+  },
+  {
+    icon: Globe,
+    title: "Works everywhere",
+    body: "Use Trakory on iPhone, Android, Windows, Mac and Linux — any modern browser.",
+  },
+  {
+    icon: Heart,
+    title: "Built with care",
+    body: "Made by a small team focused on one thing: making file conversion simple and reliable.",
+  },
+];
+
+const USE_CASES = [
+  {
+    icon: GraduationCap,
+    title: "Students",
+    body: "Convert lecture recordings to MP3 for offline listening, or turn PDF handouts into editable Word documents for note-taking.",
+  },
+  {
+    icon: Briefcase,
+    title: "Freelancers",
+    body: "Deliver files in whatever format clients need — PDF, DOCX, MP3 — and compress documents before sending them over email.",
+  },
+  {
+    icon: Video,
+    title: "Content creators",
+    body: "Extract audio from video files, download TikTok clips for repurposing, and convert between formats without dedicated software.",
+  },
+  {
+    icon: Laptop,
+    title: "Remote workers",
+    body: "Compress PDFs and Word files to fit email size limits and cloud storage quotas without losing document quality.",
   },
 ];
 
 const FAQS = [
   {
-    q: "How do I convert a video to MP3 with this free online converter?",
-    a: "Drop your video into the Trakory converter above, select MP3 and pick a bitrate (128, 192 or 320 kbps), then click Convert. Your MP3 download is ready in seconds — no upload, no signup, no watermark.",
+    q: "How do I convert a video to MP3?",
+    a: "Click the Video → Audio tab, drop your video file (MP4, MOV, MKV, WEBM or AVI), pick MP3 and a bitrate, then click Convert. Your audio file is ready to download in seconds — no signup, no upload.",
   },
   {
-    q: "Is Trakory really a free and private converter?",
-    a: "Yes — Trakory is free forever and runs entirely in your browser using WebAssembly. Your video, audio, PDF, Word and image files never leave your device, which makes it one of the safest online converters you can use.",
+    q: "Is Trakory really free and private?",
+    a: "Yes. Trakory is free forever and runs entirely in your browser using WebAssembly. Your files never leave your device. Ads help cover hosting costs so every tool stays free.",
   },
   {
-    q: "What video, audio and document formats are supported?",
-    a: "MP4, MOV, MKV, WEBM, AVI, MP3, WAV, FLAC, AAC, OGG, JPG, PNG, WEBP, PDF, DOCX, DOC, TXT and most common formats your browser can read.",
+    q: "Can Trakory make mistakes or errors?",
+    a: "Yes, sometimes. Trakory is a free, community-maintained browser tool — not a paid professional service. Most everyday conversions work well, but complex files (heavily formatted PDFs, large videos, or scanned documents) may produce imperfect results. Always review converted files before important use.",
   },
   {
-    q: "Can I use Trakory on iPhone, Android, Windows or Mac?",
-    a: "Yes. Trakory works on any device with a modern browser — Chrome, Safari, Firefox, Edge, Brave. The same converter, same speed, on every platform.",
+    q: "How accurate is the PDF to Word conversion?",
+    a: "Simple text-based PDFs convert with high accuracy. Scanned PDFs or documents with complex layouts, tables, or embedded images may lose some formatting. This is a known limitation of all browser-based converters, not specific to Trakory.",
   },
   {
-    q: "Why are there ads on a free converter?",
-    a: "Trakory is built by a small team. The ads simply help cover hosting and development so we can keep every video converter, audio converter, PDF converter and image converter completely free for everyone.",
+    q: "What formats are supported?",
+    a: "MP4, MOV, MKV, WEBM, AVI, MP3, WAV, FLAC, AAC, OGG, JPG, PNG, WEBP, PDF, DOCX, DOC, TXT and most common formats your browser can handle.",
+  },
+  {
+    q: "Does Trakory work on iPhone, Android, Windows and Mac?",
+    a: "Yes. Trakory works on any device with a modern browser — Chrome, Safari, Firefox, Edge and Brave. Same speed and privacy on every platform.",
+  },
+  {
+    q: "Why are there ads?",
+    a: "Trakory is built by a small team. Ads help cover hosting and development costs so every converter stays completely free for everyone.",
   },
   {
     q: "Is there a file size limit?",
-    a: "You can convert files up to 500 MB. Because everything runs locally, conversion speed depends on your device — modern phones and laptops handle large files easily.",
+    a: "You can convert files up to 500 MB. Since everything runs locally, conversion speed depends on your device — most modern phones and laptops handle large files without issues.",
   },
 ];
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 function Index() {
   return (
     <div
-      className="relative min-h-dvh overflow-x-clip bg-background pb-24 sm:pb-28 md:pb-32 pt-0"
+      className="relative flex flex-1 flex-col overflow-x-clip bg-background pt-0"
       suppressHydrationWarning
     >
-      {/* Ambient gradient blobs */}
+      {/* Ambient blobs */}
       <div
         aria-hidden
         className="pointer-events-none absolute -left-40 top-[-10%] size-[320px] rounded-full bg-primary/15 blur-[120px] sm:size-[480px]"
@@ -300,21 +433,18 @@ function Index() {
         className="pointer-events-none absolute -right-40 bottom-[-10%] size-[360px] rounded-full bg-accent/15 blur-[120px] sm:size-[520px]"
       />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pt-4 sm:px-6 sm:pt-6 lg:pt-8">
+      {/* ── Header ── */}
+      <header className="relative z-50 mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pt-4 sm:px-6 sm:pt-6 lg:pt-8">
         <a href="/" className="flex min-w-0 items-center gap-2.5" aria-label="Trakory home">
           <span className="truncate text-lg font-semibold tracking-tight text-foreground">
             Trakory
           </span>
         </a>
-        <div className="ml-auto flex shrink-0 items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1.5 backdrop-blur">
-          <span className="size-1.5 animate-pulse rounded-full bg-primary" />
-          <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-            Engine ready
-          </span>
-        </div>
+        <NavDropdown />
       </header>
 
       <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
+        {/* ── Hero ── */}
         <div className="mb-6 max-w-3xl text-center sm:mb-8 lg:mb-10">
           <span className="animate-float-up mb-5 inline-block rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur sm:mb-6">
             Private · In-browser · No uploads
@@ -324,29 +454,70 @@ function Index() {
             <span className="text-gradient-brand">video, audio, PDF, Word & images</span>
           </h1>
           <p className="animate-float-up delay-200 mx-auto mt-6 max-w-2xl text-pretty text-sm leading-relaxed text-muted-foreground sm:mt-8 sm:text-base md:text-lg">
-            Trakory is the{" "}
-            <strong className="text-foreground font-semibold">online converter tool</strong> built
-            for everyone — pick a tab, drop a file, get a download. Use our{" "}
-            <strong className="text-foreground font-semibold">free file converter</strong> to
-            convert MP3, turn video into audio, transform PDF into editable Word, change Word back
-            to PDF, or shrink the size of your documents. Every{" "}
-            <strong className="text-foreground font-semibold">file converter download</strong>{" "}
-            happens locally in your browser — no signup, no uploads, total privacy.
+            Trakory converts your files directly in the browser — no uploads, no accounts, total
+            privacy. Pick a tool below, drop your file, and download the result instantly.
           </p>
         </div>
 
-        <div className="w-full animate-float-up delay-250 px-2 sm:px-0">
-          <ToolSwitcher />
-        </div>
+        {/* ── How it works ── */}
+        <section aria-labelledby="how-heading" className="mt-20 w-full sm:mt-24 lg:mt-28">
+          <div className="mb-10 text-center sm:mb-14">
+            <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
+              How it works
+            </span>
+            <h2
+              id="how-heading"
+              className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl"
+            >
+              Three steps, <span className="text-gradient-brand">no complications</span>
+            </h2>
+          </div>
 
-        <div
-          id="converter"
-          className="w-full max-w-2xl mx-auto animate-float-up delay-300 px-4 sm:px-0 mt-4 sm:mt-6"
-        >
-          <Converter tool="video-to-audio" />
-        </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {[
+              {
+                step: "01",
+                title: "Pick your tool",
+                body: "Choose from video, audio, PDF, Word or image converters using the tabs above.",
+              },
+              {
+                step: "02",
+                title: "Drop your file",
+                body: "Drag and drop or click to select. Your file stays on your device — nothing is uploaded.",
+              },
+              {
+                step: "03",
+                title: "Download instantly",
+                body: "Your converted file is ready in seconds. No account or signup required.",
+              },
+            ].map((s, i) => (
+              <div
+                key={s.step}
+                className="animate-float-up relative overflow-hidden rounded-2xl border border-border bg-card/70 p-6 shadow-soft backdrop-blur"
+                style={{ animationDelay: `${i * 60}ms` }}
+              >
+                <span className="font-mono text-4xl font-bold text-primary/20 select-none">
+                  {s.step}
+                </span>
+                <h3 className="mt-2 text-base font-semibold text-foreground">{s.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+              </div>
+            ))}
+          </div>
 
-        {/* Tools showcase */}
+          {/* Accuracy disclaimer */}
+          <div className="mt-6 flex items-start gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/5 px-5 py-4 backdrop-blur">
+            <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-500" aria-hidden />
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              <strong className="font-semibold text-foreground">Accuracy note:</strong> Trakory is a
+              free, community-maintained browser tool — not a paid professional service. Most
+              everyday conversions work well, but complex or unusual files may not convert
+              perfectly. Always review results before important use.
+            </p>
+          </div>
+        </section>
+
+        {/* ── Tools overview ── */}
         <section aria-labelledby="tools-heading" className="mt-20 w-full sm:mt-24 lg:mt-28">
           <div className="mb-10 text-center sm:mb-14">
             <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
@@ -359,8 +530,8 @@ function Index() {
               Every converter you need, <span className="text-gradient-brand">in one place</span>
             </h2>
             <p className="animate-float-up delay-200 mx-auto mt-4 max-w-2xl text-sm text-muted-foreground sm:text-base">
-              From video converter and audio converter to PDF converter, Word converter and image
-              converter — Trakory is the all-in-one online file converter for 2026.
+              From video and audio to PDF and Word — all running locally in your browser with no
+              file uploads and no account required.
             </p>
           </div>
 
@@ -394,61 +565,25 @@ function Index() {
           </div>
         </section>
 
-        {/* Specialized Tools Section */}
-        <section className="mt-20 w-full sm:mt-24 lg:mt-28">
+        {/* ── Popular tools (individual pages) ── */}
+        <section aria-labelledby="popular-heading" className="mt-20 w-full sm:mt-24 lg:mt-28">
           <div className="mb-10 text-center sm:mb-14">
             <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
               Popular Tools
             </span>
-            <h2 className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
-              Specialized converters for your{" "}
-              <span className="text-gradient-brand">specific needs</span>
+            <h2
+              id="popular-heading"
+              className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl"
+            >
+              Dedicated tools for <span className="text-gradient-brand">specific tasks</span>
             </h2>
             <p className="animate-float-up delay-200 mx-auto mt-4 max-w-2xl text-sm text-muted-foreground sm:text-base">
-              Choose a dedicated tool with optimized settings and advanced features for PDF
-              conversion, Word compression, and document transformation.
+              Each tool is optimised for one job with its own focused interface and settings.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-            {[
-              {
-                title: "PDF to Word Converter",
-                desc: "Convert PDF documents to fully editable Word files. Perfect for editing scanned documents or PDFs received from clients. Preserves text formatting and layout.",
-                link: "/tools/pdf-to-word",
-                keywords: "PDF to Word, convert PDF to Word, PDF to DOCX, free PDF converter",
-              },
-              {
-                title: "Word to PDF Converter",
-                desc: "Turn DOCX and DOC files into professional PDFs. Ideal for sharing documents, archiving, and ensuring formatting stays perfect across all devices.",
-                link: "/tools/word-to-pdf",
-                keywords: "Word to PDF, convert DOCX to PDF, Word to PDF converter, DOC to PDF",
-              },
-              {
-                title: "PDF Compressor",
-                desc: "Reduce PDF file size by up to 80% while maintaining quality. Great for email attachments, cloud storage limits, and faster downloads.",
-                link: "/tools/compress-pdf",
-                keywords: "PDF compressor, compress PDF, reduce PDF size, PDF optimizer",
-              },
-              {
-                title: "Word Compressor",
-                desc: "Shrink DOCX and DOC files by up to 75%. Perfect for storage efficiency and sharing large documents without email size restrictions.",
-                link: "/tools/compress-word",
-                keywords: "Word compressor, compress DOCX, reduce Word size, compress Word",
-              },
-              {
-                title: "TikTok Video Downloader",
-                desc: "Download TikTok videos with no watermark in MP4 format. Paste a link, hit fetch, save the video. Free and instant on any device.",
-                link: "/tools/tiktok-video-downloader",
-                keywords: "TikTok video downloader, no watermark TikTok, download TikTok MP4",
-              },
-              {
-                title: "TikTok Profile Picture Downloader",
-                desc: "Get any TikTok profile picture in HD. Type the username, download the full-size avatar — perfect for fan pages and reposts.",
-                link: "/tools/tiktok-profile-downloader",
-                keywords: "TikTok profile picture downloader, TikTok avatar HD, save TikTok DP",
-              },
-            ].map((tool, i) => (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {POPULAR_TOOLS.map((tool, i) => (
               <article
                 key={tool.title}
                 className="group animate-float-up relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card/80 to-card/50 p-6 shadow-soft backdrop-blur hover:shadow-elevated transition-all duration-300 hover:border-primary/40"
@@ -456,106 +591,52 @@ function Index() {
               >
                 <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
                 <div className="relative z-10">
-                  <h3 className="text-lg font-semibold text-foreground mb-3">{tool.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{tool.desc}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono text-muted-foreground">{tool.keywords}</span>
-                    <a
-                      href={tool.link}
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
-                    >
-                      Open Tool
-                      <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7m0 0l-7 7m7-7H5"
-                        />
-                      </svg>
-                    </a>
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <h3 className="text-base font-semibold text-foreground">{tool.title}</h3>
+                    {tool.tag && (
+                      <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-primary">
+                        {tool.tag}
+                      </span>
+                    )}
                   </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{tool.desc}</p>
+                  <a
+                    href={tool.link}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                  >
+                    Open Tool
+                    <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7m0 0l-7 7m7-7H5"
+                      />
+                    </svg>
+                  </a>
                 </div>
               </article>
             ))}
           </div>
         </section>
 
-        {/* SEO Content Section */}
-        <section className="mt-20 w-full max-w-4xl mx-auto sm:mt-24 lg:mt-28">
-          <div className="rounded-2xl border border-border bg-card/70 p-6 shadow-soft backdrop-blur sm:p-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4 sm:text-3xl">
-              Complete File Conversion Solution
-            </h2>
-            <div className="space-y-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              <p>
-                Trakory is your comprehensive online converter tool for every file type. Whether you
-                need to convert PDF to Word for editing, transform Word documents to PDF for
-                sharing, compress PDF files for email, or reduce Word document size for storage — we
-                have a specialized tool for each task.
-              </p>
-              <p>
-                Our PDF to Word converter maintains perfect formatting when converting documents.
-                The Word to PDF converter ensures your DOCX files look professional on any device.
-                Both the PDF compressor and Word compressor use advanced algorithms to dramatically
-                reduce file size while preserving quality.
-              </p>
-              <p>
-                Free convert video to MP3, convert MP3 to WAV, use our converter MP3 for audio
-                formats, and access every file converter download capability — all without payment
-                or signup. Trakory is the free converter tool trusted by millions for reliable,
-                private conversions.
-              </p>
-            </div>
-          </div>
-        </section>
-        <section aria-labelledby="why-heading" className="mt-20 w-full sm:mt-24 lg:mt-28">
+        {/* ── Features & benefits (single merged section) ── */}
+        <section aria-labelledby="features-heading" className="mt-20 w-full sm:mt-24 lg:mt-28">
           <div className="mb-10 text-center sm:mb-14">
             <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
               Features & Benefits
             </span>
             <h2
-              id="why-heading"
+              id="features-heading"
               className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl"
             >
-              Why people pick Trakory as their{" "}
+              Why people use Trakory as their{" "}
               <span className="text-gradient-brand">go-to converter</span>
             </h2>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                icon: Lock,
-                title: "Stays on your device",
-                body: "Files never touch a server. Conversion happens locally with WebAssembly.",
-              },
-              {
-                icon: Sparkles,
-                title: "Studio-quality output",
-                body: "MP3 at 128/192/320 kbps, lossless WAV, compressed FLAC and more.",
-              },
-              {
-                icon: Zap,
-                title: "Fast & free",
-                body: "No accounts, no queues, no watermarks. Just drop and convert.",
-              },
-              {
-                icon: ShieldCheck,
-                title: "Private by default",
-                body: "Zero uploads. Zero tracking of file content. Total privacy guaranteed.",
-              },
-              {
-                icon: Globe,
-                title: "Works everywhere",
-                body: "Use the converter on iPhone, Android, Windows, Mac and Linux browsers.",
-              },
-              {
-                icon: Heart,
-                title: "Built with care",
-                body: "Crafted by a small team with one goal — make file conversion delightful.",
-              },
-            ].map((f, i) => {
+            {FEATURES.map((f, i) => {
               const Icon = f.icon;
               return (
                 <div
@@ -575,134 +656,92 @@ function Index() {
           </div>
         </section>
 
-        {/* Comprehensive SEO Content Section - Enhanced with Cards */}
-        <section aria-labelledby="comprehensive-heading" className="mt-16 w-full sm:mt-20">
+        {/* ── Who uses Trakory ── */}
+        <section aria-labelledby="usecases-heading" className="mt-20 w-full sm:mt-24 lg:mt-28">
           <div className="mb-10 text-center sm:mb-14">
             <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
-              Why choose Trakory
+              Who uses Trakory
             </span>
             <h2
-              id="comprehensive-heading"
+              id="usecases-heading"
               className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl"
             >
-              The ultimate online converter for{" "}
-              <span className="text-gradient-brand">every file type</span>
+              Built for <span className="text-gradient-brand">everyone</span>
             </h2>
+            <p className="animate-float-up delay-200 mx-auto mt-4 max-w-2xl text-sm text-muted-foreground sm:text-base">
+              From students and freelancers to content creators and remote teams — Trakory handles
+              everyday file conversion without the fuss.
+            </p>
           </div>
 
-          {/* Feature Cards Grid */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-12">
-            {[
-              {
-                icon: FileVideo,
-                title: "Video Converter",
-                desc: "Free convert video: MP4, MOV, MKV, WEBM, AVI to MP3 & audio formats",
-              },
-              {
-                icon: FileAudio,
-                title: "Converter MP3",
-                desc: "MP3, WAV, FLAC, AAC, OGG with quality control",
-              },
-              {
-                icon: FileText,
-                title: "PDF Converter",
-                desc: "Transform PDFs to Word, images, compress & merge",
-              },
-              {
-                icon: FileType,
-                title: "File Converter",
-                desc: "DOCX, DOC, TXT, RTF, ODT formats supported",
-              },
-            ].map((item, i) => {
-              const Icon = item.icon;
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {USE_CASES.map((u, i) => {
+              const Icon = u.icon;
               return (
                 <div
-                  key={item.title}
-                  className="animate-float-up group relative overflow-hidden rounded-2xl border border-border bg-card/70 p-4 shadow-soft backdrop-blur hover:shadow-elevated transition-all duration-300 hover:border-primary/40"
+                  key={u.title}
+                  className="animate-float-up group relative overflow-hidden rounded-2xl border border-border bg-card/70 p-6 shadow-soft backdrop-blur hover:shadow-elevated transition-all duration-300 hover:border-primary/40"
                   style={{ animationDelay: `${i * 60}ms` }}
                 >
                   <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
                   <div className="relative z-10">
-                    <div className="flex items-center justify-center size-12 rounded-xl bg-gradient-brand text-primary-foreground shadow-soft mb-3 transition-transform duration-300 group-hover:scale-110">
-                      <Icon className="size-6" />
+                    <div className="mb-4 flex size-10 items-center justify-center rounded-xl bg-gradient-brand text-primary-foreground shadow-soft transition-transform duration-300 group-hover:scale-110">
+                      <Icon className="size-5" />
                     </div>
-                    <h3 className="font-semibold text-foreground text-sm sm:text-base">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground mt-2 leading-relaxed">
-                      {item.desc}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Main Content Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            {[
-              {
-                title: "100% Private & Secure",
-                desc: "Trakory is a free file converter tool designed for everyone. Your files never leave your device because conversions run directly in your browser using WebAssembly. As a free converter tool, we keep everything 100% private without any uploads to servers.",
-                icon: Lock,
-              },
-              {
-                title: "Complete Format Support",
-                desc: "Our free file converter supports MP3, MP4, PDF, Word, and image formats. Whether you need a converter MP3 for audio or a file converter download for documents, every format is supported. Works as a converter free tool on all browsers.",
-                icon: Sparkles,
-              },
-              {
-                title: "Converter Free Forever",
-                desc: "As a free converter tool, Trakory offers unlimited conversions with no paywalls. Free convert video, free convert audio, free convert documents — all completely free. This online converter tool will always be free forever with no hidden charges.",
-                icon: Gift,
-              },
-              {
-                title: "Works Everywhere",
-                desc: "Our online converter tool works on any device with a browser. No installation, no downloads needed for this file converter. Use this converter free across Chrome, Safari, Firefox, Edge and Brave on iPhone, Android, Windows, Mac and Linux.",
-                icon: Globe,
-              },
-            ].map((card, i) => {
-              const Icon = card.icon;
-              return (
-                <div
-                  key={card.title}
-                  className="animate-float-up group relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card/80 to-card/50 p-6 shadow-soft backdrop-blur hover:shadow-elevated transition-all duration-300 hover:border-primary/40"
-                  style={{ animationDelay: `${(i + 4) * 60}ms` }}
-                >
-                  <div className="absolute inset-0 bg-gradient-brand opacity-0 group-hover:opacity-5 transition-opacity duration-300" />
-                  <div className="relative z-10">
-                    <div className="flex items-start gap-4">
-                      <div className="flex items-center justify-center size-14 rounded-xl bg-gradient-brand text-primary-foreground shadow-soft flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                        <Icon className="size-7" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">{card.title}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{card.desc}</p>
-                      </div>
-                    </div>
+                    <h3 className="text-base font-semibold text-foreground mb-2">{u.title}</h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{u.body}</p>
                   </div>
                 </div>
               );
             })}
           </div>
         </section>
+
+        {/* ── SEO prose block (natural, non-stuffed) ── */}
+        <section className="mt-20 w-full max-w-4xl mx-auto sm:mt-24 lg:mt-28">
+          <div className="rounded-2xl border border-border bg-card/70 p-6 shadow-soft backdrop-blur sm:p-8">
+            <h2 className="text-xl font-semibold text-foreground mb-4 sm:text-2xl">
+              About Trakory
+            </h2>
+            <div className="space-y-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              <p>
+                Trakory is a free, browser-based file converter built for people who need to convert
+                files quickly without installing software or uploading sensitive documents to a
+                third-party server. Whether you're extracting audio from a video, converting a PDF
+                into an editable Word document, or shrinking a large file before sending it by
+                email, Trakory has a dedicated tool for the job.
+              </p>
+              <p>
+                Every conversion runs locally using WebAssembly, which means your files stay on your
+                device from start to finish. There are no accounts, no queues, and no watermarks.
+                Trakory is supported by ads so the tools can stay free for everyone — no paywalls,
+                no usage limits.
+              </p>
+              <p>
+                Trakory is a community-maintained project and not a paid professional service.
+                Results are generally accurate for everyday files, but complex or unusual documents
+                may not always convert perfectly. We recommend reviewing converted files before
+                relying on them for important work.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
 
-      {/* FAQ — fixed z-index to stay below modals but above background */}
+      {/* ── FAQ ── */}
       <section
         aria-label="Frequently asked questions"
-        className="relative z-10 mx-auto mt-20 w-full max-w-3xl px-4 pb-24 sm:mt-24 sm:px-6 sm:pb-28 lg:mt-28 lg:pb-32"
+        className="relative z-10 mx-auto mt-20 w-full max-w-3xl px-4 pb-16 sm:mt-24 sm:px-6 sm:pb-20 lg:mt-28 lg:pb-24"
       >
         <div className="mb-10 text-center sm:mb-14">
           <span className="mb-3 inline-block animate-float-up rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground backdrop-blur">
             FAQ
           </span>
           <h2 className="animate-float-up delay-100 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-            Frequently asked questions about our free converter
+            Frequently asked questions
           </h2>
           <p className="animate-float-up delay-200 mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Learn more about Trakory's video converter, audio converter, PDF converter, image
-            converter and other tools.
+            Common questions about Trakory's tools, accuracy, privacy and supported formats.
           </p>
         </div>
 
@@ -724,11 +763,8 @@ function Index() {
         </Accordion>
       </section>
 
-      <footer className="relative z-10 mx-auto w-full max-w-6xl px-4 py-8 text-center border-t border-border/40 sm:px-6">
-        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-          Trakory · Free converter for everyone · © 2026
-        </p>
-      </footer>
+      {/* ── Footer ── */}
+      <Footer />
     </div>
   );
 }

@@ -150,3 +150,48 @@
   .delay-400 { animation-delay: 400ms; }
   .delay-500 { animation-delay: 500ms; }
 }
+
+@keyframes dropdown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-dropdown {
+  animation: dropdown 0.18s ease-out forwards;
+}
+
+@keyframes toast {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.animate-toast {
+  animation: toast 0.2s ease-out forwards;
+}
+
+/* Add this to your global CSS file (e.g., globals.css or index.css) */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) translateX(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(-50%);
+  }
+}
+
+/* For the desktop notification (uses translate-x via Tailwind) */
+.animate-fade-in {
+  animation: fade-in-simple 0.15s ease-out forwards;
+}
+
+@keyframes fade-in-simple {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -91,11 +91,11 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ scrollBehavior: "smooth" }}>
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="flex min-h-dvh flex-col">
         {children}
         <Scripts />
       </body>
@@ -104,5 +104,9 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <div className="flex flex-1 flex-col">
+      <Outlet />
+    </div>
+  );
 }

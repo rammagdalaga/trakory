@@ -5,6 +5,7 @@ import { BottomAdBar } from "./BottomAdBar";
 import { InterstitialAd } from "./InterstitialAd";
 import { ToolSwitcher } from "./ToolSwitcher";
 import { ContactSection } from "./ContactSection";
+import { Footer } from "./Footer";
 
 interface ToolPageLayoutProps {
   title: string;
@@ -23,7 +24,7 @@ export function ToolPageLayout({
 
   return (
     <div
-      className="relative flex min-h-screen flex-col overflow-x-clip bg-background"
+      className="relative flex flex-1 flex-col overflow-x-clip bg-background"
       suppressHydrationWarning
     >
       <div
@@ -51,7 +52,7 @@ export function ToolPageLayout({
         </div>
       </header>
 
-      <main className="relative z-10 mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col items-center px-4 py-10 sm:px-6 sm:py-14 lg:py-16">
+      <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-4 py-10 sm:px-6 sm:py-14 lg:py-16">
         <div className="mb-6 max-w-3xl text-center sm:mb-8">
           <h1 className="animate-float-up text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-5xl">
             {title}
@@ -74,14 +75,10 @@ export function ToolPageLayout({
         <ContactSection />
       </div>
 
-      <footer className="relative z-10 mx-auto w-full max-w-6xl px-4 py-8 text-center border-t border-border/40 sm:px-6">
-        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-          Trakory · Free converter for everyone · © 2026
-        </p>
-      </footer>
-
       {showAds && <InterstitialAd />}
       {showAds && <BottomAdBar />}
+
+      <Footer />
     </div>
   );
 }
