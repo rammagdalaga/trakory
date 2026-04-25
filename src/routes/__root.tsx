@@ -83,7 +83,12 @@ export const Route = createRootRoute({
         href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap",
       },
     ],
-    scripts: [],
+    scripts: [
+      {
+        src: "https://pl29211369.profitablecpmratenetwork.com/75/85/d5/7585d53822b64080f1cea75f11c02c14.js",
+        async: true,
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
