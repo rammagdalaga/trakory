@@ -177,7 +177,7 @@ export const Route = createFileRoute("/")({
               name: "Is Trakory really a free online converter?",
               acceptedAnswer: {
                 "@type": "Answer",
-                text: "Yes. Trakory is completely free — no hidden charges, paywalls, or account requirements. Ads help cover hosting so every converter stays free forever.",
+                text: "Yes. Trakory is completely free — no hidden charges, paywalls, or account requirements. Ads help cover hosting so every converter stays free.",
               },
             },
             {
@@ -407,7 +407,19 @@ const FAQS = [
   },
   {
     q: "Why are there ads?",
-    a: "Trakory is built by a small team. Ads help cover hosting and development costs so every converter stays completely free for everyone.",
+  a: (
+    <>
+      Trakory is built by a small team. Ads help cover hosting and development costs so every converter stays completely free for everyone.{" "}
+      <a
+        href="https://ko-fi.com/trakory"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-500 hover:text-blue-400 underline font-medium"
+      >
+        You can buy us a coffee if you want to support us and keep the tools free
+      </a>.
+    </>
+  ),
   },
   {
     q: "Is there a file size limit?",
