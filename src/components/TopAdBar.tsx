@@ -9,15 +9,12 @@ export function TopAdBar() {
   const adContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!open || !adContainerRef.current) return;
+    if (!open) return;
 
-    const container = adContainerRef.current;
-    container.innerHTML = "";
-
-    // Create and append first script with config
+    // Create config script and append to body
     const configScript = document.createElement("script");
     configScript.textContent = `
-      window.atOptions = {
+      atOptions = {
         'key' : '3f22fa6031a61d2f5c0f26c81ba99787',
         'format' : 'iframe',
         'height' : 90,
@@ -25,14 +22,22 @@ export function TopAdBar() {
         'params' : {}
       };
     `;
-    container.appendChild(configScript);
+    document.body.appendChild(configScript);
 
-    // Create and append the invoke script
+    // Create invoke script and append to body
     const invokeScript = document.createElement("script");
     invokeScript.src =
       "https://www.highperformanceformat.com/3f22fa6031a61d2f5c0f26c81ba99787/invoke.js";
     invokeScript.async = true;
-    container.appendChild(invokeScript);
+    document.body.appendChild(invokeScript);
+
+    return () => {
+      // Cleanup scripts from body on unmount or when closed
+      document.body.removeChild(configScript);
+      if (invokeScript.parentNode) {
+        document.body.removeChild(invokeScript);
+      }
+    };
   }, [open]);
 
   return (
