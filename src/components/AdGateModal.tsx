@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AdGateModalProps {
@@ -9,38 +9,21 @@ interface AdGateModalProps {
   description?: string;
 }
 
-const AD_SCRIPT_URL =
-  "https://pl29211369.profitablecpmratenetwork.com/75/85/d5/7585d53822b64080f1cea75f11c02c14.js";
+// 👉 Replace with your Smartlink (NOT .js)
+const AD_LINK = "https://www.profitablecpmratenetwork.com/uxdyhvk6?key=e11479dbf206b08b8a2e1697b36d16d4";
+
+// ⚠️ Keep this at 1 for safety
 const REQUIRED_CLICKS = 2;
 
-/**
- * Click-based ad gate. User must click the ad button `REQUIRED_CLICKS` times.
- * Each click opens the ad script in a new tab so the current page is preserved.
- * After enough clicks the "Start download" button unlocks.
- */
 export function AdGateModal({
   open,
   onComplete,
   onClose,
   title = "Your download is almost ready",
-  description = "Click the button below to support Trakory. Each click opens a quick ad in a new tab.",
+  description = "Click the button below to continue. This helps keep Trakory free.",
 }: AdGateModalProps) {
   const isMobile = useIsMobile();
   const [clicks, setClicks] = useState(0);
-  const scriptContainerRef = useRef<HTMLDivElement>(null);
-
-  // Inject ad script into modal when it opens
-  useEffect(() => {
-    if (!open || !scriptContainerRef.current) return;
-
-    const container = scriptContainerRef.current;
-    container.innerHTML = "";
-
-    const script = document.createElement("script");
-    script.src = AD_SCRIPT_URL;
-    script.async = true;
-    container.appendChild(script);
-  }, [open]);
 
   if (!open) return null;
 
@@ -48,39 +31,32 @@ export function AdGateModal({
   const progress = (clicks / REQUIRED_CLICKS) * 100;
 
   const handleAdClick = () => {
-    // Open the ad script in a new tab so the user never leaves the current page
-    window.open(AD_SCRIPT_URL, "_blank", "noopener,noreferrer");
+    window.open(AD_LINK, "_blank", "noopener,noreferrer");
+
     setClicks((c) => Math.min(c + 1, REQUIRED_CLICKS));
   };
 
   const handleDownload = () => {
     onComplete();
-    // Reset clicks for next time
     setClicks(0);
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-3 sm:p-4 backdrop-blur-sm"
-      role="dialog"
-      aria-modal="true"
-      suppressHydrationWarning
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-3 sm:p-4 backdrop-blur-sm">
       <div
-        className={`relative w-full ${isMobile ? "max-w-sm" : "max-w-lg"} overflow-hidden rounded-3xl border border-border bg-card shadow-elevated`}
+        className={`relative w-full ${
+          isMobile ? "max-w-sm" : "max-w-lg"
+        } overflow-hidden rounded-3xl border border-border bg-card shadow-elevated`}
       >
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 rounded-lg px-3 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
-          aria-label="Close ad"
+          className="absolute right-4 top-4 z-10 rounded-lg px-3 py-1 text-xs font-semibold text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
         >
           Close
         </button>
 
-        <div
-          className={`border-b border-border bg-gradient-soft ${isMobile ? "px-4 py-4" : "px-6 py-5"}`}
-        >
-          <h3 className={`${isMobile ? "text-base" : "text-lg"} font-semibold text-foreground`}>
+        <div className={`${isMobile ? "px-4 py-4" : "px-6 py-5"} border-b border-border`}>
+          <h3 className={`${isMobile ? "text-base" : "text-lg"} font-semibold`}>
             {title}
           </h3>
           <p className={`mt-1 ${isMobile ? "text-xs" : "text-sm"} text-muted-foreground`}>
@@ -89,61 +65,51 @@ export function AdGateModal({
               href="https://ko-fi.com/trakory"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:text-blue-400 underline font-medium"
+              className="text-blue-500 underline"
             >
-              You can buy us a coffee if you want to support us and keep the tools free
+              Support us
             </a>
-            .
           </p>
         </div>
 
-        <div className={`bg-background ${isMobile ? "p-4" : "p-6"}`}>
-          {/* Hidden script injection container */}
-          <div ref={scriptContainerRef} className="hidden" suppressHydrationWarning />
-
-          <div className="mt-2 space-y-5">
-            {/* Progress bar */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
-                  Progress
-                </p>
-                <p className="font-mono text-xs font-bold text-primary">
-                  {clicks}/{REQUIRED_CLICKS}
-                </p>
+        <div className={`${isMobile ? "p-4" : "p-6"}`}>
+          <div className="space-y-5">
+            {/* Progress */}
+            <div>
+              <div className="flex justify-between text-xs">
+                <span>Progress</span>
+                <span>{clicks}/{REQUIRED_CLICKS}</span>
               </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-foreground/5">
+              <div className="h-2 mt-2 bg-foreground/5 rounded-full">
                 <div
-                  className="h-full bg-gradient-brand transition-all duration-500"
+                  className="h-full bg-gradient-brand transition-all"
                   style={{ width: `${progress}%` }}
                 />
               </div>
             </div>
 
-            {/* Action buttons */}
-            <div className="flex flex-col gap-3">
-              {!done ? (
-                <button
-                  onClick={handleAdClick}
-                  className="w-full rounded-xl bg-primary/10 px-5 py-3 text-sm font-semibold text-primary transition-all hover:bg-primary/20 active:scale-[0.98]"
-                >
-                  Progress {clicks}/{REQUIRED_CLICKS} — Click to continue
-                </button>
-              ) : (
-                <button
-                  onClick={handleDownload}
-                  className="w-full rounded-xl bg-gradient-brand px-5 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all hover:shadow-elevated active:scale-[0.98]"
-                >
-                  Start download
-                </button>
-              )}
+            {/* Buttons */}
+            {!done ? (
+              <button
+                onClick={handleAdClick}
+                className="w-full rounded-xl bg-primary/10 px-5 py-3 text-sm font-semibold text-primary hover:bg-primary/20"
+              >
+                Continue
+              </button>
+            ) : (
+              <button
+                onClick={handleDownload}
+                className="w-full rounded-xl bg-gradient-brand px-5 py-3 text-sm font-semibold text-primary-foreground"
+              >
+                Start download
+              </button>
+            )}
 
-              <p className="text-center text-[11px] text-muted-foreground">
-                {done
-                  ? "You're all set! Click below to download your file."
-                  : "Each click opens a new tab. You can return here anytime."}
-              </p>
-            </div>
+            <p className="text-center text-[11px] text-muted-foreground">
+              {done
+                ? "Ready to download."
+                : "Opens a new tab. You can return here."}
+            </p>
           </div>
         </div>
       </div>
