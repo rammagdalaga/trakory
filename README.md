@@ -52,7 +52,7 @@ Trakory is a browser-based web application built with a modern React + TypeScrip
 If you want to run this project locally:
 
 ```bash
-git clone https://github.com/yourusername/trakory.git
+git clone https://github.com/rammagdalaga/trakory.git
 cd trakory
 npm install
 npm run dev
