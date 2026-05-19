@@ -38,9 +38,12 @@ The long-term goal is to build a scalable ecosystem of useful, accessible, and i
 
 ## Tech Stack
 
-- Frontend: HTML, CSS, JavaScript / React (if applicable)
-- Backend: Node.js (if applicable)
-- Other Tools: APIs, browser-based processing, etc.
+Trakory is a browser-based web application built with a modern React + TypeScript architecture.
+
+- Frontend Framework: React (TSX)
+- Language: TypeScript
+- Architecture: Modular component-based design
+- Focus: Performance, scalability, and browser-based utility systems
 
 ---
 
